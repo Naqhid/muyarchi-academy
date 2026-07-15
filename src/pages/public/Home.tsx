@@ -19,7 +19,7 @@ import type { Course, Blog, EventItem, Testimonial } from '@/types'
 /* ─── tiny helpers ─────────────────────────────────────────── */
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-primary">
+    <div className="mb-3 inline-flex items-center gap-2 rounded-md border border-secondary/30 bg-secondary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-secondary">
       {children}
     </div>
   )
@@ -32,8 +32,8 @@ function SectionHeading({ title, subtitle }: { title: string; subtitle?: string 
       viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.5 }}
       className="mb-12 text-center"
     >
-      <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">{title}</h2>
-      <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-primary" />
+      <h2 className="font-display text-3xl font-semibold tracking-tight text-primary md:text-4xl">{title}</h2>
+      <div className="mx-auto mt-3 h-0.5 w-12 bg-secondary" />
       {subtitle && <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">{subtitle}</p>}
     </motion.div>
   )
@@ -72,19 +72,8 @@ export default function Home() {
   /* ── HERO ─────────────────────────────────────────────────── */
   return (
     <>
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(199,89%,12%)] via-[hsl(222,47%,11%)] to-[hsl(199,89%,8%)]">
-        {/* soft ambient glows (kept low + symmetrical to avoid a harsh spotlight/torch look.) */}
-        <motion.div
-          animate={{ scale: [1, 1.12, 1], opacity: [0.12, 0.2, 0.12] }}
-          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -top-40 -left-40 h-[520px] w-[520px] rounded-full bg-primary/25 blur-[160px]"
-        />
-        <motion.div
-          animate={{ scale: [1, 1.15, 1], opacity: [0.1, 0.16, 0.1] }}
-          transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          className="absolute -top-40 -right-40 h-[520px] w-[520px] rounded-full bg-primary/20 blur-[160px]"
-        />
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.04]" />
+      <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background">
+        <div className="absolute inset-0 opacity-[0.02]" />
 
         <div className="container relative mx-auto px-4 text-center">
           <motion.div
@@ -92,27 +81,25 @@ export default function Home() {
             transition={{ duration: 0.8 }} className="mx-auto max-w-4xl"
           >
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }}>
-              <Badge className="mb-6 border border-primary/40 bg-primary/20 px-5 py-2 text-sm text-primary backdrop-blur-sm">
-                <GraduationCap className="mr-2 h-4 w-4" />
+              <h1 className="font-display text-5xl font-bold leading-tight tracking-tight text-primary sm:text-6xl lg:text-7xl">
                 {settings?.academy_name || 'Muyirchi Academy'}
-              </Badge>
+              </h1>
             </motion.div>
 
-            <h1 className="font-display text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
-              {settings?.hero_title || 'Welcome to Muyirchi Academy'}
-            </h1>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-8">
+              <p className="font-serif text-2xl font-light text-secondary md:text-3xl">
+                முயற்சி திருவினையாக்கும்
+              </p>
+              <div className="mx-auto mt-4 h-0.5 w-24 bg-secondary" />
+            </motion.div>
 
-            <p className="mt-6 text-lg text-white/70 md:text-xl max-w-2xl mx-auto">
-              {settings?.hero_subtitle || 'Empowering minds, shaping futures'}
+            <p className="mt-8 text-lg text-foreground/80 md:text-xl max-w-2xl mx-auto leading-relaxed">
+              {settings?.hero_subtitle || 'An institution of serious intent, rooted in Tamil wisdom and dedicated to excellence.'}
             </p>
 
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <Button asChild size="lg" className="gap-2 rounded-full px-8 shadow-lg shadow-primary/30">
+            <div className="mt-12">
+              <Button asChild size="lg" className="gap-2 rounded-md px-8 bg-secondary text-foreground hover:bg-secondary/90 font-semibold">
                 <Link to="/courses">Explore Courses <ArrowRight className="h-4 w-4" /></Link>
-              </Button>
-              <Button asChild size="lg" variant="outline"
-                className="rounded-full border-white/20 bg-white/10 px-8 text-white backdrop-blur-sm hover:bg-white/20 hover:text-white">
-                <Link to="/contact">Contact Us</Link>
               </Button>
             </div>
           </motion.div>
@@ -122,7 +109,7 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.7 }}
-              className="mx-auto mt-20 grid max-w-3xl grid-cols-3 divide-x divide-slate-200 rounded-2xl border border-white bg-white shadow-2xl shadow-black/30"
+              className="mx-auto mt-20 grid max-w-3xl grid-cols-3 divide-x divide-border rounded-lg border border-border bg-card shadow-md"
             >
               {[
                 { icon: Users, value: settings?.stat_students, label: 'Students' },
@@ -130,11 +117,11 @@ export default function Home() {
                 { icon: Award, value: settings?.stat_years, label: 'Years' },
               ].filter(s => s.value).map(({ icon: Icon, value, label }) => (
                 <div key={label} className="group flex flex-col items-center gap-1 py-8 px-4 transition-colors">
-                  <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 transition-transform duration-300 group-hover:scale-110">
-                    <Icon className="h-5 w-5 text-primary" />
+                  <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-md bg-secondary/10 transition-transform duration-300 group-hover:scale-110">
+                    <Icon className="h-5 w-5 text-secondary" />
                   </div>
-                  <span className="font-display text-3xl font-bold text-slate-900">{value}</span>
-                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">{label}</span>
+                  <span className="font-display text-2xl font-bold text-primary">{value}</span>
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</span>
                 </div>
               ))}
             </motion.div>
@@ -143,63 +130,54 @@ export default function Home() {
       </section>
 
       {/* ── ABOUT ─────────────────────────────────────────────── */}
-      <Section id="about">
-        {/* Row 1: label + heading + text + CTA */}
+      <Section id="about" className="bg-primary text-white">
+        {/* Row 1: Vision statement as inscription */}
         <FadeIn>
-          <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-            <SectionLabel><GraduationCap className="h-3.5 w-3.5" /> About Us</SectionLabel>
-            <h2 className="font-display text-3xl font-bold md:text-4xl">About Our Academy</h2>
-            <div className="mt-3 h-1 w-12 rounded-full bg-primary" />
-            <p className="mt-5 text-lg text-muted-foreground leading-relaxed">
+          <div className="mx-auto flex max-w-4xl flex-col items-center text-center py-8">
+            <h2 className="font-display text-4xl font-semibold md:text-5xl mb-6">Our Vision</h2>
+            <p className="text-xl leading-relaxed font-light">
+              {settings?.vision || 'An institution dedicated to transforming lives through education, rooted in Tamil wisdom and committed to the highest standards of excellence.'}
+            </p>
+          </div>
+        </FadeIn>
+
+        {/* Row 2: About text */}
+        <FadeIn delay={0.1}>
+          <div className="mx-auto max-w-3xl text-center mt-12 pt-8 border-t border-white/20">
+            <h3 className="font-display text-2xl font-semibold mb-4">About Our Academy</h3>
+            <p className="text-lg leading-relaxed font-light">
               {settings?.about || ''}
             </p>
-            <Button asChild variant="outline" className="mt-6 gap-2 rounded-full">
+            <Button asChild className="mt-8 bg-secondary text-foreground hover:bg-secondary/90 font-semibold rounded-md px-8">
               <Link to="/contact">Get in Touch <ChevronRight className="h-4 w-4" /></Link>
             </Button>
           </div>
         </FadeIn>
 
-        {/* Row 2: Vision + Mission */}
-        {(settings?.vision || settings?.mission) && (
-          <div className="mt-12 grid gap-6 sm:grid-cols-2">
+        {/* Row 3: Mission + Growth + Quality */}
+        {(settings?.mission) && (
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { icon: Eye, title: 'Our Vision', text: settings?.vision },
               { icon: Target, title: 'Our Mission', text: settings?.mission },
+              { icon: TrendingUp, title: 'Our Growth', text: 'Continuously expanding our curriculum to meet industry demands and student aspirations.' },
+              { icon: Award, title: 'Our Quality', text: 'Committed to excellence in education and outstanding student outcomes.' },
             ].map(({ icon: Icon, title, text }, i) => (
               <FadeIn key={title} delay={i * 0.1}>
-                <div className="group rounded-2xl border border-border bg-card p-6 transition-all hover:border-primary/40 hover:shadow-md">
-                  <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 transition-colors group-hover:bg-primary/20">
-                    <Icon className="h-5 w-5 text-primary" />
+                <div className="rounded-lg border border-white/20 bg-white/5 p-6 transition-all hover:bg-white/10 hover:border-white/40">
+                  <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-md bg-secondary/20">
+                    <Icon className="h-5 w-5 text-secondary" />
                   </div>
                   <h3 className="font-display font-semibold">{title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{text}</p>
+                  <p className="mt-2 text-sm leading-relaxed font-light">{text}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
         )}
-
-        {/* Row 3: Growth + Quality */}
-        <div className="mt-6 grid gap-6 sm:grid-cols-2">
-          {[
-            { icon: TrendingUp, title: 'Our Growth', text: 'Continuously expanding our curriculum to meet industry demands and student aspirations.' },
-            { icon: Award, title: 'Our Quality', text: 'Committed to excellence in education and outstanding student outcomes.' },
-          ].map(({ icon: Icon, title, text }, i) => (
-            <FadeIn key={title} delay={i * 0.1}>
-              <div className="group rounded-2xl border border-border bg-card p-6 transition-all hover:border-primary/40 hover:shadow-md">
-                <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 transition-colors group-hover:bg-primary/20">
-                  <Icon className="h-5 w-5 text-primary" />
-                </div>
-                <h3 className="font-display font-semibold">{title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{text}</p>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
       </Section>
 
       {/* ── COURSES ───────────────────────────────────────────── */}
-      <Section className="bg-muted/30">
+      <Section>
         <SectionHeading title="Our Courses" subtitle="Expertly crafted programs designed to help you excel in your career" />
         {loading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -213,12 +191,11 @@ export default function Home() {
               {courses.map((course, i) => (
                 <FadeIn key={course.id} delay={i * 0.08}>
                   <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1.5">
-                    <div className="relative aspect-video overflow-hidden bg-muted">
+                    <div className="relative aspect-video overflow-hidden bg-accent">
                       {course.thumbnail_url
                         ? <img src={course.thumbnail_url} alt={course.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-                        : <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5"><GraduationCap className="h-14 w-14 text-primary/30" /></div>
+                        : <div className="flex h-full items-center justify-center bg-accent" />
                       }
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                       <Badge className={`absolute left-3 top-3 text-xs capitalize ${course.status === 'active' ? 'bg-success text-success-foreground' : 'bg-muted text-muted-foreground'}`}>
                         {course.status}
                       </Badge>
@@ -290,8 +267,8 @@ export default function Home() {
         </Section>
       )}
 
-      {/* ── EVENTS ────────────────────────────────────────────── */}
-      <Section className="bg-muted/30">
+      {/* ── EVENTS ──────────────���─────────────────────────────── */}
+      <Section>
         <SectionHeading title="Latest Events" subtitle="Stay updated with our upcoming and past events" />
         {loading ? (
           <div className="grid gap-6 md:grid-cols-3">
@@ -305,12 +282,11 @@ export default function Home() {
               {events.map((event, i) => (
                 <FadeIn key={event.id} delay={i * 0.1}>
                   <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1.5">
-                    <div className="relative aspect-video overflow-hidden bg-muted">
-                      {event.cover_image_url
-                        ? <img src={event.cover_image_url} alt={event.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-                        : <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5"><Calendar className="h-14 w-14 text-primary/30" /></div>
+                    <div className="relative aspect-video overflow-hidden bg-accent">
+                      {event.image_url
+                        ? <img src={event.image_url} alt={event.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                        : <div className="flex h-full items-center justify-center bg-accent" />
                       }
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                       {event.event_date && (
                         <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1 text-xs text-white backdrop-blur-sm">
                           <Calendar className="h-3 w-3" /> {formatDate(event.event_date)}
@@ -352,9 +328,8 @@ export default function Home() {
                     <div className="relative aspect-video overflow-hidden bg-muted">
                       {blog.thumbnail_url
                         ? <img src={blog.thumbnail_url} alt={blog.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-                        : <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5"><BookOpen className="h-14 w-14 text-primary/30" /></div>
+                        : <div className="flex h-full items-center justify-center bg-accent" />
                       }
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                     </div>
                     <CardContent className="p-5">
                       <h3 className="font-display text-base font-semibold leading-snug">{blog.title}</h3>
@@ -381,12 +356,11 @@ export default function Home() {
       </Section>
 
       {/* ── CTA ───────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-[hsl(199,89%,38%)] to-[hsl(199,89%,28%)]" />
+      <section className="relative overflow-hidden bg-primary">
         <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.12, 0.08] }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-white/10 blur-3xl"
+          className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-white/5 blur-3xl"
         />
         <div className="container relative mx-auto px-4 py-24 text-center">
           <motion.div

@@ -1,5 +1,5 @@
 -- ============================================================
--- Muyirchi Academy - Supabase Schema
+-- Muyarchi Academy - Supabase Schema
 -- Run this whole file in the Supabase SQL Editor.
 -- Safe to re-run (uses IF NOT EXISTS / CREATE OR REPLACE).
 -- ============================================================
@@ -150,7 +150,7 @@ create table if not exists public.site_settings (
   footer_text    text not null default '',
   google_map_url text not null default '',
   logo_url       text not null default '',
-  academy_name   text not null default 'Muyirchi Academy',
+  academy_name   text not null default 'Muyarchi Academy',
   facebook_url   text not null default '',
   twitter_url    text not null default '',
   instagram_url  text not null default '',

@@ -55,7 +55,7 @@ export default function ForgotPassword() {
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input id="email" type="email" className="pl-10" placeholder="admin@muyirchi.com" {...register('email')} aria-invalid={!!errors.email} />
+                    <Input id="email" type="email" className="pl-10" placeholder="admin@Muyarchi.com" {...register('email')} aria-invalid={!!errors.email} />
                   </div>
                   {errors.email && <p className="text-xs text-destructive" role="alert">{errors.email.message}</p>}
                 </div>

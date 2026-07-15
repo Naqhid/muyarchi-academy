@@ -37,10 +37,10 @@ export default function AdminLayout() {
           )}
           <span className="font-display text-sm font-bold truncate">{academyName}</span>
         </div>
-        <nav className="flex-1 space-y-1 overflow-y-auto p-4">
+        <nav className="flex-1 space-y-2 overflow-y-auto p-4">
           {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} end={item.end} className={({ isActive }) => cn('flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors', isActive ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent hover:text-foreground')}>
-              <item.icon className="h-4 w-4" />{item.label}
+            <NavLink key={item.to} to={item.to} end={item.end} className={({ isActive }) => cn('flex items-center gap-3 rounded-lg px-3 py-3 text-base font-bold transition-all duration-200 transform hover:scale-105', isActive ? 'bg-gradient-to-r from-primary via-secondary to-accent text-white shadow-lg' : 'text-muted-foreground hover:text-white hover:bg-gradient-to-r hover:from-primary/70 hover:to-secondary/70')}>
+              <item.icon className="h-5 w-5" />{item.label}
             </NavLink>
           ))}
         </nav>
@@ -64,10 +64,10 @@ export default function AdminLayout() {
                 <span className="font-display text-sm font-bold">{academyName}</span>
                 <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}><X className="h-5 w-5" /></Button>
               </div>
-              <nav className="flex-1 space-y-1 overflow-y-auto p-4">
+              <nav className="flex-1 space-y-2 overflow-y-auto p-4">
                 {navItems.map((item) => (
-                  <NavLink key={item.to} to={item.to} end={item.end} onClick={() => setSidebarOpen(false)} className={({ isActive }) => cn('flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors', isActive ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent hover:text-foreground')}>
-                    <item.icon className="h-4 w-4" />{item.label}
+                  <NavLink key={item.to} to={item.to} end={item.end} onClick={() => setSidebarOpen(false)} className={({ isActive }) => cn('flex items-center gap-3 rounded-lg px-3 py-3 text-base font-bold transition-all duration-200', isActive ? 'bg-gradient-to-r from-primary via-secondary to-accent text-white shadow-lg' : 'text-muted-foreground hover:text-white hover:bg-gradient-to-r hover:from-primary/70 hover:to-secondary/70')}>
+                    <item.icon className="h-5 w-5" />{item.label}
                   </NavLink>
                 ))}
               </nav>

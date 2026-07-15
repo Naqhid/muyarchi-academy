@@ -151,7 +151,7 @@ export default function Settings() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="academy_name">Academy Name</Label>
-                <Input id="academy_name" placeholder="Muyirchi Academy" {...register('academy_name')} />
+                <Input id="academy_name" placeholder="Muyarchi Academy" {...register('academy_name')} />
                 {errors.academy_name && <p className="text-xs text-destructive" role="alert">{errors.academy_name.message}</p>}
               </div>
               <div className="space-y-2">
@@ -173,7 +173,7 @@ export default function Settings() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="hero_title">Hero Title</Label>
-                <Input id="hero_title" placeholder="Welcome to Muyirchi Academy" {...register('hero_title')} />
+                <Input id="hero_title" placeholder="Welcome to Muyarchi Academy" {...register('hero_title')} />
                 {errors.hero_title && <p className="text-xs text-destructive" role="alert">{errors.hero_title.message}</p>}
               </div>
               <div className="space-y-2">
@@ -227,7 +227,7 @@ export default function Settings() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email" className="flex items-center gap-1.5"><Mail className="h-3.5 w-3.5" />Email</Label>
-                <Input id="email" type="email" placeholder="info@muyirchi.com" {...register('email')} />
+                <Input id="email" type="email" placeholder="info@Muyarchi.com" {...register('email')} />
                 {errors.email && <p className="text-xs text-destructive" role="alert">{errors.email.message}</p>}
               </div>
               <div className="space-y-2">
@@ -249,7 +249,7 @@ export default function Settings() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="footer_text">Footer Text</Label>
-                <Textarea id="footer_text" rows={3} placeholder="© 2024 Muyirchi Academy. All rights reserved." {...register('footer_text')} />
+                <Textarea id="footer_text" rows={3} placeholder="© 2024 Muyarchi Academy. All rights reserved." {...register('footer_text')} />
                 {errors.footer_text && <p className="text-xs text-destructive" role="alert">{errors.footer_text.message}</p>}
               </div>
             </CardContent>

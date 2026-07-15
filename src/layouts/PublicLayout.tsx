@@ -60,9 +60,9 @@ export default function PublicLayout() {
             )}
             <span className="font-display text-lg font-bold text-foreground">{academyName}</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-2">
             {navLinks.map((link) => (
-              <Link key={link.to} to={link.to} className={cn('px-4 py-2 text-sm font-medium rounded-md transition-colors', location.pathname === link.to ? 'text-primary bg-primary/10' : 'text-foreground/70 hover:text-foreground hover:bg-accent')}>{link.label}</Link>
+              <Link key={link.to} to={link.to} className={cn('px-5 py-2.5 text-base font-bold rounded-lg transition-all duration-200 transform hover:scale-105', location.pathname === link.to ? 'bg-gradient-to-r from-primary via-secondary to-accent text-white shadow-lg' : 'text-foreground/80 hover:text-white hover:bg-gradient-to-r hover:from-primary/80 hover:to-secondary/80')}>{link.label}</Link>
             ))}
           </nav>
           <div className="flex items-center gap-2">
@@ -73,9 +73,9 @@ export default function PublicLayout() {
         <AnimatePresence>
           {mobileOpen && (
             <motion.nav initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="md:hidden overflow-hidden bg-background border-b border-border">
-              <div className="container mx-auto flex flex-col gap-1 px-4 py-4">
+              <div className="container mx-auto flex flex-col gap-2 px-4 py-4">
                 {navLinks.map((link) => (
-                  <Link key={link.to} to={link.to} className={cn('px-4 py-3 text-sm font-medium rounded-md transition-colors', location.pathname === link.to ? 'text-primary bg-primary/10' : 'text-foreground/70 hover:text-foreground hover:bg-accent')}>{link.label}</Link>
+                  <Link key={link.to} to={link.to} className={cn('px-4 py-3 text-base font-bold rounded-lg transition-all duration-200', location.pathname === link.to ? 'bg-gradient-to-r from-primary via-secondary to-accent text-white shadow-lg' : 'text-foreground/80 hover:text-white hover:bg-gradient-to-r hover:from-primary/80 hover:to-secondary/80')}>{link.label}</Link>
                 ))}
               </div>
             </motion.nav>
