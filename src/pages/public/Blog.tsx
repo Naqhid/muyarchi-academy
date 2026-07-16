@@ -19,14 +19,43 @@ export default function Blog() {
 
   return (
     <>
-      <section className="relative flex min-h-[40vh] items-center justify-center overflow-hidden bg-gradient-to-br from-primary/10 via-background to-accent">
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]" />
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="container relative mx-auto px-4 text-center">
-          <Badge variant="secondary" className="mb-4"><BookOpen className="mr-1.5 h-4 w-4" />Blog</Badge>
-          <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">Our Blog</h1>
-          <p className="mt-4 text-lg text-muted-foreground">Insights, stories, and updates from our academy</p>
-        </motion.div>
-      </section>
+     <section className="relative flex min-h-[55vh] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-primary">
+
+  {/* Background Effects */}
+
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#3b82f630,transparent_40%)]" />
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#06b6d430,transparent_40%)]" />
+  <div className="absolute inset-0 bg-grid-pattern opacity-[0.05]" />
+
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.7 }}
+    className="container relative mx-auto px-4 text-center"
+  >
+
+    <Badge className="mb-6 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-white backdrop-blur">
+      <BookOpen className="mr-2 h-4 w-4" />
+      Academy Blog
+    </Badge>
+
+   <h1 className="mx-auto max-w-4xl font-display text-5xl font-extrabold leading-tight tracking-tight text-white md:text-7xl">
+  Insights &{" "}
+  <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-500 bg-clip-text text-transparent">
+    Success Stories
+  </span>
+</h1>
+
+    <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-300 md:text-xl">
+      Stay updated with the latest educational insights, examination tips,
+      academy news,  and inspiring success stories. 
+    </p>
+
+   
+
+  </motion.div>
+
+</section>
       <Section>
         <SectionHeader title="Latest Posts" subtitle="Read our latest articles and updates" />
         {loading ? (
@@ -39,8 +68,11 @@ export default function Blog() {
               <FadeIn key={blog.id} delay={i * 0.05}>
                 <Card className="group h-full overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
                   <div className="aspect-video overflow-hidden bg-muted">
-                    {blog.thumbnail_url ? <img src={blog.thumbnail_url} alt={blog.title} className="h-full w-full object-cover transition-transform group-hover:scale-105" loading="lazy" /> : <div className="flex h-full items-center justify-center"><BookOpen className="h-12 w-12 text-muted-foreground/40" /></div>}
-                  </div>
+                    {blog.thumbnail_url
+                        ? <img src={blog.thumbnail_url} alt={blog.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                        : <div className="flex h-full items-center justify-center bg-accent" />
+                      }
+                           </div>
                   <CardContent className="p-5">
                     <h3 className="font-display text-lg font-semibold">{blog.title}</h3>
                     <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{blog.description}</p>

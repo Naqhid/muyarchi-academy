@@ -98,7 +98,7 @@ export default function Home() {
             </p>
 
             <div className="mt-12">
-              <Button asChild size="lg" className="gap-2 rounded-md px-8 bg-secondary text-foreground hover:bg-secondary/90 font-semibold">
+              <Button asChild size="lg" className="gap-2 rounded-md px-8 bg-secondary text-white hover:bg-secondary/90 font-semibold">
                 <Link to="/courses">Explore Courses <ArrowRight className="h-4 w-4" /></Link>
               </Button>
             </div>
@@ -130,7 +130,7 @@ export default function Home() {
       </section>
 
       {/* ── ABOUT ─────────────────────────────────────────────── */}
-      <Section id="about" className="bg-primary text-white">
+      <Section id="about" className="mt-6 bg-primary text-white">
         {/* Row 1: Vision statement as inscription */}
         <FadeIn>
           <div className="mx-auto flex max-w-4xl flex-col items-center text-center py-8">
@@ -148,7 +148,7 @@ export default function Home() {
             <p className="text-lg leading-relaxed font-light">
               {settings?.about || ''}
             </p>
-            <Button asChild className="mt-8 bg-secondary text-foreground hover:bg-secondary/90 font-semibold rounded-md px-8">
+            <Button asChild className="mt-8 bg-secondary text-white hover:bg-secondary/90 font-semibold rounded-md px-8">
               <Link to="/contact">Get in Touch <ChevronRight className="h-4 w-4" /></Link>
             </Button>
           </div>
