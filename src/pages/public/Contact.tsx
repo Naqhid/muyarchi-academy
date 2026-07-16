@@ -27,13 +27,44 @@ export default function Contact() {
   const { toast } = useToast()
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormData>({ resolver: zodResolver(schema) })
 
-  const onSubmit = (data: FormData) => {
-    const subject = encodeURIComponent(`Enquiry from ${data.name}`)
-    const body = encodeURIComponent(`Name: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email}\n\nMessage:\n${data.message}`)
-    window.location.href = `mailto:${settings?.email || ''}?subject=${subject}&body=${body}`
-    toast({ title: 'Opening mail client...', description: 'Your email client should open shortly.', variant: 'success' })
-    reset()
-  }
+const onSubmit = (data: FormData) => {
+  const subject = encodeURIComponent(
+    `Course Enquiry - ${data.name}`
+  )
+
+  const body = encodeURIComponent(
+`Dear Muyarchi Academy Team,
+
+I hope you are doing well.
+
+I would like to enquire about Muyarchi Academy and would appreciate it if you could provide me with the relevant information. My details are given below for your reference.
+
+My name is ${data.name}. You can reach me at ${data.phone} or email me at ${data.email}.
+
+${data.message}
+
+I look forward to hearing from you.
+
+Kind regards,
+
+${data.name}`
+  )
+
+  window.open(
+    `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodeURIComponent(
+      settings?.email || ""
+    )}&su=${subject}&body=${body}`,
+    "_blank"
+  )
+
+  toast({
+    title: "Opening Gmail...",
+    description: "A new Gmail compose window has been opened.",
+    variant: "success",
+  })
+
+  reset()
+}
 
   return (
     <>
@@ -47,66 +78,276 @@ export default function Contact() {
       </section>
       <Section>
         <div className="grid gap-8 lg:grid-cols-2">
-          <FadeIn>
-            <div className="space-y-6">
-              <SectionHeader title="Contact Information" centered={false} />
-              {settings?.phone && (
-                <Card><CardContent className="flex items-center gap-4 p-5">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"><Phone className="h-6 w-6 text-primary" /></div>
-                  <div><p className="text-sm font-semibold">Phone</p><a href={`tel:${settings.phone}`} className="text-sm text-muted-foreground hover:text-primary transition-colors">{settings.phone}</a></div>
-                </CardContent></Card>
+         <FadeIn>
+  <div className="space-y-6">
+
+    <SectionHeader
+      title="Let's Connect"
+      subtitle="We're here to help you take the next step in your learning journey."
+      centered={false}
+    />
+
+    {settings?.phone && (
+      <Card className="group rounded-2xl border-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <CardContent className="flex items-center gap-5 p-6">
+
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white shadow-lg">
+            <Phone className="h-6 w-6" />
+          </div>
+
+          <div className="flex-1">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              Call Us
+            </p>
+
+            <a
+              href={`tel:${settings.phone}`}
+              className="text-lg font-semibold transition-colors hover:text-primary"
+            >
+              {settings.phone}
+            </a>
+          </div>
+
+        </CardContent>
+      </Card>
+    )}
+
+    {settings?.email && (
+      <Card className="group rounded-2xl border-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <CardContent className="flex items-center gap-5 p-6">
+
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-lg">
+            <Mail className="h-6 w-6" />
+          </div>
+
+          <div className="flex-1">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              Email
+            </p>
+
+            <a
+              href={`mailto:${settings.email}`}
+              className="text-lg font-semibold transition-colors hover:text-primary break-all"
+            >
+              {settings.email}
+            </a>
+          </div>
+
+        </CardContent>
+      </Card>
+    )}
+
+    {settings?.address && (
+      <Card className="group rounded-2xl border-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <CardContent className="flex items-start gap-5 p-6">
+
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow-lg">
+            <MapPin className="h-6 w-6" />
+          </div>
+
+          <div className="flex-1">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              Visit Us
+            </p>
+
+            <p className="mt-1 leading-7 text-muted-foreground">
+              {settings.address}
+            </p>
+          </div>
+
+        </CardContent>
+      </Card>
+    )}
+
+    {settings?.phone && (
+      <Card className="group rounded-2xl border-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <CardContent className="flex items-center gap-5 p-6">
+
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-lg">
+            <MessageSquare className="h-6 w-6" />
+          </div>
+
+          <div className="flex-1">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              WhatsApp
+            </p>
+
+            <a
+              href={`https://wa.me/${settings.phone.replace(/\D/g, "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-lg font-semibold transition-colors hover:text-primary"
+            >
+              Chat with Us
+            </a>
+          </div>
+
+        </CardContent>
+      </Card>
+    )}
+
+    {settings?.google_map_url && (
+      <Card className="overflow-hidden rounded-2xl border-0 shadow-lg">
+
+        <div className="border-b bg-gradient-to-r from-primary to-blue-600 px-6 py-4 text-white">
+
+          <h3 className="text-lg font-semibold">
+            Find Us on Google Maps
+          </h3>
+
+        </div>
+
+        <iframe
+          src={settings.google_map_url}
+          width="100%"
+          height="340"
+          style={{ border: 0 }}
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+          title="Google Map"
+        />
+
+      </Card>
+    )}
+
+  </div>
+</FadeIn>
+         <FadeIn delay={0.2}>
+  <div>
+
+    <SectionHeader
+      title="Send Us an Enquiry"
+      subtitle="Fill in your details below. Your default email application will open with your enquiry pre-filled."
+      centered={false}
+    />
+
+    <Card className="rounded-2xl border-0 shadow-lg">
+
+      <CardContent className="p-8">
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
+          <div className="space-y-2">
+
+            <Label htmlFor="name">
+              Full Name
+            </Label>
+
+            <Input
+              id="name"
+              placeholder="Enter your full name"
+              {...register("name")}
+              aria-invalid={!!errors.name}
+              className="h-12 rounded-xl"
+            />
+
+            {errors.name && (
+              <p className="text-xs text-destructive">
+                {errors.name.message}
+              </p>
+            )}
+
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+
+            <div className="space-y-2">
+
+              <Label htmlFor="phone">
+                Phone Number
+              </Label>
+
+              <Input
+                id="phone"
+                placeholder="+91 9876543210"
+                {...register("phone")}
+                aria-invalid={!!errors.phone}
+                className="h-12 rounded-xl"
+              />
+
+              {errors.phone && (
+                <p className="text-xs text-destructive">
+                  {errors.phone.message}
+                </p>
               )}
-              {settings?.email && (
-                <Card><CardContent className="flex items-center gap-4 p-5">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"><Mail className="h-6 w-6 text-primary" /></div>
-                  <div><p className="text-sm font-semibold">Email</p><a href={`mailto:${settings.email}`} className="text-sm text-muted-foreground hover:text-primary transition-colors">{settings.email}</a></div>
-                </CardContent></Card>
-              )}
-              {settings?.address && (
-                <Card><CardContent className="flex items-start gap-4 p-5">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"><MapPin className="h-6 w-6 text-primary" /></div>
-                  <div><p className="text-sm font-semibold">Address</p><p className="text-sm text-muted-foreground">{settings.address}</p></div>
-                </CardContent></Card>
-              )}
-              {settings?.google_map_url && (
-                <div className="overflow-hidden rounded-lg border border-border">
-                  <iframe src={settings.google_map_url} width="100%" height="300" style={{ border: 0 }} loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Google Map" allowFullScreen />
-                </div>
-              )}
+
             </div>
-          </FadeIn>
-          <FadeIn delay={0.2}>
-            <div>
-              <SectionHeader title="Send Us a Message" centered={false} />
-              <Card><CardContent className="p-6">
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input id="name" {...register('name')} aria-invalid={!!errors.name} />
-                    {errors.name && <p className="text-xs text-destructive" role="alert">{errors.name.message}</p>}
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone</Label>
-                      <Input id="phone" {...register('phone')} aria-invalid={!!errors.phone} />
-                      {errors.phone && <p className="text-xs text-destructive" role="alert">{errors.phone.message}</p>}
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" {...register('email')} aria-invalid={!!errors.email} />
-                      {errors.email && <p className="text-xs text-destructive" role="alert">{errors.email.message}</p>}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
-                    <Textarea id="message" rows={5} {...register('message')} aria-invalid={!!errors.message} />
-                    {errors.message && <p className="text-xs text-destructive" role="alert">{errors.message.message}</p>}
-                  </div>
-                  <Button type="submit" disabled={isSubmitting} className="w-full"><Send className="h-4 w-4" />Send Message</Button>
-                </form>
-              </CardContent></Card>
+
+            <div className="space-y-2">
+
+              <Label htmlFor="email">
+                Email Address
+              </Label>
+
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                {...register("email")}
+                aria-invalid={!!errors.email}
+                className="h-12 rounded-xl"
+              />
+
+              {errors.email && (
+                <p className="text-xs text-destructive">
+                  {errors.email.message}
+                </p>
+              )}
+
             </div>
-          </FadeIn>
+
+          </div>
+
+          <div className="space-y-2">
+
+            <Label htmlFor="message">
+              Your Message
+            </Label>
+
+            <Textarea
+              id="message"
+              rows={6}
+              placeholder="Tell us how we can help you..."
+              {...register("message")}
+              aria-invalid={!!errors.message}
+              className="rounded-xl"
+            />
+
+            {errors.message && (
+              <p className="text-xs text-destructive">
+                {errors.message.message}
+              </p>
+            )}
+
+          </div>
+
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="h-12 w-full rounded-xl bg-gradient-to-r from-primary to-blue-600 text-base font-semibold shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl"
+          >
+            <Send className="mr-2 h-5 w-5" />
+            Compose Email
+          </Button>
+
+          <div className="rounded-xl bg-primary/5 p-4 text-center">
+
+            <p className="text-sm text-muted-foreground">
+              Clicking <strong>Compose Email</strong> will open your default
+              email application with your enquiry already filled in.
+            </p>
+
+          </div>
+
+        </form>
+
+      </CardContent>
+
+    </Card>
+
+  </div>
+</FadeIn>
         </div>
       </Section>
     </>
