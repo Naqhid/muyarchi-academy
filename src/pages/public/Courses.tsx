@@ -20,7 +20,7 @@ export default function Courses() {
     <>
      <section className="relative flex min-h-[55vh] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-primary">
 
-  {/* Background Effects */}
+  {/* Background Effects. */}
   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#3b82f630,transparent_40%)]" />
   <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#06b6d430,transparent_40%)]" />
   <div className="absolute inset-0 bg-grid-pattern opacity-[0.05]" />
