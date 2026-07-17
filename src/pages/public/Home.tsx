@@ -279,7 +279,7 @@ export default function Home() {
         ) : (
           <>
             <div className="grid gap-6 md:grid-cols-3">
-              {events.map((event, i) => (
+              {events.map((event:any, i) => (
                 <FadeIn key={event.id} delay={i * 0.1}>
                   <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1.5">
                     <div className="relative aspect-video overflow-hidden bg-accent">

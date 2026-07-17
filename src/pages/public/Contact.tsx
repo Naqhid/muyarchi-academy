@@ -68,14 +68,34 @@ ${data.name}`
 
   return (
     <>
-      <section className="relative flex min-h-[40vh] items-center justify-center overflow-hidden bg-gradient-to-br from-primary/10 via-background to-accent">
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]" />
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="container relative mx-auto px-4 text-center">
-          <Badge variant="secondary" className="mb-4"><MessageSquare className="mr-1.5 h-4 w-4" />Contact</Badge>
-          <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">Get in Touch</h1>
-          <p className="mt-4 text-lg text-muted-foreground">We'd love to hear from you</p>
-        </motion.div>
-      </section>
+      <section className="relative flex min-h-[50vh] items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-primary to-slate-800 text-white">
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#ffffff20,transparent_45%)]" />
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#3b82f620,transparent_40%)]" />
+
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6 }}
+    className="container relative mx-auto px-4 text-center"
+  >
+    <Badge className="mb-5 rounded-full bg-white/10 px-5 py-2 text-white backdrop-blur">
+      <MessageSquare className="mr-2 h-4 w-4" />
+      Contact Us
+    </Badge>
+
+    <h1 className="mx-auto max-w-5xl font-display text-5xl font-extrabold leading-tight tracking-tight text-white md:text-7xl">
+  Get in{" "}
+  <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-500 bg-clip-text text-transparent">
+    Touch
+  </span>
+</h1>
+
+    <p className="mx-auto mt-6 max-w-2xl text-xl leading-relaxed text-white/80">
+      Have questions about Muyarchi Academy, admissions, or our programs?
+      We're here to help and would be delighted to hear from you.
+    </p>
+  </motion.div>
+</section>
       <Section>
         <div className="grid gap-8 lg:grid-cols-2">
          <FadeIn>
