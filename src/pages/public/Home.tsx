@@ -324,25 +324,27 @@ export default function Home() {
             <div className="grid gap-6 md:grid-cols-3">
               {blogs.map((blog, i) => (
                 <FadeIn key={blog.id} delay={i * 0.1}>
-                  <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1.5">
-                    <div className="relative aspect-video overflow-hidden bg-muted">
-                      {blog.thumbnail_url
-                        ? <img src={blog.thumbnail_url} alt={blog.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-                        : <div className="flex h-full items-center justify-center bg-accent" />
-                      }
-                    </div>
-                    <CardContent className="p-5">
-                      <h3 className="font-display text-base font-semibold leading-snug">{blog.title}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{blog.description}</p>
-                      <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-[10px]">
-                          {blog.author.charAt(0)}
-                        </div>
-                        <span>{blog.author}</span>
-                        <span className="ml-auto">{formatDate(blog.published_at || blog.created_at)}</span>
+                  <Link to={`/blog/${blog.id}`}>
+                    <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1.5 cursor-pointer">
+                      <div className="relative aspect-video overflow-hidden bg-muted">
+                        {blog.thumbnail_url
+                          ? <img src={blog.thumbnail_url} alt={blog.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                          : <div className="flex h-full items-center justify-center bg-accent" />
+                        }
                       </div>
-                    </CardContent>
-                  </Card>
+                      <CardContent className="p-5">
+                        <h3 className="font-display text-base font-semibold leading-snug">{blog.title}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{blog.description}</p>
+                        <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-[10px]">
+                            {blog.author.charAt(0)}
+                          </div>
+                          <span>{blog.author}</span>
+                          <span className="ml-auto">{formatDate(blog.published_at || blog.created_at)}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </FadeIn>
               ))}
             </div>

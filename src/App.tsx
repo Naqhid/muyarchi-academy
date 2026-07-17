@@ -8,6 +8,7 @@ const PublicLayout = lazy(() => import('@/layouts/PublicLayout'))
 const Home = lazy(() => import('@/pages/public/Home'))
 const Courses = lazy(() => import('@/pages/public/Courses'))
 const Blog = lazy(() => import('@/pages/public/Blog'))
+const BlogDetail = lazy(() => import('@/pages/public/BlogDetail'))
 const Events = lazy(() => import('@/pages/public/Events'))
 const Contact = lazy(() => import('@/pages/public/Contact'))
 
@@ -38,6 +39,7 @@ export default function App() {
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/courses" element={<Courses />} />
+            <Route path="/blog/:id" element={<BlogDetail />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/events" element={<Events />} />
             <Route path="/contact" element={<Contact />} />

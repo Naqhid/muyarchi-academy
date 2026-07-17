@@ -16,7 +16,15 @@ const navLinks = [
 ]
 
 export default function PublicLayout() {
-  const { settings } = useSettings()
+  let settings = null
+  try {
+    const settingsContext = useSettings()
+    settings = settingsContext.settings
+  } catch (err) {
+    // Context not available, use fallback values
+    console.warn('Settings context not available, using fallback')
+  }
+
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)

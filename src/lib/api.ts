@@ -55,6 +55,11 @@ export async function deleteBlog(id: string) {
   const { error } = await supabase.from('blogs').delete().eq('id', id)
   if (error) throw error
 }
+export async function fetchBlogById(id: string) {
+  const { data, error } = await supabase.from('blogs').select('*').eq('id', id).single()
+  if (error) throw error
+  return data as Blog
+}
 
 // === Events ===
 export async function fetchEvents() {

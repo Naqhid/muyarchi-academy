@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { BookOpen, User, Calendar } from 'lucide-react'
 import { Section, SectionHeader, FadeIn } from '@/components/shared/Section'
@@ -66,22 +67,24 @@ export default function Blog() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {blogs.map((blog, i) => (
               <FadeIn key={blog.id} delay={i * 0.05}>
-                <Card className="group h-full overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
-                  <div className="aspect-video overflow-hidden bg-muted">
-                    {blog.thumbnail_url
-                        ? <img src={blog.thumbnail_url} alt={blog.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-                        : <div className="flex h-full items-center justify-center bg-accent" />
-                      }
-                           </div>
-                  <CardContent className="p-5">
-                    <h3 className="font-display text-lg font-semibold">{blog.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{blog.description}</p>
-                    <div className="mt-4 flex items-center gap-3 text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1"><User className="h-3.5 w-3.5" />{blog.author}</span>
-                      <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" />{formatDate(blog.published_at || blog.created_at)}</span>
-                    </div>
-                  </CardContent>
-                </Card>
+                <Link to={`/blog/${blog.id}`}>
+                  <Card className="group h-full overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1 cursor-pointer">
+                    <div className="aspect-video overflow-hidden bg-muted">
+                      {blog.thumbnail_url
+                          ? <img src={blog.thumbnail_url} alt={blog.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                          : <div className="flex h-full items-center justify-center bg-accent" />
+                        }
+                             </div>
+                    <CardContent className="p-5">
+                      <h3 className="font-display text-lg font-semibold">{blog.title}</h3>
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{blog.description}</p>
+                      <div className="mt-4 flex items-center gap-3 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1"><User className="h-3.5 w-3.5" />{blog.author}</span>
+                        <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" />{formatDate(blog.published_at || blog.created_at)}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
               </FadeIn>
             ))}
           </div>
