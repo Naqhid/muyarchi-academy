@@ -50,16 +50,13 @@ Kind regards,
 ${data.name}`
   )
 
-  window.open(
-    `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodeURIComponent(
-      settings?.email || ""
-    )}&su=${subject}&body=${body}`,
-    "_blank"
-  )
+  window.location.href = `mailto:${encodeURIComponent(
+    settings?.email || ""
+  )}?subject=${subject}&body=${body}`
 
   toast({
-    title: "Opening Gmail...",
-    description: "A new Gmail compose window has been opened.",
+    title: "Opening Email App...",
+    description: "Your default email application has been opened.",
     variant: "success",
   })
 
@@ -233,7 +230,7 @@ ${data.name}`
 
   </div>
 </FadeIn>
-         <FadeIn delay={0.2}>
+         {/* <FadeIn delay={0.2}>
   <div>
 
     <SectionHeader
@@ -367,7 +364,7 @@ ${data.name}`
     </Card>
 
   </div>
-</FadeIn>
+</FadeIn> */}
         </div>
       </Section>
     </>
