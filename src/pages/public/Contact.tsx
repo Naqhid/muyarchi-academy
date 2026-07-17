@@ -94,7 +94,7 @@ ${data.name}`
   </motion.div>
 </section>
       <Section>
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-8 lg:grid-cols-1 max-w-4xl mx-auto">
          <FadeIn>
   <div className="space-y-6">
 
@@ -143,7 +143,9 @@ ${data.name}`
             </p>
 
             <a
-              href={`mailto:${settings.email}`}
+              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(settings.email)}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-lg font-semibold transition-colors hover:text-primary break-all"
             >
               {settings.email}
