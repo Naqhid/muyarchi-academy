@@ -9,7 +9,7 @@ import '@/index.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/muyarchi-academy">
       <ToastContextProvider>
         <AuthProvider>
           <SettingsProvider>
