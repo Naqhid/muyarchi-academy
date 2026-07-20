@@ -10,6 +10,7 @@ import { PublicFooter } from './PublicFooter'
 const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/courses', label: 'Courses' },
+  { to: '/scholarship', label: 'Scholarship Test' },
   { to: '/blog', label: 'Blog' },
   { to: '/events', label: 'Events & Gallery' },
   { to: '/contact', label: 'Contact' },
@@ -53,7 +54,7 @@ export default function PublicLayout() {
 
   useEffect(() => { setMobileOpen(false) }, [location.pathname])
 
-  const academyName = settings?.academy_name || 'Muyirchi Academy'
+  const academyName = settings?.academy_name || 'Muyarchi Academy'
   const logoUrl = settings?.logo_url
 
   return (

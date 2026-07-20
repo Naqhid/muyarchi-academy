@@ -83,6 +83,23 @@ export interface SiteSettings {
   stat_students: string
   stat_courses: string
   stat_years: string
+  // Scholarship settings
+  scholarship_hero_title: string
+  scholarship_hero_description: string
+  scholarship_how_it_works_title: string
+  scholarship_how_it_works_description: string
+  scholarship_card1_title: string
+  scholarship_card1_text: string
+  scholarship_card2_title: string
+  scholarship_card2_text: string
+  scholarship_card3_title: string
+  scholarship_card3_text: string
+  scholarship_test_details_title: string
+  scholarship_eligibility: string
+  scholarship_duration: string
+  scholarship_test_date: string
+  scholarship_venues: string
+  scholarship_sample_paper_link: string
   updated_at: string
 }
 

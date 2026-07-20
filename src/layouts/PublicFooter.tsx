@@ -27,7 +27,7 @@ export function PublicFooter() {
               )}
               <span className="font-display text-lg font-bold">{settings.academy_name}</span>
             </div>
-            <p className="text-sm text-muted-foreground max-w-xs">{settings.footer_text || settings.about}</p>
+            <p className="text-sm text-muted-foreground max-w-xs">Where every effort counts.</p>
           </div>
           <div>
             <h3 className="mb-4 font-display font-semibold">Quick Links</h3>

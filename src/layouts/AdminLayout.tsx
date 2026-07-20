@@ -14,6 +14,7 @@ const navItems = [
   { to: '/admin/events', label: 'Events', icon: Calendar },
   { to: '/admin/testimonials', label: 'Testimonials', icon: Star },
   { to: '/admin/media', label: 'Media Library', icon: Image },
+  { to: '/admin/scholarship', label: 'Scholarship', icon: GraduationCap },
   { to: '/admin/settings', label: 'Settings', icon: Settings },
 ]
 
@@ -24,11 +25,11 @@ export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const handleSignOut = async () => { await signOut(); navigate('/admin/login') }
-  const academyName = settings?.academy_name || 'Muyirchi Academy'
+  const academyName = settings?.academy_name || 'Muyarchi Academy'
 
   return (
     <div className="flex min-h-screen bg-muted/30">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-border bg-card md:flex">
+      <aside className="hidden w-64 flex-col border-r border-border bg-card md:flex">
         <div className="flex h-16 items-center gap-2 border-b border-border px-6">
           {settings?.logo_url ? (
             <img src={settings.logo_url} alt={academyName} className="h-8 w-8 rounded-lg object-cover" />
@@ -44,16 +45,6 @@ export default function AdminLayout() {
             </NavLink>
           ))}
         </nav>
-        <div className="border-t border-border p-4 space-y-2">
-          <Link to="/" target="_blank" className="flex items-center gap-2 rounded-md px-3 py-2 text-xs text-muted-foreground hover:text-foreground transition-colors">
-            <ExternalLink className="h-3.5 w-3.5" />View Website
-          </Link>
-          <div className="flex items-center gap-2 rounded-md px-3 py-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-semibold">{user?.email?.charAt(0).toUpperCase() || 'A'}</div>
-            <div className="flex-1 truncate"><p className="text-xs font-medium truncate">{user?.email || 'Admin'}</p></div>
-          </div>
-          <Button variant="outline" size="sm" className="w-full" onClick={handleSignOut}><LogOut className="h-4 w-4" />Logout</Button>
-        </div>
       </aside>
       <AnimatePresence>
         {sidebarOpen && (
@@ -71,17 +62,21 @@ export default function AdminLayout() {
                   </NavLink>
                 ))}
               </nav>
-              <div className="border-t border-border p-4"><Button variant="outline" size="sm" className="w-full" onClick={handleSignOut}><LogOut className="h-4 w-4" />Logout</Button></div>
             </motion.aside>
           </>
         )}
       </AnimatePresence>
-      <div className="flex-1 md:ml-64">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/95 px-4 backdrop-blur-md md:px-6">
+      <div className="flex-1">
+        <header className="flex h-16 items-center gap-4 border-b border-border bg-background/95 px-4 backdrop-blur-md md:px-6">
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setSidebarOpen(true)}><Menu className="h-5 w-5" /></Button>
           <h1 className="font-display text-lg font-semibold">Admin Panel</h1>
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-3">
             <Link to="/" target="_blank"><Button variant="outline" size="sm"><ExternalLink className="h-4 w-4" />View Site</Button></Link>
+            <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-semibold">{user?.email?.charAt(0).toUpperCase() || 'A'}</div>
+              <span className="truncate max-w-[150px]">{user?.email || 'Admin'}</span>
+            </div>
+            <Button variant="outline" size="sm" onClick={handleSignOut}><LogOut className="h-4 w-4" />Logout</Button>
           </div>
         </header>
         <main className="p-4 md:p-6"><Outlet /></main>

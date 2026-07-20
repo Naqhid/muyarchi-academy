@@ -16,7 +16,7 @@ import { useToast } from '@/hooks/use-toast'
 const schema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   phone: z.string().min(10, 'Please enter a valid phone number'),
-  email: z.string().email('Please enter a valid email'),
+  classCourse: z.string().min(1, 'Please select a class or course'),
   message: z.string().min(10, 'Message must be at least 10 characters'),
 })
 
@@ -29,7 +29,7 @@ export default function Contact() {
 
 const onSubmit = (data: FormData) => {
   const subject = encodeURIComponent(
-    `Course Enquiry - ${data.name}`
+    `Enquiry - ${data.name}`
   )
 
   const body = encodeURIComponent(
@@ -39,7 +39,9 @@ I hope you are doing well.
 
 I would like to enquire about Muyarchi Academy and would appreciate it if you could provide me with the relevant information. My details are given below for your reference.
 
-My name is ${data.name}. You can reach me at ${data.phone} or email me at ${data.email}.
+My name is ${data.name}. You can reach me at ${data.phone}.
+
+Class/Course of interest: ${data.classCourse}
 
 ${data.message}
 
@@ -88,8 +90,7 @@ ${data.name}`
 </h1>
 
     <p className="mx-auto mt-6 max-w-2xl text-xl leading-relaxed text-white/80">
-      Have questions about Muyarchi Academy, admissions, or our programs?
-      We're here to help and would be delighted to hear from you.
+      Muyarchi Academy, Vaniyambadi, Tamil Nadu. Call or WhatsApp: [number]. Or send us an enquiry below — we reply within one working day.
     </p>
   </motion.div>
 </section>
@@ -232,7 +233,7 @@ ${data.name}`
 
   </div>
 </FadeIn>
-         {/* <FadeIn delay={0.2}>
+         <FadeIn delay={0.2}>
   <div>
 
     <SectionHeader
@@ -250,12 +251,12 @@ ${data.name}`
           <div className="space-y-2">
 
             <Label htmlFor="name">
-              Full Name
+              Name *
             </Label>
 
             <Input
               id="name"
-              placeholder="Enter your full name"
+              placeholder="Enter your name"
               {...register("name")}
               aria-invalid={!!errors.name}
               className="h-12 rounded-xl"
@@ -269,59 +270,66 @@ ${data.name}`
 
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="space-y-2">
 
-            <div className="space-y-2">
+            <Label htmlFor="phone">
+              Phone *
+            </Label>
 
-              <Label htmlFor="phone">
-                Phone Number
-              </Label>
+            <Input
+              id="phone"
+              placeholder="10-digit mobile number"
+              {...register("phone")}
+              aria-invalid={!!errors.phone}
+              className="h-12 rounded-xl"
+            />
 
-              <Input
-                id="phone"
-                placeholder="+91 9876543210"
-                {...register("phone")}
-                aria-invalid={!!errors.phone}
-                className="h-12 rounded-xl"
-              />
+            {errors.phone && (
+              <p className="text-xs text-destructive">
+                {errors.phone.message}
+              </p>
+            )}
 
-              {errors.phone && (
-                <p className="text-xs text-destructive">
-                  {errors.phone.message}
-                </p>
-              )}
+          </div>
 
-            </div>
+          <div className="space-y-2">
 
-            <div className="space-y-2">
+            <Label htmlFor="classCourse">
+              Class/Course of Interest *
+            </Label>
 
-              <Label htmlFor="email">
-                Email Address
-              </Label>
+            <select
+              id="classCourse"
+              {...register("classCourse")}
+              aria-invalid={!!errors.classCourse}
+              className="flex h-12 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="">Select class or course</option>
+              <option value="Class 8">Class 8</option>
+              <option value="Class 9">Class 9</option>
+              <option value="Class 10">Class 10</option>
+              <option value="Class 11">Class 11</option>
+              <option value="Class 12">Class 12</option>
+              <option value="NEET">NEET</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Foundation">Foundation</option>
+              <option value="Spoken English">Spoken English</option>
+              <option value="CMA">CMA</option>
+              <option value="Government Exams">Government Exams</option>
+            </select>
 
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                {...register("email")}
-                aria-invalid={!!errors.email}
-                className="h-12 rounded-xl"
-              />
-
-              {errors.email && (
-                <p className="text-xs text-destructive">
-                  {errors.email.message}
-                </p>
-              )}
-
-            </div>
+            {errors.classCourse && (
+              <p className="text-xs text-destructive">
+                {errors.classCourse.message}
+              </p>
+            )}
 
           </div>
 
           <div className="space-y-2">
 
             <Label htmlFor="message">
-              Your Message
+              Message *
             </Label>
 
             <Textarea
@@ -347,13 +355,13 @@ ${data.name}`
             className="h-12 w-full rounded-xl bg-gradient-to-r from-primary to-blue-600 text-base font-semibold shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl"
           >
             <Send className="mr-2 h-5 w-5" />
-            Compose Email
+            Send Enquiry
           </Button>
 
           <div className="rounded-xl bg-primary/5 p-4 text-center">
 
             <p className="text-sm text-muted-foreground">
-              Clicking <strong>Compose Email</strong> will open your default
+              Clicking <strong>Send Enquiry</strong> will open your default
               email application with your enquiry already filled in.
             </p>
 
@@ -366,7 +374,7 @@ ${data.name}`
     </Card>
 
   </div>
-</FadeIn> */}
+</FadeIn>
         </div>
       </Section>
     </>
