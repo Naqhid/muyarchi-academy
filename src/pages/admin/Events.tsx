@@ -71,8 +71,8 @@ export default function Events() {
       event_date: event.event_date ? event.event_date.split('T')[0] : '',
       cover_image_url: event.cover_image_url,
     })
-    setImageGallery(event.image_gallery_urls?.length > 0 ? event.image_gallery_urls : [])
-    setVideoGallery(event.video_gallery_urls?.length > 0 ? event.video_gallery_urls : [])
+    setImageGallery(event.image_gallery_urls && event.image_gallery_urls.length > 0 ? event.image_gallery_urls : [])
+    setVideoGallery(event.video_gallery_urls && event.video_gallery_urls.length > 0 ? event.video_gallery_urls : [])
     setDialogOpen(true)
   }
 
