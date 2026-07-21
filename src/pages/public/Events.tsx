@@ -99,14 +99,15 @@ export default function Events() {
       {/* Gallery Stats */}
       <div className="absolute bottom-5 right-5 flex gap-2">
 
-        {event.image_gallery_urls.length > 0 && (
+
+        {event.image_gallery_urls && event.image_gallery_urls.length > 0 && (
           <Badge className="bg-black/60 text-white backdrop-blur">
             <ImageIcon className="mr-1 h-4 w-4" />
             {event.image_gallery_urls.length}
           </Badge>
         )}
 
-        {event.video_gallery_urls.length > 0 && (
+        {event.video_gallery_urls && event.video_gallery_urls.length > 0 && (
           <Badge className="bg-black/60 text-white backdrop-blur">
             <Video className="mr-1 h-4 w-4" />
             {event.video_gallery_urls.length}
@@ -129,7 +130,7 @@ export default function Events() {
 
       {/* Photo Gallery */}
 
-      {event.image_gallery_urls.length > 0 && (
+      {event.image_gallery_urls && event.image_gallery_urls.length > 0 && (
         <div>
 
           <h4 className="mb-4 flex items-center gap-2 text-lg font-semibold">
@@ -180,7 +181,7 @@ export default function Events() {
 
       {/* Video Gallery */}
 
-      {event.video_gallery_urls.length > 0 && (
+      {event.video_gallery_urls && event.video_gallery_urls.length > 0 && (
         <div>
 
           <h4 className="mb-4 flex items-center gap-2 text-lg font-semibold">

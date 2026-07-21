@@ -71,8 +71,8 @@ export default function Events() {
       event_date: event.event_date ? event.event_date.split('T')[0] : '',
       cover_image_url: event.cover_image_url,
     })
-    setImageGallery(event.image_gallery_urls.length > 0 ? event.image_gallery_urls : [])
-    setVideoGallery(event.video_gallery_urls.length > 0 ? event.video_gallery_urls : [])
+    setImageGallery(event.image_gallery_urls?.length > 0 ? event.image_gallery_urls : [])
+    setVideoGallery(event.video_gallery_urls?.length > 0 ? event.video_gallery_urls : [])
     setDialogOpen(true)
   }
 
@@ -180,8 +180,8 @@ export default function Events() {
                     </div>
                   )}
                   <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="gap-1"><ImageIcon className="h-3 w-3" />{event.image_gallery_urls.length} images</Badge>
-                    <Badge variant="secondary" className="gap-1"><Video className="h-3 w-3" />{event.video_gallery_urls.length} videos</Badge>
+                    <Badge variant="secondary" className="gap-1"><ImageIcon className="h-3 w-3" />{event.image_gallery_urls?.length ?? 0} images</Badge>
+                    <Badge variant="secondary" className="gap-1"><Video className="h-3 w-3" />{event.video_gallery_urls?.length ?? 0} videos</Badge>
                   </div>
                   <div className="flex gap-2 pt-2">
                     <Button variant="outline" size="sm" onClick={() => openEdit(event)}><Pencil className="h-4 w-4" />Edit</Button>

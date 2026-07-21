@@ -138,11 +138,11 @@ export function initGoogleTranslateElement(): void {
   
   setTimeout(() => {
     try {
-      new (window.google.translate.TranslateElement as any)(
+      new (window.google!.translate!.TranslateElement as any)(
         { 
           pageLanguage: 'en',
           includedLanguages: 'en,ta,ur',
-          layout: (window.google.translate.TranslateElement as any).InlineLayout.SIMPLE,
+          layout: (window.google!.translate!.TranslateElement as any).InlineLayout.SIMPLE,
           autoDisplay: false,
           gaTrack: false
         },
