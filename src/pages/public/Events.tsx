@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Calendar, ImageIcon, Video, PlayCircle } from 'lucide-react'
 import { Section, SectionHeader, FadeIn } from '@/components/shared/Section'
@@ -65,7 +66,8 @@ export default function Events() {
           <div className="space-y-8">
             {events.map((event, i) => (
              <FadeIn key={event.id} delay={i * 0.05}>
-  <Card className="group overflow-hidden rounded-3xl border-0 bg-background shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+  <Link to={`/events/${event.id}`} className="block">
+  <Card className="group overflow-hidden rounded-3xl border-0 bg-background shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer">
 
     {/* Cover Image */}
     <div className="relative aspect-[21/9] overflow-hidden">
@@ -219,6 +221,7 @@ export default function Events() {
     </CardContent>
 
   </Card>
+  </Link>
 </FadeIn>
             ))}
           </div>

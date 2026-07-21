@@ -7,10 +7,13 @@ import { Skeleton } from '@/components/ui/skeleton'
 const PublicLayout = lazy(() => import('@/layouts/PublicLayout'))
 const Home = lazy(() => import('@/pages/public/Home'))
 const Courses = lazy(() => import('@/pages/public/Courses'))
+const CourseDetail = lazy(() => import('@/pages/public/CourseDetail'))
 const Scholarship = lazy(() => import('@/pages/public/Scholarship'))
+const FreeDemo = lazy(() => import('@/pages/public/FreeDemo'))
 const Blog = lazy(() => import('@/pages/public/Blog'))
 const BlogDetail = lazy(() => import('@/pages/public/BlogDetail'))
 const Events = lazy(() => import('@/pages/public/Events'))
+const EventDetail = lazy(() => import('@/pages/public/EventDetail'))
 const Contact = lazy(() => import('@/pages/public/Contact'))
 
 const AdminLayout = lazy(() => import('@/layouts/AdminLayout'))
@@ -22,7 +25,9 @@ const AdminBlogs = lazy(() => import('@/pages/admin/Blogs'))
 const AdminEvents = lazy(() => import('@/pages/admin/Events'))
 const AdminTestimonials = lazy(() => import('@/pages/admin/Testimonials'))
 const AdminMedia = lazy(() => import('@/pages/admin/Media'))
-const ScholarshipSettings = lazy(() => import('@/pages/admin/ScholarshipSettings'))
+const AdminScholarship = lazy(() => import('@/pages/admin/Scholarship'))
+const AdminEnquiries = lazy(() => import('@/pages/admin/Enquiries'))
+const AdminDemoRegistrations = lazy(() => import('@/pages/admin/DemoRegistrations'))
 const AdminSettings = lazy(() => import('@/pages/admin/Settings'))
 
 function PageLoader() {
@@ -41,9 +46,12 @@ export default function App() {
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/courses" element={<Courses />} />
+            <Route path="/courses/:id" element={<CourseDetail />} />
             <Route path="/scholarship" element={<Scholarship />} />
+            <Route path="/free-demo" element={<FreeDemo />} />
             <Route path="/blog/:id" element={<BlogDetail />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/events/:id" element={<EventDetail />} />
             <Route path="/events" element={<Events />} />
             <Route path="/contact" element={<Contact />} />
           </Route>
@@ -56,7 +64,9 @@ export default function App() {
             <Route path="events" element={<AdminEvents />} />
             <Route path="testimonials" element={<AdminTestimonials />} />
             <Route path="media" element={<AdminMedia />} />
-            <Route path="scholarship" element={<ScholarshipSettings />} />
+            <Route path="scholarship" element={<AdminScholarship />} />
+            <Route path="demo-registrations" element={<AdminDemoRegistrations />} />
+            <Route path="enquiries" element={<AdminEnquiries />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
         </Routes>

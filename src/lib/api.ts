@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import type {
-  Course, Blog, EventItem, Testimonial, MediaItem, SiteSettings,
-  CourseInput, BlogInput, EventInput, TestimonialInput, MediaInput, SiteSettingsInput,
+  Course, Blog, EventItem, Testimonial, MediaItem, SiteSettings, Scholarship, ScholarshipRegistration, Enquiry, DemoRegistration,
+  CourseInput, BlogInput, EventInput, TestimonialInput, MediaInput, SiteSettingsInput, ScholarshipInput, ScholarshipRegistrationInput, EnquiryInput, DemoRegistrationInput,
 } from '@/types'
 
 // === Courses ===
@@ -14,6 +14,11 @@ export async function fetchActiveCourses() {
   const { data, error } = await supabase.from('courses').select('*').eq('status', 'active').order('sort_order', { ascending: true })
   if (error) throw error
   return data as Course[]
+}
+export async function fetchCourseById(id: string) {
+  const { data, error } = await supabase.from('courses').select('*').eq('id', id).single()
+  if (error) throw error
+  return data as Course
 }
 export async function createCourse(input: CourseInput) {
   const { data, error } = await supabase.from('courses').insert(input).select().single()
@@ -66,6 +71,11 @@ export async function fetchEvents() {
   const { data, error } = await supabase.from('events').select('*').order('event_date', { ascending: false })
   if (error) throw error
   return data as EventItem[]
+}
+export async function fetchEventById(id: string) {
+  const { data, error } = await supabase.from('events').select('*').eq('id', id).single()
+  if (error) throw error
+  return data as EventItem
 }
 export async function createEvent(input: EventInput) {
   const { data, error } = await supabase.from('events').insert(input).select().single()
@@ -134,4 +144,64 @@ export async function updateSettings(input: Partial<SiteSettingsInput>) {
   const { data, error } = await supabase.from('site_settings').update(input).eq('id', 1).select().single()
   if (error) throw error
   return data as SiteSettings
+}
+
+// === Scholarship ===
+export async function fetchScholarship() {
+  const { data, error } = await supabase.from('scholarship').select('*').eq('id', 1).maybeSingle()
+  if (error) throw error
+  return data as Scholarship | null
+}
+export async function updateScholarship(input: Partial<ScholarshipInput>) {
+  const { data, error } = await supabase.from('scholarship').update(input).eq('id', 1).select().single()
+  if (error) throw error
+  return data as Scholarship
+}
+
+// === Scholarship Registrations ===
+export async function fetchScholarshipRegistrations() {
+  const { data, error } = await supabase.from('scholarship_registrations').select('*').order('created_at', { ascending: false })
+  if (error) throw error
+  return data as ScholarshipRegistration[]
+}
+export async function createScholarshipRegistration(input: ScholarshipRegistrationInput) {
+  const { data, error } = await supabase.from('scholarship_registrations').insert(input).select().single()
+  if (error) throw error
+  return data as ScholarshipRegistration
+}
+export async function deleteScholarshipRegistration(id: string) {
+  const { error } = await supabase.from('scholarship_registrations').delete().eq('id', id)
+  if (error) throw error
+}
+
+// === Enquiries ===
+export async function fetchEnquiries() {
+  const { data, error } = await supabase.from('enquiries').select('*').order('created_at', { ascending: false })
+  if (error) throw error
+  return data as Enquiry[]
+}
+export async function createEnquiry(input: EnquiryInput) {
+  const { data, error } = await supabase.from('enquiries').insert(input).select().single()
+  if (error) throw error
+  return data as Enquiry
+}
+export async function deleteEnquiry(id: string) {
+  const { error } = await supabase.from('enquiries').delete().eq('id', id)
+  if (error) throw error
+}
+
+// === Demo Registrations ===
+export async function fetchDemoRegistrations() {
+  const { data, error } = await supabase.from('demo_registrations').select('*').order('created_at', { ascending: false })
+  if (error) throw error
+  return data as DemoRegistration[]
+}
+export async function createDemoRegistration(input: DemoRegistrationInput) {
+  const { data, error } = await supabase.from('demo_registrations').insert(input).select().single()
+  if (error) throw error
+  return data as DemoRegistration
+}
+export async function deleteDemoRegistration(id: string) {
+  const { error } = await supabase.from('demo_registrations').delete().eq('id', id)
+  if (error) throw error
 }

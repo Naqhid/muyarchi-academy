@@ -2,16 +2,29 @@ import { Link } from 'react-router-dom'
 import { Facebook, Twitter, Instagram, Youtube, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
 import { useSettings } from '@/hooks/use-settings'
 
+// Helper to safely get a string value from settings
+const safeString = (val: unknown): string => {
+  if (typeof val === 'string') return val
+  if (val && typeof val === 'object') return JSON.stringify(val)
+  return ''
+}
+
 export function PublicFooter() {
   const { settings } = useSettings()
   if (!settings) return null
 
+  const academyName = safeString(settings.academy_name) || 'Muyarchi Academy'
+  const logoUrl = safeString(settings.logo_url)
+  const phone = safeString(settings.phone)
+  const email = safeString(settings.email)
+  const address = safeString(settings.address)
+
   const socials = [
-    { url: settings.facebook_url, icon: Facebook, label: 'Facebook' },
-    { url: settings.twitter_url, icon: Twitter, label: 'Twitter' },
-    { url: settings.instagram_url, icon: Instagram, label: 'Instagram' },
-    { url: settings.youtube_url, icon: Youtube, label: 'YouTube' },
-    { url: settings.linkedin_url, icon: Linkedin, label: 'LinkedIn' },
+    { url: safeString(settings.facebook_url), icon: Facebook, label: 'Facebook' },
+    { url: safeString(settings.twitter_url), icon: Twitter, label: 'Twitter' },
+    { url: safeString(settings.instagram_url), icon: Instagram, label: 'Instagram' },
+    { url: safeString(settings.youtube_url), icon: Youtube, label: 'YouTube' },
+    { url: safeString(settings.linkedin_url), icon: Linkedin, label: 'LinkedIn' },
   ].filter((s) => s.url)
 
   return (
@@ -20,12 +33,12 @@ export function PublicFooter() {
         <div className="grid gap-8 md:grid-cols-3">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              {settings.logo_url ? (
-                <img src={settings.logo_url} alt={settings.academy_name} className="h-9 w-9 rounded-lg object-cover" />
+              {logoUrl ? (
+                <img src={logoUrl} alt={academyName} className="h-9 w-9 rounded-lg object-cover" />
               ) : (
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-display font-bold">{settings.academy_name.charAt(0)}</div>
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-display font-bold">{academyName.charAt(0)}</div>
               )}
-              <span className="font-display text-lg font-bold">{settings.academy_name}</span>
+              <span className="font-display text-lg font-bold">{academyName}</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs">Where every effort counts.</p>
           </div>
@@ -42,9 +55,9 @@ export function PublicFooter() {
           <div>
             <h3 className="mb-4 font-display font-semibold">Contact</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              {settings.phone && <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-primary" /><a href={`tel:${settings.phone}`} className="hover:text-primary transition-colors">{settings.phone}</a></li>}
-              {settings.email && <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-primary" /><a href={`mailto:${settings.email}`} className="hover:text-primary transition-colors">{settings.email}</a></li>}
-              {settings.address && <li className="flex items-start gap-2"><MapPin className="h-4 w-4 text-primary mt-0.5" /><span>{settings.address}</span></li>}
+              {phone && <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-primary" /><a href={`tel:${phone}`} className="hover:text-primary transition-colors">{phone}</a></li>}
+              {email && <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-primary" /><a href={`mailto:${email}`} className="hover:text-primary transition-colors">{email}</a></li>}
+              {address && <li className="flex items-start gap-2"><MapPin className="h-4 w-4 text-primary mt-0.5" /><span>{address}</span></li>}
             </ul>
             {socials.length > 0 && (
               <div className="mt-4 flex gap-3">
@@ -58,7 +71,7 @@ export function PublicFooter() {
           </div>
         </div>
         <div className="mt-8 border-t border-border pt-6 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} {settings.academy_name}. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {academyName}. All rights reserved.</p>
         </div>
       </div>
     </footer>

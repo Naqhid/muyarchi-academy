@@ -135,6 +135,84 @@ create trigger media_library_set_updated_at
   for each row execute function public.set_updated_at();
 
 -- ============================================================
+-- SCHOLARSHIP  (single row, id = 1)
+-- ============================================================
+create table if not exists public.scholarship (
+  id                        integer primary key default 1 check (id = 1),
+  hero_title                text not null default '',
+  hero_description          text not null default '',
+  how_it_works_title        text not null default '',
+  how_it_works_description  text not null default '',
+  card1_title               text not null default '',
+  card1_text                text not null default '',
+  card2_title               text not null default '',
+  card2_text                text not null default '',
+  card3_title               text not null default '',
+  card3_text                text not null default '',
+  test_details_title        text not null default '',
+  eligibility               text not null default '',
+  duration                  text not null default '',
+  test_date                 text not null default '',
+  venues                    text not null default '',
+  sample_paper_link         text not null default '',
+  updated_at                timestamptz not null default now()
+);
+
+drop trigger if exists scholarship_set_updated_at on public.scholarship;
+create trigger scholarship_set_updated_at
+  before update on public.scholarship
+  for each row execute function public.set_updated_at();
+
+-- Seed the singleton scholarship row so the admin panel has something to update.
+insert into public.scholarship (id) values (1)
+on conflict (id) do nothing;
+
+-- ============================================================
+-- SCHOLARSHIP REGISTRATIONS
+-- ============================================================
+create table if not exists public.scholarship_registrations (
+  id            uuid primary key default gen_random_uuid(),
+  student_name  text not null,
+  class         text not null,
+  school        text not null,
+  parent_name   text not null,
+  parent_phone  text not null,
+  town_village  text not null,
+  created_at    timestamptz not null default now()
+);
+
+create index if not exists scholarship_registrations_created_at_idx on public.scholarship_registrations (created_at desc);
+
+-- ============================================================
+-- ENQUIRIES
+-- ============================================================
+create table if not exists public.enquiries (
+  id            uuid primary key default gen_random_uuid(),
+  name          text not null,
+  phone         text not null,
+  class_course  text not null,
+  message       text not null,
+  created_at    timestamptz not null default now()
+);
+
+create index if not exists enquiries_created_at_idx on public.enquiries (created_at desc);
+
+-- ============================================================
+-- DEMO REGISTRATIONS
+-- ============================================================
+create table if not exists public.demo_registrations (
+  id            uuid primary key default gen_random_uuid(),
+  student_name  text not null,
+  class         text not null,
+  phone         text not null,
+  preferred_time text not null,
+  message       text not null default '',
+  created_at    timestamptz not null default now()
+);
+
+create index if not exists demo_registrations_created_at_idx on public.demo_registrations (created_at desc);
+
+-- ============================================================
 -- SITE SETTINGS  (single row, id = 1)
 -- ============================================================
 create table if not exists public.site_settings (
@@ -230,6 +308,50 @@ create policy "site_settings_public_read" on public.site_settings
 drop policy if exists "site_settings_admin_write" on public.site_settings;
 create policy "site_settings_admin_write" on public.site_settings
   for all to authenticated using (true) with check (true);
+
+-- SCHOLARSHIP
+drop policy if exists "scholarship_public_read" on public.scholarship;
+create policy "scholarship_public_read" on public.scholarship
+  for select using (true);
+drop policy if exists "scholarship_admin_write" on public.scholarship;
+create policy "scholarship_admin_write" on public.scholarship
+  for all to authenticated using (true) with check (true);
+
+-- SCHOLARSHIP REGISTRATIONS
+alter table public.scholarship_registrations enable row level security;
+drop policy if exists "scholarship_registrations_public_insert" on public.scholarship_registrations;
+create policy "scholarship_registrations_public_insert" on public.scholarship_registrations
+  for insert with check (true);
+drop policy if exists "scholarship_registrations_admin_read" on public.scholarship_registrations;
+create policy "scholarship_registrations_admin_read" on public.scholarship_registrations
+  for select to authenticated using (true);
+drop policy if exists "scholarship_registrations_admin_delete" on public.scholarship_registrations;
+create policy "scholarship_registrations_admin_delete" on public.scholarship_registrations
+  for delete to authenticated using (true);
+
+-- ENQUIRIES
+alter table public.enquiries enable row level security;
+drop policy if exists "enquiries_public_insert" on public.enquiries;
+create policy "enquiries_public_insert" on public.enquiries
+  for insert with check (true);
+drop policy if exists "enquiries_admin_read" on public.enquiries;
+create policy "enquiries_admin_read" on public.enquiries
+  for select to authenticated using (true);
+drop policy if exists "enquiries_admin_delete" on public.enquiries;
+create policy "enquiries_admin_delete" on public.enquiries
+  for delete to authenticated using (true);
+
+-- DEMO REGISTRATIONS
+alter table public.demo_registrations enable row level security;
+drop policy if exists demo_registrations_public_insert on public.demo_registrations;
+create policy demo_registrations_public_insert on public.demo_registrations
+  for insert with check (true);
+drop policy if exists demo_registrations_admin_read on public.demo_registrations;
+create policy demo_registrations_admin_read on public.demo_registrations
+  for select to authenticated using (true);
+drop policy if exists demo_registrations_admin_delete on public.demo_registrations;
+create policy demo_registrations_admin_delete on public.demo_registrations
+  for delete to authenticated using (true);
 
 -- ============================================================
 -- DONE

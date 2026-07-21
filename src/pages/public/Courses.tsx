@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { GraduationCap, Clock, DollarSign, CheckCircle2, BookOpen } from 'lucide-react'
 import { Section, SectionHeader, FadeIn } from '@/components/shared/Section'
@@ -77,98 +78,98 @@ export default function Courses() {
       {courses.map((course, i) => (
 
         <FadeIn key={course.id} delay={i * 0.05}>
+          <Link to={`/courses/${course.id}`} className="block h-full">
+            <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl cursor-pointer">
 
-         <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl">
+              <div className="relative aspect-video overflow-hidden bg-accent">
+                {course.thumbnail_url
+                  ? <img src={course.thumbnail_url} alt={course.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                  : <div className="flex h-full items-center justify-center bg-accent" />
+                }
+                <Badge className={`absolute left-3 top-3 text-xs capitalize ${course.status === 'active' ? 'bg-success text-success-foreground' : 'bg-muted text-muted-foreground'}`}>
+                  {course.status}
+                </Badge>
+              </div>
 
- <div className="relative aspect-video overflow-hidden bg-accent">
-                       {course.thumbnail_url
-                         ? <img src={course.thumbnail_url} alt={course.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-                         : <div className="flex h-full items-center justify-center bg-accent" />
-                       }
-                       <Badge className={`absolute left-3 top-3 text-xs capitalize ${course.status === 'active' ? 'bg-success text-success-foreground' : 'bg-muted text-muted-foreground'}`}>
-                         {course.status}
-                       </Badge>
-                     </div>
+              <CardContent className="p-5">
 
-  <CardContent className="p-5">
+                <h3 className="font-display text-xl font-semibold leading-snug transition-colors group-hover:text-primary">
+                  {course.title}
+                </h3>
 
-    <h3 className="font-display text-xl font-semibold leading-snug transition-colors group-hover:text-primary">
-      {course.title}
-    </h3>
+                <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground">
+                  {course.description}
+                </p>
 
-    <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground">
-      {course.description}
-    </p>
+                <div className="mt-5 space-y-3 text-sm">
 
-    <div className="mt-5 space-y-3 text-sm">
+                  {course.duration && (
+                    <div className="flex items-center gap-3 rounded-xl bg-primary/5 p-3">
 
-      {course.duration && (
-        <div className="flex items-center gap-3 rounded-xl bg-primary/5 p-3">
+                      <Clock className="h-5 w-5 text-primary" />
 
-          <Clock className="h-5 w-5 text-primary" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">
+                          Duration
+                        </p>
 
-          <div>
-            <p className="text-xs text-muted-foreground">
-              Duration
-            </p>
+                        <p className="font-medium">
+                          {course.duration}
+                        </p>
 
-            <p className="font-medium">
-              {course.duration}
-            </p>
+                      </div>
 
-          </div>
+                    </div>
+                  )}
 
-        </div>
-      )}
+                  {course.fees && (
+                    <div className="flex items-center gap-3 rounded-xl bg-green-50 p-3">
 
-      {course.fees && (
-        <div className="flex items-center gap-3 rounded-xl bg-green-50 p-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 font-bold text-green-700">
+                        ₹
+                      </div>
 
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 font-bold text-green-700">
-            ₹
-          </div>
+                      <div>
 
-          <div>
+                        <p className="text-xs text-muted-foreground">
+                          Fees
+                        </p>
 
-            <p className="text-xs text-muted-foreground">
-              Fees
-            </p>
+                        <p className="font-medium">
+                          {course.fees}
+                        </p>
 
-            <p className="font-medium">
-              {course.fees}
-            </p>
+                      </div>
 
-          </div>
+                    </div>
+                  )}
 
-        </div>
-      )}
+                  {course.eligibility && (
+                    <div className="flex items-center gap-3 rounded-xl bg-blue-50 p-3">
 
-      {course.eligibility && (
-        <div className="flex items-center gap-3 rounded-xl bg-blue-50 p-3">
+                      <CheckCircle2 className="h-5 w-5 text-blue-600" />
 
-          <CheckCircle2 className="h-5 w-5 text-blue-600" />
+                      <div>
 
-          <div>
+                        <p className="text-xs text-muted-foreground">
+                          Eligibility
+                        </p>
 
-            <p className="text-xs text-muted-foreground">
-              Eligibility
-            </p>
+                        <p className="font-medium">
+                          {course.eligibility}
+                        </p>
 
-            <p className="font-medium">
-              {course.eligibility}
-            </p>
+                      </div>
 
-          </div>
+                    </div>
+                  )}
 
-        </div>
-      )}
+                </div>
 
-    </div>
+              </CardContent>
 
-  </CardContent>
-
-</Card>
-
+            </Card>
+          </Link>
         </FadeIn>
 
       ))}

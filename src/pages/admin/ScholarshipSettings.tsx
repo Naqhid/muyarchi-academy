@@ -12,26 +12,26 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { useSettings } from '@/hooks/use-settings'
-import { fetchSettings, updateSettings } from '@/lib/api'
-import type { SiteSettingsInput } from '@/types'
+import { fetchScholarship, updateScholarship } from '@/lib/api'
+import type { ScholarshipInput } from '@/types'
 
 const schema = z.object({
-  scholarship_hero_title: z.string().optional().default(''),
-  scholarship_hero_description: z.string().optional().default(''),
-  scholarship_how_it_works_title: z.string().optional().default(''),
-  scholarship_how_it_works_description: z.string().optional().default(''),
-  scholarship_card1_title: z.string().optional().default(''),
-  scholarship_card1_text: z.string().optional().default(''),
-  scholarship_card2_title: z.string().optional().default(''),
-  scholarship_card2_text: z.string().optional().default(''),
-  scholarship_card3_title: z.string().optional().default(''),
-  scholarship_card3_text: z.string().optional().default(''),
-  scholarship_test_details_title: z.string().optional().default(''),
-  scholarship_eligibility: z.string().optional().default(''),
-  scholarship_duration: z.string().optional().default(''),
-  scholarship_test_date: z.string().optional().default(''),
-  scholarship_venues: z.string().optional().default(''),
-  scholarship_sample_paper_link: z.string().optional().default(''),
+  hero_title: z.string().optional().default(''),
+  hero_description: z.string().optional().default(''),
+  how_it_works_title: z.string().optional().default(''),
+  how_it_works_description: z.string().optional().default(''),
+  card1_title: z.string().optional().default(''),
+  card1_text: z.string().optional().default(''),
+  card2_title: z.string().optional().default(''),
+  card2_text: z.string().optional().default(''),
+  card3_title: z.string().optional().default(''),
+  card3_text: z.string().optional().default(''),
+  test_details_title: z.string().optional().default(''),
+  eligibility: z.string().optional().default(''),
+  duration: z.string().optional().default(''),
+  test_date: z.string().optional().default(''),
+  venues: z.string().optional().default(''),
+  sample_paper_link: z.string().optional().default(''),
 })
 
 type FormData = z.infer<typeof schema>
@@ -44,63 +44,63 @@ export default function ScholarshipSettings() {
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      scholarship_hero_title: '', scholarship_hero_description: '', scholarship_how_it_works_title: '',
-      scholarship_how_it_works_description: '', scholarship_card1_title: '', scholarship_card1_text: '',
-      scholarship_card2_title: '', scholarship_card2_text: '', scholarship_card3_title: '', scholarship_card3_text: '',
-      scholarship_test_details_title: '', scholarship_eligibility: '', scholarship_duration: '',
-      scholarship_test_date: '', scholarship_venues: '', scholarship_sample_paper_link: '',
+      hero_title: '', hero_description: '', how_it_works_title: '',
+      how_it_works_description: '', card1_title: '', card1_text: '',
+      card2_title: '', card2_text: '', card3_title: '', card3_text: '',
+      test_details_title: '', eligibility: '', duration: '',
+      test_date: '', venues: '', sample_paper_link: '',
     },
   })
 
   useEffect(() => {
-    fetchSettings()
+    fetchScholarship()
       .then((data) => {
         if (data) {
           reset({
-            scholarship_hero_title: data.scholarship_hero_title || '',
-            scholarship_hero_description: data.scholarship_hero_description || '',
-            scholarship_how_it_works_title: data.scholarship_how_it_works_title || '',
-            scholarship_how_it_works_description: data.scholarship_how_it_works_description || '',
-            scholarship_card1_title: data.scholarship_card1_title || '',
-            scholarship_card1_text: data.scholarship_card1_text || '',
-            scholarship_card2_title: data.scholarship_card2_title || '',
-            scholarship_card2_text: data.scholarship_card2_text || '',
-            scholarship_card3_title: data.scholarship_card3_title || '',
-            scholarship_card3_text: data.scholarship_card3_text || '',
-            scholarship_test_details_title: data.scholarship_test_details_title || '',
-            scholarship_eligibility: data.scholarship_eligibility || '',
-            scholarship_duration: data.scholarship_duration || '',
-            scholarship_test_date: data.scholarship_test_date || '',
-            scholarship_venues: data.scholarship_venues || '',
-            scholarship_sample_paper_link: data.scholarship_sample_paper_link || '',
+            hero_title: data.hero_title || '',
+            hero_description: data.hero_description || '',
+            how_it_works_title: data.how_it_works_title || '',
+            how_it_works_description: data.how_it_works_description || '',
+            card1_title: data.card1_title || '',
+            card1_text: data.card1_text || '',
+            card2_title: data.card2_title || '',
+            card2_text: data.card2_text || '',
+            card3_title: data.card3_title || '',
+            card3_text: data.card3_text || '',
+            test_details_title: data.test_details_title || '',
+            eligibility: data.eligibility || '',
+            duration: data.duration || '',
+            test_date: data.test_date || '',
+            venues: data.venues || '',
+            sample_paper_link: data.sample_paper_link || '',
           })
         }
       })
-      .catch((err) => { console.error('Failed to load settings:', err); toast({ title: 'Error', description: 'Failed to load settings', variant: 'destructive' }) })
+      .catch((err) => { console.error('Failed to load scholarship settings:', err); toast({ title: 'Error', description: 'Failed to load scholarship settings', variant: 'destructive' }) })
       .finally(() => setLoading(false))
   }, [reset, toast])
 
   const onSubmit = async (data: FormData) => {
-    const input: Partial<SiteSettingsInput> = {
-      scholarship_hero_title: data.scholarship_hero_title || '',
-      scholarship_hero_description: data.scholarship_hero_description || '',
-      scholarship_how_it_works_title: data.scholarship_how_it_works_title || '',
-      scholarship_how_it_works_description: data.scholarship_how_it_works_description || '',
-      scholarship_card1_title: data.scholarship_card1_title || '',
-      scholarship_card1_text: data.scholarship_card1_text || '',
-      scholarship_card2_title: data.scholarship_card2_title || '',
-      scholarship_card2_text: data.scholarship_card2_text || '',
-      scholarship_card3_title: data.scholarship_card3_title || '',
-      scholarship_card3_text: data.scholarship_card3_text || '',
-      scholarship_test_details_title: data.scholarship_test_details_title || '',
-      scholarship_eligibility: data.scholarship_eligibility || '',
-      scholarship_duration: data.scholarship_duration || '',
-      scholarship_test_date: data.scholarship_test_date || '',
-      scholarship_venues: data.scholarship_venues || '',
-      scholarship_sample_paper_link: data.scholarship_sample_paper_link || '',
+    const input: Partial<ScholarshipInput> = {
+      hero_title: data.hero_title || '',
+      hero_description: data.hero_description || '',
+      how_it_works_title: data.how_it_works_title || '',
+      how_it_works_description: data.how_it_works_description || '',
+      card1_title: data.card1_title || '',
+      card1_text: data.card1_text || '',
+      card2_title: data.card2_title || '',
+      card2_text: data.card2_text || '',
+      card3_title: data.card3_title || '',
+      card3_text: data.card3_text || '',
+      test_details_title: data.test_details_title || '',
+      eligibility: data.eligibility || '',
+      duration: data.duration || '',
+      test_date: data.test_date || '',
+      venues: data.venues || '',
+      sample_paper_link: data.sample_paper_link || '',
     }
     try {
-      await updateSettings(input)
+      await updateScholarship(input)
       toast({ title: 'Scholarship settings saved', description: 'Scholarship page content has been updated successfully.', variant: 'success' })
       refresh()
     } catch (err) {
@@ -140,14 +140,14 @@ export default function ScholarshipSettings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="scholarship_hero_title">Hero Title</Label>
-                <Input id="scholarship_hero_title" placeholder="Scholarship-cum-Admission Test" {...register('scholarship_hero_title')} />
-                {errors.scholarship_hero_title && <p className="text-xs text-destructive" role="alert">{errors.scholarship_hero_title.message}</p>}
+                <Label htmlFor="hero_title">Hero Title</Label>
+                <Input id="hero_title" placeholder="Scholarship-cum-Admission Test" {...register('hero_title')} />
+                {errors.hero_title && <p className="text-xs text-destructive" role="alert">{errors.hero_title.message}</p>}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="scholarship_hero_description">Hero Description</Label>
-                <Textarea id="scholarship_hero_description" rows={3} placeholder="Every student who joins Muyarchi Academy sits our scholarship test..." {...register('scholarship_hero_description')} />
-                {errors.scholarship_hero_description && <p className="text-xs text-destructive" role="alert">{errors.scholarship_hero_description.message}</p>}
+                <Label htmlFor="hero_description">Hero Description</Label>
+                <Textarea id="hero_description" rows={3} placeholder="Every student who joins Muyarchi Academy sits our scholarship test..." {...register('hero_description')} />
+                {errors.hero_description && <p className="text-xs text-destructive" role="alert">{errors.hero_description.message}</p>}
               </div>
             </CardContent>
           </Card>
@@ -162,41 +162,41 @@ export default function ScholarshipSettings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="scholarship_how_it_works_title">Section Title</Label>
-                <Input id="scholarship_how_it_works_title" placeholder="How It Works" {...register('scholarship_how_it_works_title')} />
-                {errors.scholarship_how_it_works_title && <p className="text-xs text-destructive" role="alert">{errors.scholarship_how_it_works_title.message}</p>}
+                <Label htmlFor="how_it_works_title">Section Title</Label>
+                <Input id="how_it_works_title" placeholder="How It Works" {...register('how_it_works_title')} />
+                {errors.how_it_works_title && <p className="text-xs text-destructive" role="alert">{errors.how_it_works_title.message}</p>}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="scholarship_how_it_works_description">Section Description</Label>
-                <Textarea id="scholarship_how_it_works_description" rows={3} placeholder="The test rewards effort and ability, not background..." {...register('scholarship_how_it_works_description')} />
-                {errors.scholarship_how_it_works_description && <p className="text-xs text-destructive" role="alert">{errors.scholarship_how_it_works_description.message}</p>}
+                <Label htmlFor="how_it_works_description">Section Description</Label>
+                <Textarea id="how_it_works_description" rows={3} placeholder="The test rewards effort and ability, not background..." {...register('how_it_works_description')} />
+                {errors.how_it_works_description && <p className="text-xs text-destructive" role="alert">{errors.how_it_works_description.message}</p>}
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
-                  <Label htmlFor="scholarship_card1_title">Card 1 Title</Label>
-                  <Input id="scholarship_card1_title" placeholder="Objective Test" {...register('scholarship_card1_title')} />
+                  <Label htmlFor="card1_title">Card 1 Title</Label>
+                  <Input id="card1_title" placeholder="Objective Test" {...register('card1_title')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="scholarship_card2_title">Card 2 Title</Label>
-                  <Input id="scholarship_card2_title" placeholder="Merit-Based" {...register('scholarship_card2_title')} />
+                  <Label htmlFor="card2_title">Card 2 Title</Label>
+                  <Input id="card2_title" placeholder="Merit-Based" {...register('card2_title')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="scholarship_card3_title">Card 3 Title</Label>
-                  <Input id="scholarship_card3_title" placeholder="Fee Reduction" {...register('scholarship_card3_title')} />
+                  <Label htmlFor="card3_title">Card 3 Title</Label>
+                  <Input id="card3_title" placeholder="Fee Reduction" {...register('card3_title')} />
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
-                  <Label htmlFor="scholarship_card1_text">Card 1 Text</Label>
-                  <Textarea id="scholarship_card1_text" rows={2} placeholder="Mathematics, Science and mental ability" {...register('scholarship_card1_text')} />
+                  <Label htmlFor="card1_text">Card 1 Text</Label>
+                  <Textarea id="card1_text" rows={2} placeholder="Mathematics, Science and mental ability" {...register('card1_text')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="scholarship_card2_text">Card 2 Text</Label>
-                  <Textarea id="scholarship_card2_text" rows={2} placeholder="Scholarships awarded on performance" {...register('scholarship_card2_text')} />
+                  <Label htmlFor="card2_text">Card 2 Text</Label>
+                  <Textarea id="card2_text" rows={2} placeholder="Scholarships awarded on performance" {...register('card2_text')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="scholarship_card3_text">Card 3 Text</Label>
-                  <Textarea id="scholarship_card3_text" rows={2} placeholder="Every mark earned reduces the fee" {...register('scholarship_card3_text')} />
+                  <Label htmlFor="card3_text">Card 3 Text</Label>
+                  <Textarea id="card3_text" rows={2} placeholder="Every mark earned reduces the fee" {...register('card3_text')} />
                 </div>
               </div>
             </CardContent>
@@ -212,34 +212,34 @@ export default function ScholarshipSettings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="scholarship_test_details_title">Section Title</Label>
-                <Input id="scholarship_test_details_title" placeholder="Test Details" {...register('scholarship_test_details_title')} />
-                {errors.scholarship_test_details_title && <p className="text-xs text-destructive" role="alert">{errors.scholarship_test_details_title.message}</p>}
+                <Label htmlFor="test_details_title">Section Title</Label>
+                <Input id="test_details_title" placeholder="Test Details" {...register('test_details_title')} />
+                {errors.test_details_title && <p className="text-xs text-destructive" role="alert">{errors.test_details_title.message}</p>}
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="scholarship_eligibility">Eligibility</Label>
-                  <Input id="scholarship_eligibility" placeholder="Students entering Classes 8–12" {...register('scholarship_eligibility')} />
+                  <Label htmlFor="eligibility">Eligibility</Label>
+                  <Input id="eligibility" placeholder="Students entering Classes 8–12" {...register('eligibility')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="scholarship_duration">Duration</Label>
-                  <Input id="scholarship_duration" placeholder="Coming soon" {...register('scholarship_duration')} />
+                  <Label htmlFor="duration">Duration</Label>
+                  <Input id="duration" placeholder="Coming soon" {...register('duration')} />
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="scholarship_test_date">Test Date</Label>
-                  <Input id="scholarship_test_date" placeholder="Coming soon" {...register('scholarship_test_date')} />
+                  <Label htmlFor="test_date">Test Date</Label>
+                  <Input id="test_date" placeholder="Coming soon" {...register('test_date')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="scholarship_venues">Venues</Label>
-                  <Input id="scholarship_venues" placeholder="Coming soon" {...register('scholarship_venues')} />
+                  <Label htmlFor="venues">Venues</Label>
+                  <Input id="venues" placeholder="Coming soon" {...register('venues')} />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="scholarship_sample_paper_link">Sample Paper Download Link</Label>
-                <Input id="scholarship_sample_paper_link" placeholder="https://..." {...register('scholarship_sample_paper_link')} />
-                {errors.scholarship_sample_paper_link && <p className="text-xs text-destructive" role="alert">{errors.scholarship_sample_paper_link.message}</p>}
+                <Label htmlFor="sample_paper_link">Sample Paper Download Link</Label>
+                <Input id="sample_paper_link" placeholder="https://..." {...register('sample_paper_link')} />
+                {errors.sample_paper_link && <p className="text-xs text-destructive" role="alert">{errors.sample_paper_link.message}</p>}
               </div>
             </CardContent>
           </Card>

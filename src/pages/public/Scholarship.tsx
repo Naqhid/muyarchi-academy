@@ -7,11 +7,12 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
-import { useSettings } from '@/hooks/use-settings'
+import { useScholarship } from '@/hooks/use-scholarship'
+import { createScholarshipRegistration } from '@/lib/api'
 
 export default function Scholarship() {
   const { toast } = useToast()
-  const { settings } = useSettings()
+  const { scholarship } = useScholarship()
   const [formData, setFormData] = useState({
     studentName: '',
     class: '',
@@ -26,9 +27,15 @@ export default function Scholarship() {
     e.preventDefault()
     setLoading(true)
     
-    // Simulate form submission
-    setTimeout(() => {
-      setLoading(false)
+    try {
+      await createScholarshipRegistration({
+        student_name: formData.studentName,
+        class: formData.class,
+        school: formData.school,
+        parent_name: formData.parentName,
+        parent_phone: formData.parentPhone,
+        town_village: formData.townVillage,
+      })
       toast({
         title: "Registration Submitted",
         description: "We'll contact you with scholarship test details soon.",
@@ -41,7 +48,16 @@ export default function Scholarship() {
         parentPhone: '',
         townVillage: '',
       })
-    }, 1500)
+    } catch (err) {
+      console.error('Registration error:', err)
+      toast({
+        title: "Registration Failed",
+        description: "Please try again later.",
+        variant: "destructive",
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -67,10 +83,10 @@ export default function Scholarship() {
             Scholarship Programme
           </div>
           <h1 className="mx-auto max-w-4xl font-display text-4xl font-extrabold leading-tight tracking-tight text-white md:text-6xl">
-            {settings?.scholarship_hero_title || 'Scholarship-cum-Admission Test'}
+            {scholarship?.hero_title || 'Scholarship Programme'}
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            {settings?.scholarship_hero_description || 'Every student who joins Muyarchi Academy sits our scholarship test — and every mark earned reduces the fee.'}
+            {scholarship?.hero_description || 'Content coming soon'}
           </p>
         </motion.div>
       </section>
@@ -80,16 +96,16 @@ export default function Scholarship() {
         <FadeIn>
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="font-display text-3xl font-semibold tracking-tight text-primary md:text-4xl mb-6">
-              {settings?.scholarship_how_it_works_title || 'How It Works'}
+              {scholarship?.how_it_works_title || 'How It Works'}
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-              {settings?.scholarship_how_it_works_description || 'The test rewards effort and ability, not background: a simple objective paper appropriate to the student\'s class, covering Mathematics, Science and mental ability. Scholarships are awarded on merit, and the registration amount is fully adjusted against admission for every student who takes the test.'}
+              {scholarship?.how_it_works_description || 'Content coming soon'}
             </p>
             <div className="grid gap-6 md:grid-cols-3">
               {[
-                { icon: BookOpen, title: settings?.scholarship_card1_title || 'Objective Test', text: settings?.scholarship_card1_text || 'Mathematics, Science and mental ability' },
-                { icon: CheckCircle, title: settings?.scholarship_card2_title || 'Merit-Based', text: settings?.scholarship_card2_text || 'Scholarships awarded on performance' },
-                { icon: GraduationCap, title: settings?.scholarship_card3_title || 'Fee Reduction', text: settings?.scholarship_card3_text || 'Every mark earned reduces the fee' },
+                { icon: BookOpen, title: scholarship?.card1_title || 'Card 1', text: scholarship?.card1_text || 'Content coming soon' },
+                { icon: CheckCircle, title: scholarship?.card2_title || 'Card 2', text: scholarship?.card2_text || 'Content coming soon' },
+                { icon: GraduationCap, title: scholarship?.card3_title || 'Card 3', text: scholarship?.card3_text || 'Content coming soon' },
               ].map((item, i) => (
                 <FadeIn key={i} delay={i * 0.1}>
                   <Card className="border-0 shadow-sm">
@@ -113,32 +129,32 @@ export default function Scholarship() {
         <FadeIn>
           <div className="mx-auto max-w-3xl">
             <h2 className="font-display text-3xl font-semibold tracking-tight text-primary md:text-4xl mb-8 text-center">
-              {settings?.scholarship_test_details_title || 'Test Details'}
+              {scholarship?.test_details_title || 'Test Details'}
             </h2>
             <Card className="border-0 shadow-sm">
               <CardContent className="p-8">
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
                     <h3 className="font-semibold mb-2">Eligibility</h3>
-                    <p className="text-muted-foreground">{settings?.scholarship_eligibility || 'Students entering Classes 8–12'}</p>
+                    <p className="text-muted-foreground">{scholarship?.eligibility || 'Content coming soon'}</p>
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">Duration</h3>
-                    <p className="text-muted-foreground">{settings?.scholarship_duration || 'Coming soon'}</p>
+                    <p className="text-muted-foreground">{scholarship?.duration || 'Content coming soon'}</p>
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">Test Date</h3>
-                    <p className="text-muted-foreground">{settings?.scholarship_test_date || 'Coming soon'}</p>
+                    <p className="text-muted-foreground">{scholarship?.test_date || 'Content coming soon'}</p>
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">Venues</h3>
-                    <p className="text-muted-foreground">{settings?.scholarship_venues || 'Coming soon'}</p>
+                    <p className="text-muted-foreground">{scholarship?.venues || 'Content coming soon'}</p>
                   </div>
                 </div>
-                {settings?.scholarship_sample_paper_link && (
+                {scholarship?.sample_paper_link && (
                   <div className="mt-6 pt-6 border-t text-center">
                     <Button asChild variant="outline">
-                      <a href={settings.scholarship_sample_paper_link} target="_blank" rel="noopener noreferrer">
+                      <a href={scholarship.sample_paper_link} target="_blank" rel="noopener noreferrer">
                         Download Sample Paper
                       </a>
                     </Button>

@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Sun, Moon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -11,20 +11,26 @@ const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/courses', label: 'Courses' },
   { to: '/scholarship', label: 'Scholarship Test' },
+  { to: '/free-demo', label: 'Free Demo' },
   { to: '/blog', label: 'Blog' },
   { to: '/events', label: 'Events & Gallery' },
   { to: '/contact', label: 'Contact' },
 ]
 
+// Lazy load LanguageSwitcher for better performance
+ const LazyLanguageSwitcher = lazy(() => import('@/components/LanguageSwitcher'))
+
+// Simple fallback for lazy loading
+function LanguageSwitcherFallback() {
+  return (
+    <Button variant="ghost" size="icon" aria-label="Select language" disabled>
+      <span className="text-lg">🌐</span>
+    </Button>
+  )
+}
+
 export default function PublicLayout() {
-  let settings = null
-  try {
-    const settingsContext = useSettings()
-    settings = settingsContext.settings
-  } catch (err) {
-    // Context not available, use fallback values
-    console.warn('Settings context not available, using fallback')
-  }
+  const { settings } = useSettings()
 
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -54,8 +60,18 @@ export default function PublicLayout() {
 
   useEffect(() => { setMobileOpen(false) }, [location.pathname])
 
-  const academyName = settings?.academy_name || 'Muyarchi Academy'
-  const logoUrl = settings?.logo_url
+  // Safely get academy name (handle case where it might be an object)
+  const academyName = (() => {
+    const val = settings?.academy_name
+    if (typeof val === 'string') return val
+    if (val && typeof val === 'object') return JSON.stringify(val)
+    return 'Muyarchi Academy'
+  })()
+  const logoUrl = (() => {
+    const val = settings?.logo_url
+    if (typeof val === 'string') return val
+    return undefined
+  })()
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -75,6 +91,9 @@ export default function PublicLayout() {
             ))}
           </nav>
           <div className="flex items-center gap-2">
+            <Suspense fallback={<LanguageSwitcherFallback />}>
+              <LazyLanguageSwitcher />
+            </Suspense>
             <Button variant="ghost" size="icon" onClick={toggleDark} aria-label="Toggle theme">{dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}</Button>
             <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">{mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</Button>
           </div>
@@ -92,6 +111,7 @@ export default function PublicLayout() {
         </AnimatePresence>
       </header>
       <main className="flex-1 pt-16"><Outlet /></main>
+      <div id="google-translate-element" className="hidden" />
       <PublicFooter />
     </div>
   )

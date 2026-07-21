@@ -30,9 +30,11 @@ export interface EventItem {
   title: string
   description: string
   event_date: string | null
-  cover_image_url: string
-  image_gallery_urls: string[]
-  video_gallery_urls: string[]
+  cover_image_url?: string
+  image_gallery_urls?: string[]
+  video_gallery_urls?: string[]
+  venues?: string
+  image_url?: string
   created_at: string
   updated_at: string
 }
@@ -83,24 +85,58 @@ export interface SiteSettings {
   stat_students: string
   stat_courses: string
   stat_years: string
-  // Scholarship settings
-  scholarship_hero_title: string
-  scholarship_hero_description: string
-  scholarship_how_it_works_title: string
-  scholarship_how_it_works_description: string
-  scholarship_card1_title: string
-  scholarship_card1_text: string
-  scholarship_card2_title: string
-  scholarship_card2_text: string
-  scholarship_card3_title: string
-  scholarship_card3_text: string
-  scholarship_test_details_title: string
-  scholarship_eligibility: string
-  scholarship_duration: string
-  scholarship_test_date: string
-  scholarship_venues: string
-  scholarship_sample_paper_link: string
   updated_at: string
+}
+
+export interface Scholarship {
+  id: number
+  hero_title: string
+  hero_description: string
+  how_it_works_title: string
+  how_it_works_description: string
+  card1_title: string
+  card1_text: string
+  card2_title: string
+  card2_text: string
+  card3_title: string
+  card3_text: string
+  test_details_title: string
+  eligibility: string
+  duration: string
+  test_date: string
+  venues: string
+  sample_paper_link: string
+  updated_at: string
+}
+
+export interface ScholarshipRegistration {
+  id: string
+  student_name: string
+  class: string
+  school: string
+  parent_name: string
+  parent_phone: string
+  town_village: string
+  created_at: string
+}
+
+export interface Enquiry {
+  id: string
+  name: string
+  phone: string
+  class_course: string
+  message: string
+  created_at: string
+}
+
+export interface DemoRegistration {
+  id: string
+  student_name: string
+  class: string
+  phone: string
+  preferred_time: string
+  message: string
+  created_at: string
 }
 
 export type CourseInput = Omit<Course, 'id' | 'created_at' | 'updated_at'>
@@ -109,3 +145,7 @@ export type EventInput = Omit<EventItem, 'id' | 'created_at' | 'updated_at'>
 export type TestimonialInput = Omit<Testimonial, 'id' | 'created_at' | 'updated_at'>
 export type MediaInput = Omit<MediaItem, 'id' | 'created_at' | 'updated_at'>
 export type SiteSettingsInput = Omit<SiteSettings, 'id' | 'updated_at'>
+export type ScholarshipInput = Omit<Scholarship, 'id' | 'updated_at'>
+export type ScholarshipRegistrationInput = Omit<ScholarshipRegistration, 'id' | 'created_at'>
+export type EnquiryInput = Omit<Enquiry, 'id' | 'created_at'>
+export type DemoRegistrationInput = Omit<DemoRegistration, 'id' | 'created_at'>

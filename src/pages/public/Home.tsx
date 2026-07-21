@@ -58,6 +58,21 @@ export default function Home() {
   const [events, setEvents] = useState<EventItem[]>([])
   const [loading, setLoading] = useState(true)
 
+  // Safely get academy name (handle case where it might be an object)
+  const academyName = (() => {
+    const val = settings?.academy_name
+    if (typeof val === 'string') return val
+    if (val && typeof val === 'object') return JSON.stringify(val)
+    return 'Muyarchi Academy'
+  })()
+  
+  // Safely get hero subtitle
+  const heroSubtitle = (() => {
+    const val = settings?.hero_subtitle
+    if (typeof val === 'string') return val
+    return 'Empowering students in Vaniyambadi with quality education and coaching for a brighter future.'
+  })()
+
   useEffect(() => {
     Promise.all([fetchActiveCourses(), fetchPublishedBlogs(), fetchEvents()])
       .then(([c, b, e]) => {
@@ -81,7 +96,7 @@ export default function Home() {
           >
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }}>
               <h1 className="font-display text-5xl font-bold leading-tight tracking-tight text-primary sm:text-6xl lg:text-7xl">
-                {settings?.academy_name || 'Muyarchi Academy'}
+                {academyName}
               </h1>
             </motion.div>
 
@@ -93,7 +108,7 @@ export default function Home() {
             </motion.div>
 
             <p className="mt-8 text-lg text-foreground/80 md:text-xl max-w-2xl mx-auto leading-relaxed">
-              {settings?.hero_subtitle || 'City-standard coaching in Vaniyambadi — at fees families can afford.'}
+              {heroSubtitle}
             </p>
 
             <div className="mt-12 flex flex-wrap justify-center gap-4">
@@ -101,7 +116,7 @@ export default function Home() {
                 <Link to="/scholarship">Register for the Scholarship Test</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="gap-2 rounded-md px-8">
-                <Link to="/contact">Book a free demo class</Link>
+                <Link to="/free-demo">Book a free demo class</Link>
               </Button>
             </div>
           </motion.div>
@@ -167,28 +182,30 @@ export default function Home() {
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {courses.map((course, i) => (
                 <FadeIn key={course.id} delay={i * 0.08}>
-                  <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1.5">
-                    <div className="relative aspect-video overflow-hidden bg-accent">
-                      {course.thumbnail_url
-                        ? <img src={course.thumbnail_url} alt={course.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-                        : <div className="flex h-full items-center justify-center bg-accent" />
-                      }
-                      <Badge className={`absolute left-3 top-3 text-xs capitalize ${course.status === 'active' ? 'bg-success text-success-foreground' : 'bg-muted text-muted-foreground'}`}>
-                        {course.status}
-                      </Badge>
-                    </div>
-                    <CardContent className="p-5">
-                      <h3 className="font-display text-base font-semibold leading-snug transition-colors group-hover:text-primary">{course.title}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{course.description}</p>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {course.duration && (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
-                            <Clock className="h-3.5 w-3.5" /> {course.duration}
-                          </span>
-                        )}
+                  <Link to={`/courses/${course.id}`} className="block h-full">
+                    <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1.5 cursor-pointer">
+                      <div className="relative aspect-video overflow-hidden bg-accent">
+                        {course.thumbnail_url
+                          ? <img src={course.thumbnail_url} alt={course.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                          : <div className="flex h-full items-center justify-center bg-accent" />
+                        }
+                        <Badge className={`absolute left-3 top-3 text-xs capitalize ${course.status === 'active' ? 'bg-success text-success-foreground' : 'bg-muted text-muted-foreground'}`}>
+                          {course.status}
+                        </Badge>
                       </div>
-                    </CardContent>
-                  </Card>
+                      <CardContent className="p-5">
+                        <h3 className="font-display text-base font-semibold leading-snug transition-colors group-hover:text-primary">{course.title}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{course.description}</p>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {course.duration && (
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
+                              <Clock className="h-3.5 w-3.5" /> {course.duration}
+                            </span>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </FadeIn>
               ))}
             </div>
@@ -216,23 +233,25 @@ export default function Home() {
             <div className="grid gap-6 md:grid-cols-3">
               {events.map((event:any, i) => (
                 <FadeIn key={event.id} delay={i * 0.1}>
-                  <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1.5">
-                    <div className="relative aspect-video overflow-hidden bg-accent">
-                      {event.image_url
-                        ? <img src={event.image_url} alt={event.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-                        : <div className="flex h-full items-center justify-center bg-accent" />
-                      }
-                      {event.event_date && (
-                        <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1 text-xs text-white backdrop-blur-sm">
-                          <Calendar className="h-3 w-3" /> {formatDate(event.event_date)}
-                        </div>
-                      )}
-                    </div>
-                    <CardContent className="p-5">
-                      <h3 className="font-display text-base font-semibold leading-snug transition-colors group-hover:text-primary">{event.title}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{event.description}</p>
-                    </CardContent>
-                  </Card>
+                  <Link to={`/events/${event.id}`} className="block h-full">
+                    <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1.5 cursor-pointer">
+                      <div className="relative aspect-video overflow-hidden bg-accent">
+                        {event.image_url
+                          ? <img src={event.image_url} alt={event.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                          : <div className="flex h-full items-center justify-center bg-accent" />
+                        }
+                        {event.event_date && (
+                          <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1 text-xs text-white backdrop-blur-sm">
+                            <Calendar className="h-3 w-3" /> {formatDate(event.event_date)}
+                          </div>
+                        )}
+                      </div>
+                      <CardContent className="p-5">
+                        <h3 className="font-display text-base font-semibold leading-snug transition-colors group-hover:text-primary">{event.title}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{event.description}</p>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </FadeIn>
               ))}
             </div>

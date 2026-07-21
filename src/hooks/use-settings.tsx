@@ -17,6 +17,13 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const refresh = React.useCallback(async () => {
     try {
       const data = await fetchSettings()
+      console.log('Fetched settings data:', data)
+      // Let's also stringify each field to see what's inside
+      if (data) {
+        Object.entries(data).forEach(([key, value]) => {
+          console.log(`settings.${key}:`, value, 'type:', typeof value)
+        })
+      }
       setSettings(data)
     } catch (err) {
       console.error('Failed to load settings:', err)

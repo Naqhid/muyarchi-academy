@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { useSettings } from '@/hooks/use-settings'
 import { useToast } from '@/hooks/use-toast'
+import { createEnquiry } from '@/lib/api'
 
 const schema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -27,42 +28,28 @@ export default function Contact() {
   const { toast } = useToast()
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormData>({ resolver: zodResolver(schema) })
 
-const onSubmit = (data: FormData) => {
-  const subject = encodeURIComponent(
-    `Enquiry - ${data.name}`
-  )
-
-  const body = encodeURIComponent(
-`Dear Muyarchi Academy Team,
-
-I hope you are doing well.
-
-I would like to enquire about Muyarchi Academy and would appreciate it if you could provide me with the relevant information. My details are given below for your reference.
-
-My name is ${data.name}. You can reach me at ${data.phone}.
-
-Class/Course of interest: ${data.classCourse}
-
-${data.message}
-
-I look forward to hearing from you.
-
-Kind regards,
-
-${data.name}`
-  )
-
-  window.location.href = `mailto:${encodeURIComponent(
-    settings?.email || ""
-  )}?subject=${subject}&body=${body}`
-
-  toast({
-    title: "Opening Email App...",
-    description: "Your default email application has been opened.",
-    variant: "success",
-  })
-
-  reset()
+const onSubmit = async (data: FormData) => {
+  try {
+    await createEnquiry({
+      name: data.name,
+      phone: data.phone,
+      class_course: data.classCourse,
+      message: data.message,
+    })
+    toast({
+      title: "Enquiry Submitted",
+      description: "We'll get back to you within one working day.",
+      variant: "success",
+    })
+    reset()
+  } catch (err) {
+    console.error('Enquiry error:', err)
+    toast({
+      title: "Submission Failed",
+      description: "Please try again later.",
+      variant: "destructive",
+    })
+  }
 }
 
   return (
@@ -238,7 +225,7 @@ ${data.name}`
 
     <SectionHeader
       title="Send Us an Enquiry"
-      subtitle="Fill in your details below. Your default email application will open with your enquiry pre-filled."
+      subtitle="Fill in your details below. We'll get back to you within one working day."
       centered={false}
     />
 
@@ -357,15 +344,6 @@ ${data.name}`
             <Send className="mr-2 h-5 w-5" />
             Send Enquiry
           </Button>
-
-          <div className="rounded-xl bg-primary/5 p-4 text-center">
-
-            <p className="text-sm text-muted-foreground">
-              Clicking <strong>Send Enquiry</strong> will open your default
-              email application with your enquiry already filled in.
-            </p>
-
-          </div>
 
         </form>
 
