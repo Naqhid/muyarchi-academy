@@ -194,7 +194,7 @@ export default function Events() {
         </div>
       )}
 
-      {/* Create / Edit Dialog */}
+      {/* Create / Edit Dialog. */}
       <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) { setEditing(null); reset(); setImageGallery([]); setVideoGallery([]) } }}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
