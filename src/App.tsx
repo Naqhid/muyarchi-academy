@@ -18,7 +18,6 @@ const Contact = lazy(() => import('@/pages/public/Contact'))
 
 const AdminLayout = lazy(() => import('@/layouts/AdminLayout'))
 const Login = lazy(() => import('@/pages/admin/Login'))
-const ForgotPassword = lazy(() => import('@/pages/admin/ForgotPassword'))
 const Dashboard = lazy(() => import('@/pages/admin/Dashboard'))
 const AdminCourses = lazy(() => import('@/pages/admin/Courses'))
 const AdminBlogs = lazy(() => import('@/pages/admin/Blogs'))
@@ -56,7 +55,6 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
           </Route>
           <Route path="/admin/login" element={<Login />} />
-          <Route path="/admin/forgot-password" element={<ForgotPassword />} />
           <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
             <Route index element={<Dashboard />} />
             <Route path="courses" element={<AdminCourses />} />

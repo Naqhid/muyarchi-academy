@@ -69,7 +69,6 @@ export default function Login() {
                   <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="h-4 w-4 rounded border-input text-primary focus:ring-ring" />
                   Remember me
                 </label>
-                <Link to="/admin/forgot-password" className="text-sm text-primary hover:underline">Forgot password?</Link>
               </div>
               <Button type="submit" disabled={isSubmitting} className="w-full">
                 {isSubmitting ? <><Loader2 className="h-4 w-4 animate-spin" />Signing in...</> : 'Sign In'}
