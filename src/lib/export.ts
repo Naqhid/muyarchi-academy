@@ -60,7 +60,7 @@ export function createPdf<T>(title: string, columns: ExportColumn<T>[], rows: T[
   objects.push(`<< /Type /Pages /Kids [${pageIds.map((id) => `${id} 0 R`).join(' ')}] /Count ${pageCount} >>`)
 
   for (let page = 0; page < pageCount; page++) {
-    const pageLines = page === 0
+    const pageLines: PdfLine[] = page === 0
       ? lines.filter((line) => line.y >= 738 - (pageRows - 1) * 16)
       : [
           { text: `${title} (continued)`, y: 800, size: 14 },
