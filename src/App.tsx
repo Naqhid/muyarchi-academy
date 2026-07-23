@@ -28,6 +28,7 @@ const AdminScholarship = lazy(() => import('@/pages/admin/Scholarship'))
 const AdminEnquiries = lazy(() => import('@/pages/admin/Enquiries'))
 const AdminDemoRegistrations = lazy(() => import('@/pages/admin/DemoRegistrations'))
 const AdminSettings = lazy(() => import('@/pages/admin/Settings'))
+const AdminTranslations = lazy(() => import('@/pages/admin/Translations'))
 
 function PageLoader() {
   return (
@@ -66,6 +67,7 @@ export default function App() {
             <Route path="demo-registrations" element={<AdminDemoRegistrations />} />
             <Route path="enquiries" element={<AdminEnquiries />} />
             <Route path="settings" element={<AdminSettings />} />
+            <Route path="translations" element={<AdminTranslations />} />
           </Route>
         </Routes>
       </Suspense>

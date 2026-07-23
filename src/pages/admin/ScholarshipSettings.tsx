@@ -17,20 +17,35 @@ import type { ScholarshipInput } from '@/types'
 
 const schema = z.object({
   hero_title: z.string().optional().default(''),
+  hero_title_ta: z.string().optional().default(''),
   hero_description: z.string().optional().default(''),
+  hero_description_ta: z.string().optional().default(''),
   how_it_works_title: z.string().optional().default(''),
+  how_it_works_title_ta: z.string().optional().default(''),
   how_it_works_description: z.string().optional().default(''),
+  how_it_works_description_ta: z.string().optional().default(''),
   card1_title: z.string().optional().default(''),
+  card1_title_ta: z.string().optional().default(''),
   card1_text: z.string().optional().default(''),
+  card1_text_ta: z.string().optional().default(''),
   card2_title: z.string().optional().default(''),
+  card2_title_ta: z.string().optional().default(''),
   card2_text: z.string().optional().default(''),
+  card2_text_ta: z.string().optional().default(''),
   card3_title: z.string().optional().default(''),
+  card3_title_ta: z.string().optional().default(''),
   card3_text: z.string().optional().default(''),
+  card3_text_ta: z.string().optional().default(''),
   test_details_title: z.string().optional().default(''),
+  test_details_title_ta: z.string().optional().default(''),
   eligibility: z.string().optional().default(''),
+  eligibility_ta: z.string().optional().default(''),
   duration: z.string().optional().default(''),
+  duration_ta: z.string().optional().default(''),
   test_date: z.string().optional().default(''),
+  test_date_ta: z.string().optional().default(''),
   venues: z.string().optional().default(''),
+  venues_ta: z.string().optional().default(''),
   sample_paper_link: z.string().optional().default(''),
 })
 
@@ -44,11 +59,14 @@ export default function ScholarshipSettings() {
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      hero_title: '', hero_description: '', how_it_works_title: '',
-      how_it_works_description: '', card1_title: '', card1_text: '',
-      card2_title: '', card2_text: '', card3_title: '', card3_text: '',
-      test_details_title: '', eligibility: '', duration: '',
-      test_date: '', venues: '', sample_paper_link: '',
+      hero_title: '', hero_title_ta: '', hero_description: '', hero_description_ta: '',
+      how_it_works_title: '', how_it_works_title_ta: '', how_it_works_description: '', how_it_works_description_ta: '',
+      card1_title: '', card1_title_ta: '', card1_text: '', card1_text_ta: '',
+      card2_title: '', card2_title_ta: '', card2_text: '', card2_text_ta: '',
+      card3_title: '', card3_title_ta: '', card3_text: '', card3_text_ta: '',
+      test_details_title: '', test_details_title_ta: '',
+      eligibility: '', eligibility_ta: '', duration: '', duration_ta: '',
+      test_date: '', test_date_ta: '', venues: '', venues_ta: '', sample_paper_link: '',
     },
   })
 
@@ -58,20 +76,35 @@ export default function ScholarshipSettings() {
         if (data) {
           reset({
             hero_title: data.hero_title || '',
+            hero_title_ta: data.hero_title_ta || '',
             hero_description: data.hero_description || '',
+            hero_description_ta: data.hero_description_ta || '',
             how_it_works_title: data.how_it_works_title || '',
+            how_it_works_title_ta: data.how_it_works_title_ta || '',
             how_it_works_description: data.how_it_works_description || '',
+            how_it_works_description_ta: data.how_it_works_description_ta || '',
             card1_title: data.card1_title || '',
+            card1_title_ta: data.card1_title_ta || '',
             card1_text: data.card1_text || '',
+            card1_text_ta: data.card1_text_ta || '',
             card2_title: data.card2_title || '',
+            card2_title_ta: data.card2_title_ta || '',
             card2_text: data.card2_text || '',
+            card2_text_ta: data.card2_text_ta || '',
             card3_title: data.card3_title || '',
+            card3_title_ta: data.card3_title_ta || '',
             card3_text: data.card3_text || '',
+            card3_text_ta: data.card3_text_ta || '',
             test_details_title: data.test_details_title || '',
+            test_details_title_ta: data.test_details_title_ta || '',
             eligibility: data.eligibility || '',
+            eligibility_ta: data.eligibility_ta || '',
             duration: data.duration || '',
+            duration_ta: data.duration_ta || '',
             test_date: data.test_date || '',
+            test_date_ta: data.test_date_ta || '',
             venues: data.venues || '',
+            venues_ta: data.venues_ta || '',
             sample_paper_link: data.sample_paper_link || '',
           })
         }
@@ -83,20 +116,35 @@ export default function ScholarshipSettings() {
   const onSubmit = async (data: FormData) => {
     const input: Partial<ScholarshipInput> = {
       hero_title: data.hero_title || '',
+      hero_title_ta: data.hero_title_ta || '',
       hero_description: data.hero_description || '',
+      hero_description_ta: data.hero_description_ta || '',
       how_it_works_title: data.how_it_works_title || '',
+      how_it_works_title_ta: data.how_it_works_title_ta || '',
       how_it_works_description: data.how_it_works_description || '',
+      how_it_works_description_ta: data.how_it_works_description_ta || '',
       card1_title: data.card1_title || '',
+      card1_title_ta: data.card1_title_ta || '',
       card1_text: data.card1_text || '',
+      card1_text_ta: data.card1_text_ta || '',
       card2_title: data.card2_title || '',
+      card2_title_ta: data.card2_title_ta || '',
       card2_text: data.card2_text || '',
+      card2_text_ta: data.card2_text_ta || '',
       card3_title: data.card3_title || '',
+      card3_title_ta: data.card3_title_ta || '',
       card3_text: data.card3_text || '',
+      card3_text_ta: data.card3_text_ta || '',
       test_details_title: data.test_details_title || '',
+      test_details_title_ta: data.test_details_title_ta || '',
       eligibility: data.eligibility || '',
+      eligibility_ta: data.eligibility_ta || '',
       duration: data.duration || '',
+      duration_ta: data.duration_ta || '',
       test_date: data.test_date || '',
+      test_date_ta: data.test_date_ta || '',
       venues: data.venues || '',
+      venues_ta: data.venues_ta || '',
       sample_paper_link: data.sample_paper_link || '',
     }
     try {
@@ -140,14 +188,22 @@ export default function ScholarshipSettings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="hero_title">Hero Title</Label>
+                <Label htmlFor="hero_title">Hero Title (English)</Label>
                 <Input id="hero_title" placeholder="Scholarship-cum-Admission Test" {...register('hero_title')} />
                 {errors.hero_title && <p className="text-xs text-destructive" role="alert">{errors.hero_title.message}</p>}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="hero_description">Hero Description</Label>
+                <Label htmlFor="hero_title_ta">Hero Title (Tamil)</Label>
+                <Input id="hero_title_ta" placeholder="உதவித்தொகை தேர்வு" {...register('hero_title_ta')} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="hero_description">Hero Description (English)</Label>
                 <Textarea id="hero_description" rows={3} placeholder="Every student who joins Muyarchi Academy sits our scholarship test..." {...register('hero_description')} />
                 {errors.hero_description && <p className="text-xs text-destructive" role="alert">{errors.hero_description.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="hero_description_ta">Hero Description (Tamil)</Label>
+                <Textarea id="hero_description_ta" rows={3} placeholder="விளக்கம்..." {...register('hero_description_ta')} />
               </div>
             </CardContent>
           </Card>
@@ -162,41 +218,77 @@ export default function ScholarshipSettings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="how_it_works_title">Section Title</Label>
+                <Label htmlFor="how_it_works_title">Section Title (English)</Label>
                 <Input id="how_it_works_title" placeholder="How It Works" {...register('how_it_works_title')} />
                 {errors.how_it_works_title && <p className="text-xs text-destructive" role="alert">{errors.how_it_works_title.message}</p>}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="how_it_works_description">Section Description</Label>
+                <Label htmlFor="how_it_works_title_ta">Section Title (Tamil)</Label>
+                <Input id="how_it_works_title_ta" placeholder="எப்படி இயங்குகிறது" {...register('how_it_works_title_ta')} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="how_it_works_description">Section Description (English)</Label>
                 <Textarea id="how_it_works_description" rows={3} placeholder="The test rewards effort and ability, not background..." {...register('how_it_works_description')} />
                 {errors.how_it_works_description && <p className="text-xs text-destructive" role="alert">{errors.how_it_works_description.message}</p>}
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="how_it_works_description_ta">Section Description (Tamil)</Label>
+                <Textarea id="how_it_works_description_ta" rows={3} placeholder="விளக்கம்..." {...register('how_it_works_description_ta')} />
+              </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
-                  <Label htmlFor="card1_title">Card 1 Title</Label>
+                  <Label htmlFor="card1_title">Card 1 Title (English)</Label>
                   <Input id="card1_title" placeholder="Objective Test" {...register('card1_title')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="card2_title">Card 2 Title</Label>
+                  <Label htmlFor="card2_title">Card 2 Title (English)</Label>
                   <Input id="card2_title" placeholder="Merit-Based" {...register('card2_title')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="card3_title">Card 3 Title</Label>
+                  <Label htmlFor="card3_title">Card 3 Title (English)</Label>
                   <Input id="card3_title" placeholder="Fee Reduction" {...register('card3_title')} />
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
-                  <Label htmlFor="card1_text">Card 1 Text</Label>
+                  <Label htmlFor="card1_title_ta">Card 1 Title (Tamil)</Label>
+                  <Input id="card1_title_ta" placeholder="தலைப்பு" {...register('card1_title_ta')} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="card2_title_ta">Card 2 Title (Tamil)</Label>
+                  <Input id="card2_title_ta" placeholder="தலைப்பு" {...register('card2_title_ta')} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="card3_title_ta">Card 3 Title (Tamil)</Label>
+                  <Input id="card3_title_ta" placeholder="தலைப்பு" {...register('card3_title_ta')} />
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="space-y-2">
+                  <Label htmlFor="card1_text">Card 1 Text (English)</Label>
                   <Textarea id="card1_text" rows={2} placeholder="Mathematics, Science and mental ability" {...register('card1_text')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="card2_text">Card 2 Text</Label>
+                  <Label htmlFor="card2_text">Card 2 Text (English)</Label>
                   <Textarea id="card2_text" rows={2} placeholder="Scholarships awarded on performance" {...register('card2_text')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="card3_text">Card 3 Text</Label>
+                  <Label htmlFor="card3_text">Card 3 Text (English)</Label>
                   <Textarea id="card3_text" rows={2} placeholder="Every mark earned reduces the fee" {...register('card3_text')} />
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="space-y-2">
+                  <Label htmlFor="card1_text_ta">Card 1 Text (Tamil)</Label>
+                  <Textarea id="card1_text_ta" rows={2} placeholder="உரை" {...register('card1_text_ta')} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="card2_text_ta">Card 2 Text (Tamil)</Label>
+                  <Textarea id="card2_text_ta" rows={2} placeholder="உரை" {...register('card2_text_ta')} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="card3_text_ta">Card 3 Text (Tamil)</Label>
+                  <Textarea id="card3_text_ta" rows={2} placeholder="உரை" {...register('card3_text_ta')} />
                 </div>
               </div>
             </CardContent>
@@ -212,28 +304,52 @@ export default function ScholarshipSettings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="test_details_title">Section Title</Label>
+                <Label htmlFor="test_details_title">Section Title (English)</Label>
                 <Input id="test_details_title" placeholder="Test Details" {...register('test_details_title')} />
                 {errors.test_details_title && <p className="text-xs text-destructive" role="alert">{errors.test_details_title.message}</p>}
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="test_details_title_ta">Section Title (Tamil)</Label>
+                <Input id="test_details_title_ta" placeholder="தேர்வு விவரங்கள்" {...register('test_details_title_ta')} />
+              </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="eligibility">Eligibility</Label>
+                  <Label htmlFor="eligibility">Eligibility (English)</Label>
                   <Input id="eligibility" placeholder="Students entering Classes 8–12" {...register('eligibility')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="duration">Duration</Label>
-                  <Input id="duration" placeholder="Coming soon" {...register('duration')} />
+                  <Label htmlFor="eligibility_ta">Eligibility (Tamil)</Label>
+                  <Input id="eligibility_ta" placeholder="தகுதி" {...register('eligibility_ta')} />
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="test_date">Test Date</Label>
+                  <Label htmlFor="duration">Duration (English)</Label>
+                  <Input id="duration" placeholder="Coming soon" {...register('duration')} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="duration_ta">Duration (Tamil)</Label>
+                  <Input id="duration_ta" placeholder="காலம்" {...register('duration_ta')} />
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="test_date">Test Date (English)</Label>
                   <Input id="test_date" placeholder="Coming soon" {...register('test_date')} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="venues">Venues</Label>
+                  <Label htmlFor="test_date_ta">Test Date (Tamil)</Label>
+                  <Input id="test_date_ta" placeholder="தேர்வு தேதி" {...register('test_date_ta')} />
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="venues">Venues (English)</Label>
                   <Input id="venues" placeholder="Coming soon" {...register('venues')} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="venues_ta">Venues (Tamil)</Label>
+                  <Input id="venues_ta" placeholder="தேர்வு மையங்கள்" {...register('venues_ta')} />
                 </div>
               </div>
               <div className="space-y-2">

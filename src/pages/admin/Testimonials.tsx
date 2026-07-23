@@ -18,8 +18,11 @@ import type { Testimonial, TestimonialInput } from '@/types'
 
 const schema = z.object({
   author_name: z.string().min(1, 'Author name is required'),
+  author_name_ta: z.string().optional().default(''),
   author_role: z.string().optional().default(''),
+  author_role_ta: z.string().optional().default(''),
   content: z.string().min(1, 'Content is required'),
+  content_ta: z.string().optional().default(''),
   rating: z.coerce.number().int().min(1, 'Rating is required').max(5, 'Rating must be 1-5'),
   avatar_url: z.string().optional().default(''),
   sort_order: z.coerce.number().int().default(0),
@@ -37,7 +40,7 @@ export default function Testimonials() {
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset, watch, setValue } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { author_name: '', author_role: '', content: '', rating: 5, avatar_url: '', sort_order: 0 },
+    defaultValues: { author_name: '', author_name_ta: '', author_role: '', author_role_ta: '', content: '', content_ta: '', rating: 5, avatar_url: '', sort_order: 0 },
   })
   const ratingValue = watch('rating')
 
@@ -53,21 +56,24 @@ export default function Testimonials() {
 
   const openAdd = () => {
     setEditing(null)
-    reset({ author_name: '', author_role: '', content: '', rating: 5, avatar_url: '', sort_order: 0 })
+    reset({ author_name: '', author_name_ta: '', author_role: '', author_role_ta: '', content: '', content_ta: '', rating: 5, avatar_url: '', sort_order: 0 })
     setDialogOpen(true)
   }
 
   const openEdit = (t: Testimonial) => {
     setEditing(t)
-    reset({ author_name: t.author_name, author_role: t.author_role, content: t.content, rating: t.rating, avatar_url: t.avatar_url, sort_order: t.sort_order })
+    reset({ author_name: t.author_name, author_name_ta: t.author_name_ta || '', author_role: t.author_role, author_role_ta: t.author_role_ta || '', content: t.content, content_ta: t.content_ta || '', rating: t.rating, avatar_url: t.avatar_url, sort_order: t.sort_order })
     setDialogOpen(true)
   }
 
   const onSubmit = async (data: FormData) => {
     const input: TestimonialInput = {
       author_name: data.author_name,
+      author_name_ta: data.author_name_ta || '',
       author_role: data.author_role || '',
+      author_role_ta: data.author_role_ta || '',
       content: data.content,
+      content_ta: data.content_ta || '',
       rating: data.rating,
       avatar_url: data.avatar_url || '',
       sort_order: data.sort_order,
@@ -163,18 +169,30 @@ export default function Testimonials() {
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="author_name">Author Name</Label>
+              <Label htmlFor="author_name">Author Name (English)</Label>
               <Input id="author_name" placeholder="John Doe" {...register('author_name')} aria-invalid={!!errors.author_name} />
               {errors.author_name && <p className="text-xs text-destructive" role="alert">{errors.author_name.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="author_role">Author Role</Label>
+              <Label htmlFor="author_name_ta">Author Name (Tamil)</Label>
+              <Input id="author_name_ta" placeholder="பெயர்" {...register('author_name_ta')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="author_role">Author Role (English)</Label>
               <Input id="author_role" placeholder="Parent / Student" {...register('author_role')} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="content">Content</Label>
+              <Label htmlFor="author_role_ta">Author Role (Tamil)</Label>
+              <Input id="author_role_ta" placeholder="பெற்றோர் / மாணவர்" {...register('author_role_ta')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="content">Content (English)</Label>
               <Textarea id="content" placeholder="Testimonial content..." rows={4} {...register('content')} aria-invalid={!!errors.content} />
               {errors.content && <p className="text-xs text-destructive" role="alert">{errors.content.message}</p>}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="content_ta">Content (Tamil)</Label>
+              <Textarea id="content_ta" placeholder="சான்று உள்ளடக்கம்..." rows={4} {...register('content_ta')} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="rating">Rating</Label>

@@ -4,33 +4,33 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Sun, Moon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useSettings } from '@/hooks/use-settings'
+import { useLanguage, pickLang } from '@/hooks/use-language'
 import { cn } from '@/lib/utils'
 import { PublicFooter } from './PublicFooter'
 
 const navLinks = [
-  { to: '/', label: 'Home' },
-  { to: '/courses', label: 'Courses' },
-  { to: '/scholarship', label: 'Scholarship Test' },
-  { to: '/free-demo', label: 'Free Demo' },
-  { to: '/blog', label: 'Blog' },
-  { to: '/events', label: 'Events & Gallery' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/', key: 'nav.home' },
+  { to: '/courses', key: 'nav.courses' },
+  { to: '/scholarship', key: 'nav.scholarship' },
+  { to: '/free-demo', key: 'nav.freeDemo' },
+  { to: '/blog', key: 'nav.blog' },
+  { to: '/events', key: 'nav.events' },
+  { to: '/contact', key: 'nav.contact' },
 ]
 
-// Lazy load LanguageSwitcher for better performance
- const LazyLanguageSwitcher = lazy(() => import('@/components/LanguageSwitcher'))
+const LazyLanguageSwitcher = lazy(() => import('@/components/LanguageSwitcher'))
 
-// Simple fallback for lazy loading
 function LanguageSwitcherFallback() {
   return (
     <Button variant="ghost" size="icon" aria-label="Select language" disabled>
-      <span className="text-lg">🌐</span>
+      <span className="text-lg">EN</span>
     </Button>
   )
 }
 
 export default function PublicLayout() {
   const { settings } = useSettings()
+  const { t, language } = useLanguage()
 
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -60,13 +60,15 @@ export default function PublicLayout() {
 
   useEffect(() => { setMobileOpen(false) }, [location.pathname])
 
-  // Safely get academy name (handle case where it might be an object)
   const academyName = (() => {
-    const val = settings?.academy_name
-    if (typeof val === 'string') return val
-    if (val && typeof val === 'object') return JSON.stringify(val)
-    return 'Muyarchi Academy'
+    const en = (() => {
+      const val = settings?.academy_name
+      if (typeof val === 'string') return val
+      return 'Muyarchi Academy'
+    })()
+    return pickLang(en, settings?.academy_name_ta || '', language)
   })()
+
   const logoUrl = (() => {
     const val = settings?.logo_url
     if (typeof val === 'string') return val
@@ -87,7 +89,7 @@ export default function PublicLayout() {
           </Link>
           <nav className="hidden md:flex items-center gap-2">
             {navLinks.map((link) => (
-              <Link key={link.to} to={link.to} className={cn('px-5 py-2.5 text-base font-bold rounded-lg transition-all duration-200 transform hover:scale-105', location.pathname === link.to ? 'bg-gradient-to-r from-primary via-secondary to-accent text-white shadow-lg' : 'text-foreground/80 hover:text-white hover:bg-gradient-to-r hover:from-primary/80 hover:to-secondary/80')}>{link.label}</Link>
+              <Link key={link.to} to={link.to} className={cn('px-5 py-2.5 text-base font-bold rounded-lg transition-all duration-200 transform hover:scale-105', location.pathname === link.to ? 'bg-gradient-to-r from-primary via-secondary to-accent text-white shadow-lg' : 'text-foreground/80 hover:text-white hover:bg-gradient-to-r hover:from-primary/80 hover:to-secondary/80')}>{t(link.key)}</Link>
             ))}
           </nav>
           <div className="flex items-center gap-2">
@@ -103,7 +105,7 @@ export default function PublicLayout() {
             <motion.nav initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="md:hidden overflow-hidden bg-background border-b border-border">
               <div className="container mx-auto flex flex-col gap-2 px-4 py-4">
                 {navLinks.map((link) => (
-                  <Link key={link.to} to={link.to} className={cn('px-4 py-3 text-base font-bold rounded-lg transition-all duration-200', location.pathname === link.to ? 'bg-gradient-to-r from-primary via-secondary to-accent text-white shadow-lg' : 'text-foreground/80 hover:text-white hover:bg-gradient-to-r hover:from-primary/80 hover:to-secondary/80')}>{link.label}</Link>
+                  <Link key={link.to} to={link.to} className={cn('px-4 py-3 text-base font-bold rounded-lg transition-all duration-200', location.pathname === link.to ? 'bg-gradient-to-r from-primary via-secondary to-accent text-white shadow-lg' : 'text-foreground/80 hover:text-white hover:bg-gradient-to-r hover:from-primary/80 hover:to-secondary/80')}>{t(link.key)}</Link>
                 ))}
               </div>
             </motion.nav>
@@ -111,7 +113,6 @@ export default function PublicLayout() {
         </AnimatePresence>
       </header>
       <main className="flex-1 pt-16"><Outlet /></main>
-      <div id="google-translate-element" className="hidden" />
       <PublicFooter />
     </div>
   )

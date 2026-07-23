@@ -17,16 +17,23 @@ import type { SiteSettingsInput } from '@/types'
 
 const schema = z.object({
   academy_name: z.string().optional().default(''),
+  academy_name_ta: z.string().optional().default(''),
   logo_url: z.string().optional().default(''),
   hero_title: z.string().optional().default(''),
+  hero_title_ta: z.string().optional().default(''),
   hero_subtitle: z.string().optional().default(''),
+  hero_subtitle_ta: z.string().optional().default(''),
   about: z.string().optional().default(''),
+  about_ta: z.string().optional().default(''),
   vision: z.string().optional().default(''),
+  vision_ta: z.string().optional().default(''),
   mission: z.string().optional().default(''),
+  mission_ta: z.string().optional().default(''),
   phone: z.string().optional().default(''),
   email: z.string().optional().default(''),
   address: z.string().optional().default(''),
   footer_text: z.string().optional().default(''),
+  footer_text_ta: z.string().optional().default(''),
   google_map_url: z.string().optional().default(''),
   stat_students: z.string().optional().default(''),
   stat_courses: z.string().optional().default(''),
@@ -47,8 +54,8 @@ export default function Settings() {
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      academy_name: '', logo_url: '', hero_title: '', hero_subtitle: '', about: '', vision: '', mission: '',
-      phone: '', email: '', address: '', footer_text: '', google_map_url: '',
+      academy_name: '', academy_name_ta: '', logo_url: '', hero_title: '', hero_title_ta: '', hero_subtitle: '', hero_subtitle_ta: '', about: '', about_ta: '', vision: '', vision_ta: '', mission: '', mission_ta: '',
+      phone: '', email: '', address: '', footer_text: '', footer_text_ta: '', google_map_url: '',
       stat_students: '', stat_courses: '', stat_years: '',
       facebook_url: '', twitter_url: '', instagram_url: '', youtube_url: '', linkedin_url: '',
     },
@@ -60,16 +67,23 @@ export default function Settings() {
         if (data) {
           reset({
             academy_name: data.academy_name || '',
+            academy_name_ta: data.academy_name_ta || '',
             logo_url: data.logo_url || '',
             hero_title: data.hero_title || '',
+            hero_title_ta: data.hero_title_ta || '',
             hero_subtitle: data.hero_subtitle || '',
+            hero_subtitle_ta: data.hero_subtitle_ta || '',
             about: data.about || '',
+            about_ta: data.about_ta || '',
             vision: data.vision || '',
+            vision_ta: data.vision_ta || '',
             mission: data.mission || '',
+            mission_ta: data.mission_ta || '',
             phone: data.phone || '',
             email: data.email || '',
             address: data.address || '',
             footer_text: data.footer_text || '',
+            footer_text_ta: data.footer_text_ta || '',
             google_map_url: data.google_map_url || '',
             stat_students: data.stat_students || '',
             stat_courses: data.stat_courses || '',
@@ -89,16 +103,23 @@ export default function Settings() {
   const onSubmit = async (data: FormData) => {
     const input: Partial<SiteSettingsInput> = {
       academy_name: data.academy_name || '',
+      academy_name_ta: data.academy_name_ta || '',
       logo_url: data.logo_url || '',
       hero_title: data.hero_title || '',
+      hero_title_ta: data.hero_title_ta || '',
       hero_subtitle: data.hero_subtitle || '',
+      hero_subtitle_ta: data.hero_subtitle_ta || '',
       about: data.about || '',
+      about_ta: data.about_ta || '',
       vision: data.vision || '',
+      vision_ta: data.vision_ta || '',
       mission: data.mission || '',
+      mission_ta: data.mission_ta || '',
       phone: data.phone || '',
       email: data.email || '',
       address: data.address || '',
       footer_text: data.footer_text || '',
+      footer_text_ta: data.footer_text_ta || '',
       google_map_url: data.google_map_url || '',
       stat_students: data.stat_students || '',
       stat_courses: data.stat_courses || '',
@@ -150,9 +171,13 @@ export default function Settings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="academy_name">Academy Name</Label>
+                <Label htmlFor="academy_name">Academy Name (English)</Label>
                 <Input id="academy_name" placeholder="Muyarchi Academy" {...register('academy_name')} />
                 {errors.academy_name && <p className="text-xs text-destructive" role="alert">{errors.academy_name.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="academy_name_ta">Academy Name (Tamil)</Label>
+                <Input id="academy_name_ta" placeholder="முயற்சி அகாடமி" {...register('academy_name_ta')} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="logo_url">Logo URL</Label>
@@ -172,14 +197,22 @@ export default function Settings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="hero_title">Hero Title</Label>
+                <Label htmlFor="hero_title">Hero Title (English)</Label>
                 <Input id="hero_title" placeholder="Welcome to Muyarchi Academy" {...register('hero_title')} />
                 {errors.hero_title && <p className="text-xs text-destructive" role="alert">{errors.hero_title.message}</p>}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="hero_subtitle">Hero Subtitle</Label>
+                <Label htmlFor="hero_title_ta">Hero Title (Tamil)</Label>
+                <Input id="hero_title_ta" placeholder="தலைப்பு" {...register('hero_title_ta')} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="hero_subtitle">Hero Subtitle (English)</Label>
                 <Input id="hero_subtitle" placeholder="Empowering students through quality education" {...register('hero_subtitle')} />
                 {errors.hero_subtitle && <p className="text-xs text-destructive" role="alert">{errors.hero_subtitle.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="hero_subtitle_ta">Hero Subtitle (Tamil)</Label>
+                <Input id="hero_subtitle_ta" placeholder="துணைத் தலைப்பு" {...register('hero_subtitle_ta')} />
               </div>
             </CardContent>
           </Card>
@@ -194,19 +227,31 @@ export default function Settings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="about">About</Label>
+                <Label htmlFor="about">About (English)</Label>
                 <Textarea id="about" rows={4} placeholder="About your academy..." {...register('about')} />
                 {errors.about && <p className="text-xs text-destructive" role="alert">{errors.about.message}</p>}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="vision">Vision</Label>
+                <Label htmlFor="about_ta">About (Tamil)</Label>
+                <Textarea id="about_ta" rows={4} placeholder="அகாடமி பற்றி..." {...register('about_ta')} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="vision">Vision (English)</Label>
                 <Textarea id="vision" rows={3} placeholder="Your academy's vision..." {...register('vision')} />
                 {errors.vision && <p className="text-xs text-destructive" role="alert">{errors.vision.message}</p>}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="mission">Mission</Label>
+                <Label htmlFor="vision_ta">Vision (Tamil)</Label>
+                <Textarea id="vision_ta" rows={3} placeholder="கல்வி நோக்கம்..." {...register('vision_ta')} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="mission">Mission (English)</Label>
                 <Textarea id="mission" rows={3} placeholder="Your academy's mission..." {...register('mission')} />
                 {errors.mission && <p className="text-xs text-destructive" role="alert">{errors.mission.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="mission_ta">Mission (Tamil)</Label>
+                <Textarea id="mission_ta" rows={3} placeholder="கல்வி பணி..." {...register('mission_ta')} />
               </div>
             </CardContent>
           </Card>
@@ -248,9 +293,13 @@ export default function Settings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="footer_text">Footer Text</Label>
+                <Label htmlFor="footer_text">Footer Text (English)</Label>
                 <Textarea id="footer_text" rows={3} placeholder="© 2024 Muyarchi Academy. All rights reserved." {...register('footer_text')} />
                 {errors.footer_text && <p className="text-xs text-destructive" role="alert">{errors.footer_text.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="footer_text_ta">Footer Text (Tamil)</Label>
+                <Textarea id="footer_text_ta" rows={3} placeholder="அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." {...register('footer_text_ta')} />
               </div>
             </CardContent>
           </Card>

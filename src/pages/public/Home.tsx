@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
-  ArrowRight, GraduationCap, Eye, Target, BookOpen,
-  Calendar, Users, Award, TrendingUp, ChevronRight,
-  Clock, IndianRupee,
+  ArrowRight, Eye, Target, BookOpen,
+  Calendar, Award, TrendingUp, ChevronRight,
+  Clock,
 } from 'lucide-react'
 import { Section, FadeIn } from '@/components/shared/Section'
 import { Button } from '@/components/ui/button'
@@ -12,11 +12,17 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
 import { useSettings } from '@/hooks/use-settings'
+import { useLanguage, pickLang } from '@/hooks/use-language'
 import { fetchActiveCourses, fetchPublishedBlogs, fetchEvents } from '@/lib/api'
 import { formatDate } from '@/lib/utils'
 import type { Course, Blog, EventItem } from '@/types'
 
-/* ─── tiny helpers ─────────────────────────────────────────── */
+const safeString = (val: unknown, fallback = ''): string => {
+  if (typeof val === 'string') return val
+  if (val && typeof val === 'object') return JSON.stringify(val)
+  return fallback
+}
+
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="mb-3 inline-flex items-center gap-2 rounded-md border border-secondary/30 bg-secondary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-secondary">
@@ -50,28 +56,16 @@ function EmptyState({ icon: Icon, message }: { icon: React.ElementType; message:
   )
 }
 
-/* ─── main component ───────────────────────────────────────── */
 export default function Home() {
   const { settings } = useSettings()
+  const { t, language } = useLanguage()
   const [courses, setCourses] = useState<Course[]>([])
   const [blogs, setBlogs] = useState<Blog[]>([])
   const [events, setEvents] = useState<EventItem[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Safely get academy name (handle case where it might be an object)
-  const academyName = (() => {
-    const val = settings?.academy_name
-    if (typeof val === 'string') return val
-    if (val && typeof val === 'object') return JSON.stringify(val)
-    return 'Muyarchi Academy'
-  })()
-  
-  // Safely get hero subtitle
-  const heroSubtitle = (() => {
-    const val = settings?.hero_subtitle
-    if (typeof val === 'string') return val
-    return 'Empowering students in Vaniyambadi with quality education and coaching for a brighter future.'
-  })()
+  const academyName = pickLang(safeString(settings?.academy_name, 'Muyarchi Academy'), safeString(settings?.academy_name_ta), language)
+  const heroSubtitle = pickLang(safeString(settings?.hero_subtitle, 'Empowering students in Vaniyambadi with quality education and coaching for a brighter future.'), safeString(settings?.hero_subtitle_ta), language)
 
   useEffect(() => {
     Promise.all([fetchActiveCourses(), fetchPublishedBlogs(), fetchEvents()])
@@ -83,7 +77,6 @@ export default function Home() {
       .finally(() => setLoading(false))
   }, [])
 
-  /* ── HERO ─────────────────────────────────────────────────── */
   return (
     <>
       <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background">
@@ -113,10 +106,10 @@ export default function Home() {
 
             <div className="mt-12 flex flex-wrap justify-center gap-4">
               <Button asChild size="lg" className="gap-2 rounded-md px-8 bg-secondary text-white hover:bg-secondary/90 font-semibold">
-                <Link to="/scholarship">Register for the Scholarship Test</Link>
+                <Link to="/scholarship">{t('home.bookDemo', 'Register for the Scholarship Test')}</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="gap-2 rounded-md px-8">
-                <Link to="/free-demo">Book a free demo class</Link>
+                <Link to="/free-demo">{t('freeDemo.title', 'Book a free demo class')}</Link>
               </Button>
             </div>
           </motion.div>
@@ -125,33 +118,30 @@ export default function Home() {
 
       {/* ── ABOUT ─────────────────────────────────────────────── */}
       <Section id="about" className="mt-6 bg-primary text-white">
-        {/* Row 1: Vision statement as inscription */}
         <FadeIn>
           <div className="mx-auto flex max-w-4xl flex-col items-center text-center py-8">
-            <h2 className="font-display text-4xl font-semibold md:text-5xl mb-6">Our Vision</h2>
+            <h2 className="font-display text-4xl font-semibold md:text-5xl mb-6">{pickLang('Our Vision', safeString(settings?.vision_ta), language)}</h2>
             <p className="text-xl leading-relaxed font-light">
-              In Vaniyambadi and the villages around it, a child's talent and effort — not family income or location — decide how far they go.
+              {pickLang(safeString(settings?.vision, "In Vaniyambadi and the villages around it, a child's talent and effort — not family income or location — decide how far they go."), safeString(settings?.vision_ta), language)}
             </p>
           </div>
         </FadeIn>
 
-        {/* Row 2: About text */}
         <FadeIn delay={0.1}>
           <div className="mx-auto max-w-3xl text-center mt-12 pt-8 border-t border-white/20">
-            <h3 className="font-display text-2xl font-semibold mb-4">About the Academy</h3>
+            <h3 className="font-display text-2xl font-semibold mb-4">{pickLang('About the Academy', safeString(settings?.about_ta), language)}</h3>
             <p className="text-lg leading-relaxed font-light">
-              Muyarchi Academy is a new coaching institute in Vaniyambadi, started with a simple belief: a student here should not need to travel to Vellore or Chennai — or pay city fees — to get serious coaching. We teach strong fundamentals from Class 8, prepare senior students for medical and engineering entrance examinations, build spoken English from Class 1, and coach working professionals for CMA. Small batches, monthly tests with ranked results shared with parents, and teachers selected through live demonstration classes — that is how we work.
+              {pickLang(safeString(settings?.about, "Muyarchi Academy is a new coaching institute in Vaniyambadi, started with a simple belief: a student here should not need to travel to Vellore or Chennai — or pay city fees — to get serious coaching. We teach strong fundamentals from Class 8, prepare senior students for medical and engineering entrance examinations, build spoken English from Class 1, and coach working professionals for CMA. Small batches, monthly tests with ranked results shared with parents, and teachers selected through live demonstration classes — that is how we work."), safeString(settings?.about_ta), language)}
             </p>
             <Button asChild className="mt-8 bg-secondary text-white hover:bg-secondary/90 font-semibold rounded-md px-8">
-              <Link to="/contact">Get in Touch <ChevronRight className="h-4 w-4" /></Link>
+              <Link to="/contact">{t('home.aboutCta', 'Get in Touch')} <ChevronRight className="h-4 w-4" /></Link>
             </Button>
           </div>
         </FadeIn>
 
-        {/* Row 3: Mission + Values + Quality */}
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { icon: Target, title: 'Our Mission', text: 'To bring city-standard coaching to our town at fees families can afford — without compromising on teaching quality or student outcomes.' },
+            { icon: Target, title: pickLang('Our Mission', safeString(settings?.mission_ta), language), text: pickLang(safeString(settings?.mission, "To bring city-standard coaching to our town at fees families can afford — without compromising on teaching quality or student outcomes."), safeString(settings?.mission_ta), language) },
             { icon: TrendingUp, title: 'Our Values', text: 'Honesty. Discipline. Care.' },
             { icon: Award, title: 'Our Quality', text: 'Monthly tests with ranked results shared with parents, small batches of around 40, and teachers selected through live demonstration classes.' },
           ].map(({ icon: Icon, title, text }, i) => (
@@ -170,13 +160,13 @@ export default function Home() {
 
       {/* ── COURSES ───────────────────────────────────────────── */}
       <Section>
-        <SectionHeading title="Our Courses" subtitle="Expertly crafted programs designed to help you excel in your career" />
+        <SectionHeading title={t('home.ourCourses', 'Our Courses')} subtitle="Expertly crafted programs designed to help you excel in your career" />
         {loading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-80 rounded-2xl" />)}
           </div>
         ) : courses.length === 0 ? (
-          <EmptyState icon={BookOpen} message="No courses available yet" />
+          <EmptyState icon={BookOpen} message={t('courses.noCourses', 'No courses available yet')} />
         ) : (
           <>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -194,12 +184,12 @@ export default function Home() {
                         </Badge>
                       </div>
                       <CardContent className="p-5">
-                        <h3 className="font-display text-base font-semibold leading-snug transition-colors group-hover:text-primary">{course.title}</h3>
-                        <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{course.description}</p>
+                        <h3 className="font-display text-base font-semibold leading-snug transition-colors group-hover:text-primary">{pickLang(course.title, course.title_ta, language)}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{pickLang(course.description, course.description_ta, language)}</p>
                         <div className="mt-4 flex flex-wrap gap-2">
                           {course.duration && (
                             <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
-                              <Clock className="h-3.5 w-3.5" /> {course.duration}
+                              <Clock className="h-3.5 w-3.5" /> {pickLang(course.duration, course.duration_ta, language)}
                             </span>
                           )}
                         </div>
@@ -211,33 +201,32 @@ export default function Home() {
             </div>
             <div className="mt-10 text-center">
               <Button asChild variant="outline" className="gap-2 rounded-full px-8">
-                <Link to="/courses">View All Courses <ArrowRight className="h-4 w-4" /></Link>
+                <Link to="/courses">{t('home.viewAllCourses', 'View All Courses')} <ArrowRight className="h-4 w-4" /></Link>
               </Button>
             </div>
           </>
         )}
       </Section>
 
-
-      {/* ── EVENTS ──────────────���─────────────────────────────── */}
+      {/* ── EVENTS ──────────────────────────────────────────────── */}
       <Section>
-        <SectionHeading title="Latest Events" subtitle="Stay updated with our upcoming and past events" />
+        <SectionHeading title={t('home.upcomingEvents', 'Latest Events')} subtitle="Stay updated with our upcoming and past events" />
         {loading ? (
           <div className="grid gap-6 md:grid-cols-3">
             {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-80 rounded-2xl" />)}
           </div>
         ) : events.length === 0 ? (
-          <EmptyState icon={Calendar} message="No events to show" />
+          <EmptyState icon={Calendar} message={t('events.noEvents', 'No events to show')} />
         ) : (
           <>
             <div className="grid gap-6 md:grid-cols-3">
-              {events.map((event:any, i) => (
+              {events.map((event, i) => (
                 <FadeIn key={event.id} delay={i * 0.1}>
                   <Link to={`/events/${event.id}`} className="block h-full">
                     <Card className="group h-full overflow-hidden rounded-2xl border-0 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1.5 cursor-pointer">
                       <div className="relative aspect-video overflow-hidden bg-accent">
-                        {event.image_url
-                          ? <img src={event.image_url} alt={event.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                        {event.cover_image_url
+                          ? <img src={event.cover_image_url} alt={event.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
                           : <div className="flex h-full items-center justify-center bg-accent" />
                         }
                         {event.event_date && (
@@ -247,8 +236,8 @@ export default function Home() {
                         )}
                       </div>
                       <CardContent className="p-5">
-                        <h3 className="font-display text-base font-semibold leading-snug transition-colors group-hover:text-primary">{event.title}</h3>
-                        <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{event.description}</p>
+                        <h3 className="font-display text-base font-semibold leading-snug transition-colors group-hover:text-primary">{pickLang(event.title, event.title_ta, language)}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{pickLang(event.description, event.description_ta, language)}</p>
                       </CardContent>
                     </Card>
                   </Link>
@@ -257,7 +246,7 @@ export default function Home() {
             </div>
             <div className="mt-10 text-center">
               <Button asChild variant="outline" className="gap-2 rounded-full px-8">
-                <Link to="/events">View All Events <ArrowRight className="h-4 w-4" /></Link>
+                <Link to="/events">{t('home.viewAllEvents', 'View All Events')} <ArrowRight className="h-4 w-4" /></Link>
               </Button>
             </div>
           </>
@@ -266,13 +255,13 @@ export default function Home() {
 
       {/* ── BLOGS ─────────────────────────────────────────────── */}
       <Section>
-        <SectionHeading title="Latest Blogs" subtitle="Insights, stories and updates from our academy" />
+        <SectionHeading title={t('home.latestBlog', 'Latest Blogs')} subtitle="Insights, stories and updates from our academy" />
         {loading ? (
           <div className="grid gap-6 md:grid-cols-3">
             {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-80 rounded-2xl" />)}
           </div>
         ) : blogs.length === 0 ? (
-          <EmptyState icon={BookOpen} message="No blog posts yet" />
+          <EmptyState icon={BookOpen} message={t('blog.noArticles', 'No blog posts yet')} />
         ) : (
           <>
             <div className="grid gap-6 md:grid-cols-3">
@@ -287,8 +276,8 @@ export default function Home() {
                         }
                       </div>
                       <CardContent className="p-5">
-                        <h3 className="font-display text-base font-semibold leading-snug">{blog.title}</h3>
-                        <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{blog.description}</p>
+                        <h3 className="font-display text-base font-semibold leading-snug">{pickLang(blog.title, blog.title_ta, language)}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{pickLang(blog.description, blog.description_ta, language)}</p>
                         <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
                           <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-[10px]">
                             {blog.author.charAt(0)}
@@ -304,7 +293,7 @@ export default function Home() {
             </div>
             <div className="mt-10 text-center">
               <Button asChild variant="outline" className="gap-2 rounded-full px-8">
-                <Link to="/blog">View All Posts <ArrowRight className="h-4 w-4" /></Link>
+                <Link to="/blog">{t('home.viewAllBlogs', 'View All Posts')} <ArrowRight className="h-4 w-4" /></Link>
               </Button>
             </div>
           </>
@@ -324,22 +313,22 @@ export default function Home() {
             viewport={{ once: true }} transition={{ duration: 0.5 }}
           >
             <Badge className="mb-6 border border-white/20 bg-white/10 px-5 py-2 text-sm text-white">
-              <TrendingUp className="mr-2 h-4 w-4" /> Start Today
+              <TrendingUp className="mr-2 h-4 w-4" /> {t('home.learnMore', 'Start Today')}
             </Badge>
             <h2 className="font-display text-3xl font-bold text-white md:text-5xl">
-              Ready to Start Your Journey?
+              {t('home.learnMore', 'Ready to Start Your Journey?')}
             </h2>
             <p className="mt-4 text-lg text-white/75 max-w-xl mx-auto">
-              Join Muyarchi Academy today and take the first step toward a brighter future.
+              {t('home.learnMore', 'Join Muyarchi Academy today and take the first step toward a brighter future.')}
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Button asChild size="lg" variant="secondary" className="rounded-full px-8 shadow-lg">
-                <Link to="/courses">View All Courses</Link>
+                <Link to="/courses">{t('home.viewAllCourses', 'View All Courses')}</Link>
               </Button>
               <Button asChild size="lg"
                 className="rounded-full border border-white/30 bg-white/10 px-8 text-white backdrop-blur-sm hover:bg-white/20"
                 variant="outline">
-                <Link to="/contact">Get in Touch</Link>
+                <Link to="/contact">{t('home.aboutCta', 'Get in Touch')}</Link>
               </Button>
             </div>
           </motion.div>

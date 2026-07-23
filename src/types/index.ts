@@ -1,10 +1,14 @@
 export interface Course {
   id: string
   title: string
+  title_ta: string
   description: string
+  description_ta: string
   duration: string
+  duration_ta: string
   fees: string
   eligibility: string
+  eligibility_ta: string
   thumbnail_url: string
   status: 'active' | 'inactive'
   sort_order: number
@@ -15,8 +19,11 @@ export interface Course {
 export interface Blog {
   id: string
   title: string
+  title_ta: string
   description: string
+  description_ta: string
   content: string
+  content_ta: string
   author: string
   thumbnail_url: string
   published: boolean
@@ -28,7 +35,9 @@ export interface Blog {
 export interface EventItem {
   id: string
   title: string
+  title_ta: string
   description: string
+  description_ta: string
   event_date: string | null
   cover_image_url?: string
   image_gallery_urls?: string[]
@@ -42,8 +51,11 @@ export interface EventItem {
 export interface Testimonial {
   id: string
   author_name: string
+  author_name_ta: string
   author_role: string
+  author_role_ta: string
   content: string
+  content_ta: string
   rating: number
   avatar_url: string
   sort_order: number
@@ -66,17 +78,24 @@ export interface MediaItem {
 export interface SiteSettings {
   id: number
   hero_title: string
+  hero_title_ta: string
   hero_subtitle: string
+  hero_subtitle_ta: string
   about: string
+  about_ta: string
   vision: string
+  vision_ta: string
   mission: string
+  mission_ta: string
   phone: string
   email: string
   address: string
   footer_text: string
+  footer_text_ta: string
   google_map_url: string
   logo_url: string
   academy_name: string
+  academy_name_ta: string
   facebook_url: string
   twitter_url: string
   instagram_url: string
@@ -91,21 +110,44 @@ export interface SiteSettings {
 export interface Scholarship {
   id: number
   hero_title: string
+  hero_title_ta: string
   hero_description: string
+  hero_description_ta: string
   how_it_works_title: string
+  how_it_works_title_ta: string
   how_it_works_description: string
+  how_it_works_description_ta: string
   card1_title: string
+  card1_title_ta: string
   card1_text: string
+  card1_text_ta: string
   card2_title: string
+  card2_title_ta: string
   card2_text: string
+  card2_text_ta: string
   card3_title: string
+  card3_title_ta: string
   card3_text: string
+  card3_text_ta: string
   test_details_title: string
+  test_details_title_ta: string
   eligibility: string
+  eligibility_ta: string
   duration: string
+  duration_ta: string
   test_date: string
+  test_date_ta: string
   venues: string
+  venues_ta: string
   sample_paper_link: string
+  updated_at: string
+}
+
+export interface UiTranslation {
+  id: string
+  key: string
+  en: string
+  ta: string
   updated_at: string
 }
 

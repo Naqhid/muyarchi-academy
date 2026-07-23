@@ -20,8 +20,11 @@ import type { Blog, BlogInput } from '@/types'
 
 const schema = z.object({
   title: z.string().min(1, 'Title is required'),
+  title_ta: z.string().optional().default(''),
   description: z.string().optional().default(''),
+  description_ta: z.string().optional().default(''),
   content: z.string().optional().default(''),
+  content_ta: z.string().optional().default(''),
   author: z.string().min(1, 'Author is required'),
   thumbnail_url: z.string().optional().default(''),
   published: z.boolean().default(false),
@@ -41,7 +44,7 @@ export default function Blogs() {
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { title: '', description: '', content: '', author: '', thumbnail_url: '', published: false, published_at: '' },
+    defaultValues: { title: '', title_ta: '', description: '', description_ta: '', content: '', content_ta: '', author: '', thumbnail_url: '', published: false, published_at: '' },
   })
 
   const load = () => {
@@ -59,7 +62,7 @@ export default function Blogs() {
 
   const openCreate = () => {
     setEditing(null)
-    reset({ title: '', description: '', content: '', author: '', thumbnail_url: '', published: false, published_at: '' })
+    reset({ title: '', title_ta: '', description: '', description_ta: '', content: '', content_ta: '', author: '', thumbnail_url: '', published: false, published_at: '' })
     setDialogOpen(true)
   }
 
@@ -67,8 +70,11 @@ export default function Blogs() {
     setEditing(blog)
     reset({
       title: blog.title,
+      title_ta: blog.title_ta || '',
       description: blog.description,
+      description_ta: blog.description_ta || '',
       content: blog.content,
+      content_ta: blog.content_ta || '',
       author: blog.author,
       thumbnail_url: blog.thumbnail_url,
       published: blog.published,
@@ -81,8 +87,11 @@ export default function Blogs() {
     try {
       const input: BlogInput = {
         title: data.title,
+        title_ta: data.title_ta ?? '',
         description: data.description ?? '',
+        description_ta: data.description_ta ?? '',
         content: data.content ?? '',
+        content_ta: data.content_ta ?? '',
         author: data.author,
         thumbnail_url: data.thumbnail_url ?? '',
         published: data.published,
@@ -195,17 +204,29 @@ export default function Blogs() {
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title">Title (English)</Label>
               <Input id="title" placeholder="Enter blog title" {...register('title')} aria-invalid={!!errors.title} />
               {errors.title && <p className="text-xs text-destructive" role="alert">{errors.title.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="title_ta">Title (Tamil)</Label>
+              <Input id="title_ta" placeholder="வலைப்பதிவு தலைப்பு" {...register('title_ta')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description (English)</Label>
               <Textarea id="description" placeholder="Enter blog description" {...register('description')} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="content">Content</Label>
+              <Label htmlFor="description_ta">Description (Tamil)</Label>
+              <Textarea id="description_ta" placeholder="வலைப்பதிவு விளக்கம்" {...register('description_ta')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="content">Content (English)</Label>
               <Textarea id="content" rows={8} placeholder="Enter blog content" {...register('content')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="content_ta">Content (Tamil)</Label>
+              <Textarea id="content_ta" rows={8} placeholder="வலைப்பதிவு உள்ளடக்கம்" {...register('content_ta')} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="author">Author</Label>

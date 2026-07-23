@@ -19,10 +19,14 @@ import type { Course, CourseInput } from '@/types'
 
 const schema = z.object({
   title: z.string().min(1, 'Title is required'),
+  title_ta: z.string().optional().default(''),
   description: z.string().optional().default(''),
+  description_ta: z.string().optional().default(''),
   duration: z.string().optional().default(''),
+  duration_ta: z.string().optional().default(''),
   fees: z.string().optional().default(''),
   eligibility: z.string().optional().default(''),
+  eligibility_ta: z.string().optional().default(''),
   thumbnail_url: z.string().optional().default(''),
   status: z.enum(['active', 'inactive']).default('active'),
   sort_order: z.coerce.number().int().default(0),
@@ -41,7 +45,7 @@ export default function Courses() {
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { title: '', description: '', duration: '', fees: '', eligibility: '', thumbnail_url: '', status: 'active', sort_order: 0 },
+    defaultValues: { title: '', title_ta: '', description: '', description_ta: '', duration: '', duration_ta: '', fees: '', eligibility: '', eligibility_ta: '', thumbnail_url: '', status: 'active', sort_order: 0 },
   })
 
   const load = () => {
@@ -59,7 +63,7 @@ export default function Courses() {
 
   const openCreate = () => {
     setEditing(null)
-    reset({ title: '', description: '', duration: '', fees: '', eligibility: '', thumbnail_url: '', status: 'active', sort_order: 0 })
+    reset({ title: '', title_ta: '', description: '', description_ta: '', duration: '', duration_ta: '', fees: '', eligibility: '', eligibility_ta: '', thumbnail_url: '', status: 'active', sort_order: 0 })
     setDialogOpen(true)
   }
 
@@ -67,10 +71,14 @@ export default function Courses() {
     setEditing(course)
     reset({
       title: course.title,
+      title_ta: course.title_ta || '',
       description: course.description,
+      description_ta: course.description_ta || '',
       duration: course.duration,
+      duration_ta: course.duration_ta || '',
       fees: course.fees,
       eligibility: course.eligibility,
+      eligibility_ta: course.eligibility_ta || '',
       thumbnail_url: course.thumbnail_url,
       status: course.status,
       sort_order: course.sort_order,
@@ -82,10 +90,14 @@ export default function Courses() {
     try {
       const input: CourseInput = {
         title: data.title,
+        title_ta: data.title_ta ?? '',
         description: data.description ?? '',
+        description_ta: data.description_ta ?? '',
         duration: data.duration ?? '',
+        duration_ta: data.duration_ta ?? '',
         fees: data.fees ?? '',
         eligibility: data.eligibility ?? '',
+        eligibility_ta: data.eligibility_ta ?? '',
         thumbnail_url: data.thumbnail_url ?? '',
         status: data.status,
         sort_order: data.sort_order,
@@ -197,18 +209,30 @@ export default function Courses() {
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title">Title (English)</Label>
               <Input id="title" placeholder="Enter course title" {...register('title')} aria-invalid={!!errors.title} />
               {errors.title && <p className="text-xs text-destructive" role="alert">{errors.title.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="title_ta">Title (Tamil)</Label>
+              <Input id="title_ta" placeholder="பாடநெறி தலைப்பு" {...register('title_ta')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description (English)</Label>
               <Textarea id="description" placeholder="Enter course description" {...register('description')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description_ta">Description (Tamil)</Label>
+              <Textarea id="description_ta" placeholder="பாடநெறி விளக்கம்" {...register('description_ta')} />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="duration">Duration</Label>
+                <Label htmlFor="duration">Duration (English)</Label>
                 <Input id="duration" placeholder="e.g. 6 months" {...register('duration')} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="duration_ta">Duration (Tamil)</Label>
+                <Input id="duration_ta" placeholder="காலம்" {...register('duration_ta')} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="fees">Fees</Label>
@@ -216,8 +240,12 @@ export default function Courses() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="eligibility">Eligibility</Label>
+              <Label htmlFor="eligibility">Eligibility (English)</Label>
               <Input id="eligibility" placeholder="e.g. 10th pass" {...register('eligibility')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="eligibility_ta">Eligibility (Tamil)</Label>
+              <Input id="eligibility_ta" placeholder="தகுதி" {...register('eligibility_ta')} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="thumbnail_url">Thumbnail URL</Label>

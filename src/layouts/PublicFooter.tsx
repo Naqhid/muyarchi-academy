@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Facebook, Twitter, Instagram, Youtube, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
 import { useSettings } from '@/hooks/use-settings'
+import { useLanguage, pickLang } from '@/hooks/use-language'
 
-// Helper to safely get a string value from settings
 const safeString = (val: unknown): string => {
   if (typeof val === 'string') return val
   if (val && typeof val === 'object') return JSON.stringify(val)
@@ -11,13 +11,15 @@ const safeString = (val: unknown): string => {
 
 export function PublicFooter() {
   const { settings } = useSettings()
+  const { t, language } = useLanguage()
   if (!settings) return null
 
-  const academyName = safeString(settings.academy_name) || 'Muyarchi Academy'
+  const academyName = pickLang(safeString(settings.academy_name) || 'Muyarchi Academy', safeString(settings.academy_name_ta), language)
+  const footerText = pickLang(safeString(settings.footer_text) || 'Where every effort counts.', safeString(settings.footer_text_ta), language)
   const logoUrl = safeString(settings.logo_url)
   const phone = safeString(settings.phone)
   const email = safeString(settings.email)
-  const address = safeString(settings.address)
+  const address = pickLang(safeString(settings.address), safeString(settings.address), language)
 
   const socials = [
     { url: safeString(settings.facebook_url), icon: Facebook, label: 'Facebook' },
@@ -40,20 +42,20 @@ export function PublicFooter() {
               )}
               <span className="font-display text-lg font-bold">{academyName}</span>
             </div>
-            <p className="text-sm text-muted-foreground max-w-xs">Where every effort counts.</p>
+            <p className="text-sm text-muted-foreground max-w-xs">{footerText}</p>
           </div>
           <div>
-            <h3 className="mb-4 font-display font-semibold">Quick Links</h3>
+            <h3 className="mb-4 font-display font-semibold">{t('footer.quickLinks')}</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
-              <li><Link to="/courses" className="hover:text-primary transition-colors">Courses</Link></li>
-              <li><Link to="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
-              <li><Link to="/events" className="hover:text-primary transition-colors">Events & Gallery</Link></li>
-              <li><Link to="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
+              <li><Link to="/" className="hover:text-primary transition-colors">{t('nav.home')}</Link></li>
+              <li><Link to="/courses" className="hover:text-primary transition-colors">{t('nav.courses')}</Link></li>
+              <li><Link to="/blog" className="hover:text-primary transition-colors">{t('nav.blog')}</Link></li>
+              <li><Link to="/events" className="hover:text-primary transition-colors">{t('nav.events')}</Link></li>
+              <li><Link to="/contact" className="hover:text-primary transition-colors">{t('nav.contact')}</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="mb-4 font-display font-semibold">Contact</h3>
+            <h3 className="mb-4 font-display font-semibold">{t('footer.contactUs')}</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               {phone && <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-primary" /><a href={`tel:${phone}`} className="hover:text-primary transition-colors">{phone}</a></li>}
               {email && <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-primary" /><a href={`mailto:${email}`} className="hover:text-primary transition-colors">{email}</a></li>}
@@ -71,7 +73,7 @@ export function PublicFooter() {
           </div>
         </div>
         <div className="mt-8 border-t border-border pt-6 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} {academyName}. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {academyName}. {t('footer.rights')}</p>
         </div>
       </div>
     </footer>

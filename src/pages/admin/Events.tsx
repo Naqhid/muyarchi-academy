@@ -19,7 +19,9 @@ import type { EventItem, EventInput } from '@/types'
 
 const schema = z.object({
   title: z.string().min(1, 'Title is required'),
+  title_ta: z.string().optional().default(''),
   description: z.string().optional().default(''),
+  description_ta: z.string().optional().default(''),
   event_date: z.string().optional().default(''),
   cover_image_url: z.string().optional().default(''),
 })
@@ -39,7 +41,7 @@ export default function Events() {
 
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { title: '', description: '', event_date: '', cover_image_url: '' },
+    defaultValues: { title: '', title_ta: '', description: '', description_ta: '', event_date: '', cover_image_url: '' },
   })
 
   const load = () => {
@@ -57,7 +59,7 @@ export default function Events() {
 
   const openCreate = () => {
     setEditing(null)
-    reset({ title: '', description: '', event_date: '', cover_image_url: '' })
+    reset({ title: '', title_ta: '', description: '', description_ta: '', event_date: '', cover_image_url: '' })
     setImageGallery([])
     setVideoGallery([])
     setDialogOpen(true)
@@ -67,7 +69,9 @@ export default function Events() {
     setEditing(event)
     reset({
       title: event.title,
+      title_ta: event.title_ta || '',
       description: event.description,
+      description_ta: event.description_ta || '',
       event_date: event.event_date ? event.event_date.split('T')[0] : '',
       cover_image_url: event.cover_image_url,
     })
@@ -80,7 +84,9 @@ export default function Events() {
     try {
       const input: EventInput = {
         title: data.title,
+        title_ta: data.title_ta ?? '',
         description: data.description ?? '',
+        description_ta: data.description_ta ?? '',
         event_date: data.event_date ?? '',
         cover_image_url: data.cover_image_url ?? '',
         image_gallery_urls: imageGallery.filter((url) => url.trim() !== ''),
@@ -203,13 +209,21 @@ export default function Events() {
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title">Title (English)</Label>
               <Input id="title" placeholder="Enter event title" {...register('title')} aria-invalid={!!errors.title} />
               {errors.title && <p className="text-xs text-destructive" role="alert">{errors.title.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="title_ta">Title (Tamil)</Label>
+              <Input id="title_ta" placeholder="நிகழ்வு தலைப்பு" {...register('title_ta')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description (English)</Label>
               <Textarea id="description" placeholder="Enter event description" {...register('description')} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description_ta">Description (Tamil)</Label>
+              <Textarea id="description_ta" placeholder="நிகழ்வு விளக்கம்" {...register('description_ta')} />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">

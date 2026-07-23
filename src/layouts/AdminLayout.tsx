@@ -1,7 +1,7 @@
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LayoutDashboard, BookOpen, FileText, Calendar, Star, Image, Settings, LogOut, Menu, X, GraduationCap, ExternalLink, Users, MessageSquare, PlayCircle } from 'lucide-react'
+import { LayoutDashboard, BookOpen, FileText, Calendar, Star, Image, Settings, LogOut, Menu, X, GraduationCap, ExternalLink, Users, MessageSquare, PlayCircle, Languages } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/use-auth'
 import { useSettings } from '@/hooks/use-settings'
@@ -15,6 +15,7 @@ const navItems = [
   { to: '/admin/testimonials', label: 'Testimonials', icon: Star },
   { to: '/admin/media', label: 'Media Library', icon: Image },
   { to: '/admin/scholarship', label: 'Scholarship', icon: GraduationCap },
+  { to: '/admin/translations', label: 'UI Translations', icon: Languages },
   { to: '/admin/demo-registrations', label: 'Demo Registrations', icon: PlayCircle },
   { to: '/admin/enquiries', label: 'Enquiries', icon: MessageSquare },
   { to: '/admin/settings', label: 'Settings', icon: Settings },
