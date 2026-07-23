@@ -334,12 +334,13 @@ export default function Settings() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-xl"><MapPin className="h-5 w-5" />Google Map</CardTitle>
-              <CardDescription>Embed URL for the Google Map on your contact page</CardDescription>
+              <CardDescription>Use a Google Maps Embed URL. Google Maps share links (such as maps.app.goo.gl) cannot be displayed in the website.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="google_map_url">Google Map URL</Label>
-                <Input id="google_map_url" placeholder="https://maps.google.com/..." {...register('google_map_url')} />
+                <Label htmlFor="google_map_url">Google Maps Embed URL</Label>
+                <Input id="google_map_url" placeholder="https://www.google.com/maps/embed?pb=..." {...register('google_map_url')} />
+                <p className="text-xs text-muted-foreground">In Google Maps: Share → Embed a map → Copy HTML, then paste only the URL inside <code>src="..."</code>.</p>
                 {errors.google_map_url && <p className="text-xs text-destructive" role="alert">{errors.google_map_url.message}</p>}
               </div>
             </CardContent>

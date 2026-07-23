@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { fetchScholarshipRegistrations, deleteScholarshipRegistration } from '@/lib/api'
 import type { ScholarshipRegistration } from '@/types'
+import { ExportRecords } from '@/components/admin/ExportRecords'
 
 export default function ScholarshipRegistrations() {
   const { toast } = useToast()
@@ -57,6 +58,12 @@ export default function ScholarshipRegistrations() {
           <p className="text-sm text-muted-foreground">View and manage scholarship test registrations</p>
         </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <ExportRecords title="Scholarship Registrations" rows={registrations} columns={[
+            { label: 'Student', value: (item) => item.student_name }, { label: 'Class', value: (item) => item.class },
+            { label: 'School', value: (item) => item.school }, { label: 'Parent', value: (item) => item.parent_name },
+            { label: 'Parent phone', value: (item) => item.parent_phone }, { label: 'Town / Village', value: (item) => item.town_village },
+            { label: 'Registered', value: (item) => formatDate(item.created_at) },
+          ]} />
           <Users className="h-4 w-4" />
           <span>{registrations.length} total</span>
         </div>

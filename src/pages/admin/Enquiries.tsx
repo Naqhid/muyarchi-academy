@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { fetchEnquiries, deleteEnquiry } from '@/lib/api'
 import type { Enquiry } from '@/types'
+import { ExportRecords } from '@/components/admin/ExportRecords'
 
 export default function Enquiries() {
   const { toast } = useToast()
@@ -57,6 +58,11 @@ export default function Enquiries() {
           <p className="text-sm text-muted-foreground">View and manage contact form enquiries</p>
         </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <ExportRecords title="Enquiries" rows={enquiries} columns={[
+            { label: 'Name', value: (item) => item.name }, { label: 'Phone', value: (item) => item.phone },
+            { label: 'Class / Course', value: (item) => item.class_course }, { label: 'Message', value: (item) => item.message },
+            { label: 'Submitted', value: (item) => formatDate(item.created_at) },
+          ]} />
           <MessageSquare className="h-4 w-4" />
           <span>{enquiries.length} total</span>
         </div>

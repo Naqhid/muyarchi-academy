@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { fetchDemoRegistrations, deleteDemoRegistration } from '@/lib/api'
 import type { DemoRegistration } from '@/types'
+import { ExportRecords } from '@/components/admin/ExportRecords'
 
 export default function DemoRegistrations() {
   const { toast } = useToast()
@@ -57,6 +58,11 @@ export default function DemoRegistrations() {
           <p className="text-sm text-muted-foreground">View and manage free demo class bookings</p>
         </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <ExportRecords title="Demo Class Registrations" rows={registrations} columns={[
+            { label: 'Student', value: (item) => item.student_name }, { label: 'Class', value: (item) => item.class },
+            { label: 'Phone', value: (item) => item.phone }, { label: 'Preferred time', value: (item) => item.preferred_time },
+            { label: 'Message', value: (item) => item.message }, { label: 'Registered', value: (item) => formatDate(item.created_at) },
+          ]} />
           <Users className="h-4 w-4" />
           <span>{registrations.length} total</span>
         </div>

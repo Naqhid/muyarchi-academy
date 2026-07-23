@@ -32,7 +32,16 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  React.useEffect(() => { refresh() }, [refresh])
+  React.useEffect(() => {
+    refresh()
+
+    // Settings are edited in the admin panel, which is often open in a
+    // separate tab from the public site. Refresh when the visitor returns so
+    // saved content is reflected without requiring a full browser reload.
+    const refreshOnFocus = () => { void refresh() }
+    window.addEventListener('focus', refreshOnFocus)
+    return () => window.removeEventListener('focus', refreshOnFocus)
+  }, [refresh])
 
   return <SettingsContext.Provider value={{ settings, loading, refresh }}>{children}</SettingsContext.Provider>
 }

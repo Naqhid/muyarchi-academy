@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Phone, Mail, MapPin, MessageSquare, Send } from 'lucide-react'
+import { Phone, Mail, MapPin, MessageSquare, Send, ExternalLink } from 'lucide-react'
 import { Section, SectionHeader, FadeIn } from '@/components/shared/Section'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -29,6 +29,17 @@ const safeString = (val: unknown): string => {
   return ''
 }
 
+const getMapEmbedUrl = (mapUrl: string, address: string) => {
+  // Google short/share links cannot be embedded. An address can always be used
+  // to create a supported Google Maps embed URL instead.
+  if (mapUrl.includes('maps.app.goo.gl') || mapUrl.includes('goo.gl/maps')) {
+    return address ? `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed` : null
+  }
+  if (mapUrl.includes('/embed') || mapUrl.includes('output=embed')) return mapUrl
+  if (address) return `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`
+  return null
+}
+
 export default function Contact() {
   const { settings } = useSettings()
   const { toast } = useToast()
@@ -47,6 +58,8 @@ export default function Contact() {
   }
 
   const hasContactInfo = safeString(settings?.phone) || safeString(settings?.email) || safeString(settings?.address)
+  const mapUrl = safeString(settings?.google_map_url)
+  const mapEmbedUrl = getMapEmbedUrl(mapUrl, safeString(settings?.address))
 
   return (
     <>
@@ -140,12 +153,20 @@ export default function Contact() {
                 </Card>
               )}
 
-              {settings?.google_map_url && (
+              {mapUrl && (
                 <Card className="overflow-hidden rounded-2xl border-0 shadow-lg">
                   <div className="border-b bg-gradient-to-r from-primary to-blue-600 px-6 py-4 text-white">
                     <h3 className="text-lg font-semibold">{t('contact.mapLabel', 'Find Us on Google Maps')}</h3>
                   </div>
-                  <iframe src={safeString(settings.google_map_url)} width="100%" height="340" style={{ border: 0 }} loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade" title="Google Map" />
+                  {mapEmbedUrl ? (
+                    <iframe src={mapEmbedUrl} width="100%" height="340" style={{ border: 0 }} loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade" title="Google Map" />
+                  ) : (
+                    <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
+                      <MapPin className="h-10 w-10 text-primary" />
+                      <p className="text-muted-foreground">Open our location in Google Maps.</p>
+                      <Button asChild><a href={mapUrl} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-4 w-4" />Open Google Maps</a></Button>
+                    </CardContent>
+                  )}
                 </Card>
               )}
             </div>
