@@ -95,7 +95,7 @@ export default function Home() {
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-8">
               <p className="font-serif text-2xl font-light text-secondary md:text-3xl">
-                முயற்சி திருவினையாக்கும்
+                {t('home.kural', 'முயற்சி திருவினையாக்கும்')}
               </p>
               <div className="mx-auto mt-4 h-0.5 w-24 bg-secondary" />
             </motion.div>
@@ -120,7 +120,7 @@ export default function Home() {
       <Section id="about" className="mt-6 bg-primary text-white">
         <FadeIn>
           <div className="mx-auto flex max-w-4xl flex-col items-center text-center py-8">
-            <h2 className="font-display text-4xl font-semibold md:text-5xl mb-6">{pickLang('Our Vision', safeString(settings?.vision_ta), language)}</h2>
+            <h2 className="font-display text-4xl font-semibold md:text-5xl mb-6">{t('home.visionHeading', 'Our Vision')}</h2>
             <p className="text-xl leading-relaxed font-light">
               {pickLang(safeString(settings?.vision, "In Vaniyambadi and the villages around it, a child's talent and effort — not family income or location — decide how far they go."), safeString(settings?.vision_ta), language)}
             </p>
@@ -129,7 +129,7 @@ export default function Home() {
 
         <FadeIn delay={0.1}>
           <div className="mx-auto max-w-3xl text-center mt-12 pt-8 border-t border-white/20">
-            <h3 className="font-display text-2xl font-semibold mb-4">{pickLang('About the Academy', safeString(settings?.about_ta), language)}</h3>
+            <h3 className="font-display text-2xl font-semibold mb-4">{t('home.aboutHeading', 'About the Academy')}</h3>
             <p className="text-lg leading-relaxed font-light">
               {pickLang(safeString(settings?.about, "Muyarchi Academy is a new coaching institute in Vaniyambadi, started with a simple belief: a student here should not need to travel to Vellore or Chennai — or pay city fees — to get serious coaching. We teach strong fundamentals from Class 8, prepare senior students for medical and engineering entrance examinations, build spoken English from Class 1, and coach working professionals for CMA. Small batches, monthly tests with ranked results shared with parents, and teachers selected through live demonstration classes — that is how we work."), safeString(settings?.about_ta), language)}
             </p>
@@ -142,8 +142,8 @@ export default function Home() {
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
             { icon: Target, title: pickLang('Our Mission', safeString(settings?.mission_ta), language), text: pickLang(safeString(settings?.mission, "To bring city-standard coaching to our town at fees families can afford — without compromising on teaching quality or student outcomes."), safeString(settings?.mission_ta), language) },
-            { icon: TrendingUp, title: 'Our Values', text: 'Honesty. Discipline. Care.' },
-            { icon: Award, title: 'Our Quality', text: 'Monthly tests with ranked results shared with parents, small batches of around 40, and teachers selected through live demonstration classes.' },
+            { icon: TrendingUp, title: t('home.valuesTitle', 'Honesty. Discipline. Care.'), text: t('home.valuesText', 'How we run every classroom, every test, and every fee receipt.') },
+            { icon: Award, title: t('home.qualityTitle', 'Our Quality'), text: t('home.qualityText', 'Monthly tests with ranked results shared with parents, small batches of around 40, and teachers selected through live demonstration classes.') },
           ].map(({ icon: Icon, title, text }, i) => (
             <FadeIn key={title} delay={i * 0.1}>
               <div className="rounded-lg border border-white/20 bg-white/5 p-6 transition-all hover:bg-white/10 hover:border-white/40">
@@ -160,7 +160,7 @@ export default function Home() {
 
       {/* ── COURSES ───────────────────────────────────────────── */}
       <Section>
-        <SectionHeading title={t('home.ourCourses', 'Our Courses')} subtitle="Expertly crafted programs designed to help you excel in your career" />
+        <SectionHeading title={t('home.ourCourses', 'Our Courses')} subtitle={t('home.coursesSubtitle', 'Expertly crafted programs designed to help you excel in your career')} />
         {loading ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-80 rounded-2xl" />)}
@@ -210,7 +210,7 @@ export default function Home() {
 
       {/* ── EVENTS ──────────────────────────────────────────────── */}
       <Section>
-        <SectionHeading title={t('home.upcomingEvents', 'Latest Events')} subtitle="Stay updated with our upcoming and past events" />
+        <SectionHeading title={t('home.upcomingEvents', 'Latest Events')} subtitle={t('home.eventsSubtitle', 'Stay updated with our upcoming and past events')} />
         {loading ? (
           <div className="grid gap-6 md:grid-cols-3">
             {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-80 rounded-2xl" />)}
@@ -255,7 +255,7 @@ export default function Home() {
 
       {/* ── BLOGS ─────────────────────────────────────────────── */}
       <Section>
-        <SectionHeading title={t('home.latestBlog', 'Latest Blogs')} subtitle="Insights, stories and updates from our academy" />
+        <SectionHeading title={t('home.latestBlog', 'Latest Blogs')} subtitle={t('home.blogSubtitle', 'Insights, stories and updates from our academy')} />
         {loading ? (
           <div className="grid gap-6 md:grid-cols-3">
             {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-80 rounded-2xl" />)}
@@ -316,10 +316,10 @@ export default function Home() {
               <TrendingUp className="mr-2 h-4 w-4" /> {t('home.learnMore', 'Start Today')}
             </Badge>
             <h2 className="font-display text-3xl font-bold text-white md:text-5xl">
-              {t('home.learnMore', 'Ready to Start Your Journey?')}
+              {t('home.ctaTitle', 'Ready to Start Your Journey?')}
             </h2>
             <p className="mt-4 text-lg text-white/75 max-w-xl mx-auto">
-              {t('home.learnMore', 'Join Muyarchi Academy today and take the first step toward a brighter future.')}
+              {t('home.ctaText', 'Join Muyarchi Academy today and take the first step toward a brighter future.')}
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Button asChild size="lg" variant="secondary" className="rounded-full px-8 shadow-lg">
@@ -328,7 +328,7 @@ export default function Home() {
               <Button asChild size="lg"
                 className="rounded-full border border-white/30 bg-white/10 px-8 text-white backdrop-blur-sm hover:bg-white/20"
                 variant="outline">
-                <Link to="/contact">{t('home.aboutCta', 'Get in Touch')}</Link>
+                <Link to="/contact">{t('home.ctaButton', 'Get in Touch')}</Link>
               </Button>
             </div>
           </motion.div>

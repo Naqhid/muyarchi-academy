@@ -29,7 +29,7 @@ export default function EventDetail() {
   }
 
   if (error || !event) {
-    return (<div className="container mx-auto px-4 py-12"><div className="mx-auto max-w-4xl text-center"><Calendar className="mx-auto mb-4 h-16 w-16 text-muted-foreground opacity-40" /><h2 className="mb-2 text-2xl font-semibold">Event Not Found</h2><p className="mb-6 text-muted-foreground">{error || 'The event you are looking for does not exist.'}</p><Button asChild variant="outline"><Link to="/events">{t('eventDetail.back', 'Back to Events')}</Link></Button></div></div>)
+    return (<div className="container mx-auto px-4 py-12"><div className="mx-auto max-w-4xl text-center"><Calendar className="mx-auto mb-4 h-16 w-16 text-muted-foreground opacity-40" /><h2 className="mb-2 text-2xl font-semibold">{t('eventDetail.notFoundTitle', 'Event Not Found')}</h2><p className="mb-6 text-muted-foreground">{error || t('eventDetail.notFoundText', 'The event you are looking for does not exist.')}</p><Button asChild variant="outline"><Link to="/events">{t('eventDetail.back', 'Back to Events')}</Link></Button></div></div>)
   }
 
   const title = pickLang(event.title, event.title_ta, language)
@@ -49,7 +49,7 @@ export default function EventDetail() {
       </section>
 
       <Section>
-        <SectionHeader title="Event Overview" subtitle="Complete details about this event" centered={false} />
+        <SectionHeader title={t('eventDetail.overviewTitle', 'Event Overview')} subtitle={t('eventDetail.overviewText', 'Complete details about this event')} centered={false} />
         <div className="grid gap-8 lg:grid-cols-3">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-1">
             <Card className="overflow-hidden rounded-2xl border-0 shadow-lg">
@@ -63,10 +63,10 @@ export default function EventDetail() {
               <p className="text-lg leading-relaxed text-muted-foreground mb-8">{description}</p>
               <div className="grid gap-6 sm:grid-cols-2">
                 {event.event_date && (
-                  <div className="rounded-xl bg-primary/5 p-4"><div className="flex items-center gap-3"><Calendar className="h-6 w-6 text-primary" /><div><p className="text-sm text-muted-foreground">Event Date</p><p className="font-semibold">{formatDate(event.event_date)}</p></div></div></div>
+                  <div className="rounded-xl bg-primary/5 p-4"><div className="flex items-center gap-3"><Calendar className="h-6 w-6 text-primary" /><div><p className="text-sm text-muted-foreground">{t('eventDetail.dateLabel', 'Event Date')}</p><p className="font-semibold">{formatDate(event.event_date)}</p></div></div></div>
                 )}
                 {event.venues && (
-                  <div className="rounded-xl bg-green-50 p-4"><div className="flex items-center gap-3"><MapPin className="h-6 w-6 text-green-600" /><div><p className="text-sm text-muted-foreground">Venue</p><p className="font-semibold">{event.venues}</p></div></div></div>
+                  <div className="rounded-xl bg-green-50 p-4"><div className="flex items-center gap-3"><MapPin className="h-6 w-6 text-green-600" /><div><p className="text-sm text-muted-foreground">{t('eventDetail.venueLabel', 'Venue')}</p><p className="font-semibold">{event.venues}</p></div></div></div>
                 )}
               </div>
             </CardContent></Card>
@@ -76,7 +76,7 @@ export default function EventDetail() {
 
       {event.image_gallery_urls && event.image_gallery_urls.length > 0 && (
         <Section className="bg-muted/50">
-          <SectionHeader title={t('eventDetail.gallery', 'Image Gallery')} subtitle="A visual journey through the event" centered={false} />
+          <SectionHeader title={t('eventDetail.imageGallery', 'Image Gallery')} subtitle={t('eventDetail.imageGalleryText', 'A visual journey through the event')} centered={false} />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {event.image_gallery_urls.map((url, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
@@ -89,7 +89,7 @@ export default function EventDetail() {
 
       {event.video_gallery_urls && event.video_gallery_urls.length > 0 && (
         <Section>
-          <SectionHeader title={t('eventDetail.gallery', 'Video Gallery')} subtitle="Watch highlights from the event" centered={false} />
+          <SectionHeader title={t('eventDetail.videoGallery', 'Video Gallery')} subtitle={t('eventDetail.videoGalleryText', 'Watch highlights from the event')} centered={false} />
           <div className="grid gap-4 sm:grid-cols-2">
             {event.video_gallery_urls.map((url, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
@@ -102,8 +102,8 @@ export default function EventDetail() {
 
       <Section>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mx-auto max-w-3xl text-center">
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-primary md:text-4xl">Interested in this Event?</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Get in touch with us for more information about this event.</p>
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-primary md:text-4xl">{t('eventDetail.ctaTitle', 'Interested in this Event?')}</h2>
+          <p className="mt-4 text-lg text-muted-foreground">{t('eventDetail.ctaText', 'Get in touch with us for more information about this event.')}</p>
           <div className="mt-8"><Button asChild size="lg" className="bg-gradient-to-r from-primary to-blue-600"><Link to="/contact">{t('nav.contact', 'Contact Us')}</Link></Button></div>
         </motion.div>
       </Section>

@@ -32,17 +32,17 @@ export default function Events() {
             <Calendar className="mr-2 h-4 w-4" /> {t('nav.events', 'Academy Events')}
           </Badge>
           <h1 className="mx-auto max-w-4xl font-display text-5xl font-extrabold leading-tight tracking-tight text-white md:text-7xl">
-            <span className="text-white">Events & </span>
-            <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-500 bg-clip-text text-transparent">{t('eventDetail.gallery', 'Gallery')}</span>
+            <span className="text-white">{t('events.heroPrefix', 'Events & ')} </span>
+            <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-500 bg-clip-text text-transparent">{t('events.heroHighlight', 'Gallery')}</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-300 md:text-xl">
-            {t('events.title', 'Discover memorable moments from our seminars, workshops, competitions, celebrations, and student activities.')}
+            {t('events.heroSubtitle', 'Discover memorable moments from our seminars, workshops, competitions, celebrations, and student activities.')}
           </p>
         </motion.div>
       </section>
 
       <Section>
-        <SectionHeader title={t('events.title', 'Our Events')} subtitle={t('events.title', 'Stay updated with our academy events')} />
+        <SectionHeader title={t('events.listTitle', 'Our Events')} subtitle={t('events.listSubtitle', 'Stay updated with our academy events')} />
         {loading ? (
           <div className="space-y-8">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-80 rounded-lg" />)}</div>
         ) : events.length === 0 ? (
@@ -79,7 +79,7 @@ export default function Events() {
                       <p className="text-base leading-7 text-muted-foreground">{pickLang(event.description, event.description_ta, language)}</p>
                       {event.image_gallery_urls && event.image_gallery_urls.length > 0 && (
                         <div>
-                          <h4 className="mb-4 flex items-center gap-2 text-lg font-semibold"><ImageIcon className="h-5 w-5 text-primary" />{t('eventDetail.gallery', 'Photo Gallery')}</h4>
+                          <h4 className="mb-4 flex items-center gap-2 text-lg font-semibold"><ImageIcon className="h-5 w-5 text-primary" />{t('events.photoGallery', 'Photo Gallery')}</h4>
                           <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
                             {event.image_gallery_urls.map((url, j) => (
                               <Dialog key={j}>
@@ -97,12 +97,12 @@ export default function Events() {
                       )}
                       {event.video_gallery_urls && event.video_gallery_urls.length > 0 && (
                         <div>
-                          <h4 className="mb-4 flex items-center gap-2 text-lg font-semibold"><Video className="h-5 w-5 text-primary" />{t('eventDetail.gallery', 'Video Gallery')}</h4>
+                          <h4 className="mb-4 flex items-center gap-2 text-lg font-semibold"><Video className="h-5 w-5 text-primary" />{t('events.videoGallery', 'Video Gallery')}</h4>
                           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {event.video_gallery_urls.map((url, j) => (
                               <a key={j} href={url} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 rounded-2xl border bg-accent/40 p-4 transition-all hover:bg-primary hover:text-white hover:shadow-lg">
                                 <PlayCircle className="h-8 w-8 text-primary transition group-hover:text-white" />
-                                <div><p className="font-semibold">{t('eventDetail.gallery', 'Video')} {j + 1}</p><p className="text-xs opacity-70">Click to watch</p></div>
+                                <div><p className="font-semibold">{t('events.videoLabel', 'Video')} {j + 1}</p><p className="text-xs opacity-70">{t('events.clickToWatch', 'Click to watch')}</p></div>
                               </a>
                             ))}
                           </div>

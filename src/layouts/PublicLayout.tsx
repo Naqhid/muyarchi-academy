@@ -60,6 +60,19 @@ export default function PublicLayout() {
 
   useEffect(() => { setMobileOpen(false) }, [location.pathname])
 
+  useEffect(() => {
+    const setMeta = (name: string, value: string) => {
+      let element = document.querySelector(`meta[name="${name}"]`)
+      if (!element) { element = document.createElement('meta'); element.setAttribute('name', name); document.head.appendChild(element) }
+      element.setAttribute('content', value)
+    }
+    document.title = t('seo.title', 'Muyarchi Academy — Coaching Institute, Vaniyambadi')
+    setMeta('description', t('seo.description', 'City-standard coaching in Vaniyambadi at fees families can afford.'))
+    setMeta('keywords', t('seo.keywords', 'Muyarchi Academy, coaching institute, Vaniyambadi'))
+    const image = t('seo.ogImage', '')
+    if (image) { let og = document.querySelector('meta[property="og:image"]'); if (!og) { og = document.createElement('meta'); og.setAttribute('property', 'og:image'); document.head.appendChild(og) }; og.setAttribute('content', image) }
+  }, [t])
+
   const academyName = (() => {
     const en = (() => {
       const val = settings?.academy_name

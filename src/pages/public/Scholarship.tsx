@@ -49,6 +49,7 @@ export default function Scholarship() {
     { icon: CheckCircle, title: pickLang(safeString(scholarship?.card2_title, 'Card 2'), safeString(scholarship?.card2_title_ta), language), text: pickLang(safeString(scholarship?.card2_text, 'Content coming soon'), safeString(scholarship?.card2_text_ta), language) },
     { icon: GraduationCap, title: pickLang(safeString(scholarship?.card3_title, 'Card 3'), safeString(scholarship?.card3_title_ta), language), text: pickLang(safeString(scholarship?.card3_text, 'Content coming soon'), safeString(scholarship?.card3_text_ta), language) },
   ]
+  const classOptions = t('form.classOptions', '8|9|10|11|12').split('|').map((item) => item.trim()).filter(Boolean)
 
   return (
     <>
@@ -112,16 +113,16 @@ export default function Scholarship() {
             <h2 className="font-display text-3xl font-semibold tracking-tight text-primary md:text-4xl mb-8 text-center">{t('scholarship.formTitle', 'Register for the Test')}</h2>
             <Card className="border-0 shadow-sm"><CardContent className="p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2"><Label htmlFor="studentName">{t('scholarship.studentName', 'Student Name')} *</Label><Input id="studentName" name="studentName" value={formData.studentName} onChange={handleChange} required placeholder="Enter student's full name" /></div>
+                <div className="space-y-2"><Label htmlFor="studentName">{t('scholarship.studentName', 'Student Name')} *</Label><Input id="studentName" name="studentName" value={formData.studentName} onChange={handleChange} required placeholder={t('form.studentNamePlaceholder', "Enter student's full name")} /></div>
                 <div className="space-y-2"><Label htmlFor="class">{t('scholarship.class', 'Class (2025-26)')} *</Label>
                   <select id="class" name="class" value={formData.class} onChange={handleChange} required className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                    <option value="">Select class</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option>
+                    <option value="">{t('form.selectClass', 'Select class')}</option>{classOptions.map((option) => <option key={option} value={option}>{t('form.classPrefix', 'Class')} {option}</option>)}
                   </select>
                 </div>
-                <div className="space-y-2"><Label htmlFor="school">{t('scholarship.school', 'School')} *</Label><Input id="school" name="school" value={formData.school} onChange={handleChange} required placeholder="Current school name" /></div>
-                <div className="space-y-2"><Label htmlFor="parentName">{t('scholarship.parentName', 'Parent Name')} *</Label><Input id="parentName" name="parentName" value={formData.parentName} onChange={handleChange} required placeholder="Father/Mother/Guardian name" /></div>
-                <div className="space-y-2"><Label htmlFor="parentPhone">{t('scholarship.parentPhone', 'Parent Phone (WhatsApp)')} *</Label><Input id="parentPhone" name="parentPhone" type="tel" value={formData.parentPhone} onChange={handleChange} required placeholder="10-digit mobile number" pattern="[0-9]{10}" /></div>
-                <div className="space-y-2"><Label htmlFor="townVillage">{t('scholarship.townVillage', 'Town/Village')} *</Label><Input id="townVillage" name="townVillage" value={formData.townVillage} onChange={handleChange} required placeholder="Your town or village" /></div>
+                <div className="space-y-2"><Label htmlFor="school">{t('scholarship.school', 'School')} *</Label><Input id="school" name="school" value={formData.school} onChange={handleChange} required placeholder={t('form.schoolPlaceholder', 'Current school name')} /></div>
+                <div className="space-y-2"><Label htmlFor="parentName">{t('scholarship.parentName', 'Parent Name')} *</Label><Input id="parentName" name="parentName" value={formData.parentName} onChange={handleChange} required placeholder={t('form.parentNamePlaceholder', 'Father/Mother/Guardian name')} /></div>
+                <div className="space-y-2"><Label htmlFor="parentPhone">{t('scholarship.parentPhone', 'Parent Phone (WhatsApp)')} *</Label><Input id="parentPhone" name="parentPhone" type="tel" value={formData.parentPhone} onChange={handleChange} required placeholder={t('form.phonePlaceholder', '10-digit mobile number')} pattern="[0-9]{10}" /></div>
+                <div className="space-y-2"><Label htmlFor="townVillage">{t('scholarship.townVillage', 'Town/Village')} *</Label><Input id="townVillage" name="townVillage" value={formData.townVillage} onChange={handleChange} required placeholder={t('form.townPlaceholder', 'Your town or village')} /></div>
                 <Button type="submit" className="w-full" disabled={loading}>{loading ? 'Submitting...' : t('scholarship.submit', 'Register for Scholarship Test')}</Button>
               </form>
             </CardContent></Card>

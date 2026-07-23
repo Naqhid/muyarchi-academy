@@ -16,6 +16,7 @@ export default function FreeDemo() {
   const { t } = useLanguage()
   const [formData, setFormData] = useState({ studentName: '', class: '', phone: '', preferredTime: '', message: '' })
   const [loading, setLoading] = useState(false)
+  const classOptions = t('form.classOptions', '8|9|10|11|12').split('|').map((item) => item.trim()).filter(Boolean)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -53,15 +54,15 @@ export default function FreeDemo() {
             <h2 className="font-display text-3xl font-semibold tracking-tight text-primary md:text-4xl mb-8 text-center">{t('freeDemo.title', 'Register for Free Demo')}</h2>
             <Card className="border-0 shadow-sm"><CardContent className="p-8">
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2"><Label htmlFor="studentName">{t('freeDemo.studentName', 'Student Name')} *</Label><Input id="studentName" name="studentName" value={formData.studentName} onChange={handleChange} required placeholder="Enter student's full name" /></div>
+                <div className="space-y-2"><Label htmlFor="studentName">{t('freeDemo.studentName', 'Student Name')} *</Label><Input id="studentName" name="studentName" value={formData.studentName} onChange={handleChange} required placeholder={t('form.studentNamePlaceholder', "Enter student's full name")} /></div>
                 <div className="space-y-2"><Label htmlFor="class">{t('freeDemo.class', 'Class')} *</Label>
                   <select id="class" name="class" value={formData.class} onChange={handleChange} required className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                    <option value="">Select class</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option>
+                    <option value="">{t('form.selectClass', 'Select class')}</option>{classOptions.map((option) => <option key={option} value={option}>{t('form.classPrefix', 'Class')} {option}</option>)}
                   </select>
                 </div>
-                <div className="space-y-2"><Label htmlFor="phone">{t('freeDemo.phone', 'Phone (WhatsApp)')} *</Label><Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} required placeholder="10-digit mobile number" pattern="[0-9]{10}" /></div>
-                <div className="space-y-2"><Label htmlFor="preferredTime">{t('freeDemo.preferredTime', 'Preferred Time')} *</Label><Input id="preferredTime" name="preferredTime" value={formData.preferredTime} onChange={handleChange} required placeholder="e.g., Morning 10 AM, Afternoon 3 PM, Evening 6 PM" /></div>
-                <div className="space-y-2"><Label htmlFor="message">{t('freeDemo.message', 'Additional Message')}</Label><Textarea id="message" name="message" rows={4} value={formData.message} onChange={handleChange} placeholder="Any specific subjects or topics you'd like to cover in the demo?" /></div>
+                <div className="space-y-2"><Label htmlFor="phone">{t('freeDemo.phone', 'Phone (WhatsApp)')} *</Label><Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} required placeholder={t('form.phonePlaceholder', '10-digit mobile number')} pattern="[0-9]{10}" /></div>
+                <div className="space-y-2"><Label htmlFor="preferredTime">{t('freeDemo.preferredTime', 'Preferred Time')} *</Label><Input id="preferredTime" name="preferredTime" value={formData.preferredTime} onChange={handleChange} required placeholder={t('form.preferredTimePlaceholder', 'e.g., Morning 10 AM, Afternoon 3 PM, Evening 6 PM')} /></div>
+                <div className="space-y-2"><Label htmlFor="message">{t('freeDemo.message', 'Additional Message')}</Label><Textarea id="message" name="message" rows={4} value={formData.message} onChange={handleChange} placeholder={t('form.demoMessagePlaceholder', "Any specific subjects or topics you'd like to cover in the demo?")} /></div>
                 <Button type="submit" className="w-full" disabled={loading}>{loading ? 'Submitting...' : t('freeDemo.submit', 'Book Free Demo Class')}</Button>
               </form>
             </CardContent></Card>

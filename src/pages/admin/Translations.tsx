@@ -15,7 +15,7 @@ export default function Translations() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [search, setSearch] = useState('')
-  const [edits, setEdits] = useState<Record<string, string>>({})
+  const [edits, setEdits] = useState<Record<string, Partial<Pick<UiTranslation, 'en' | 'ta'>>>>({})
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -33,8 +33,8 @@ export default function Translations() {
   const handleSave = async () => {
     setSaving(true)
     try {
-      const updates = Object.entries(edits).map(([key, ta]) =>
-        supabase.from('ui_translations').update({ ta }).eq('key', key)
+      const updates = Object.entries(edits).map(([key, values]) =>
+        supabase.from('ui_translations').update(values).eq('key', key)
       )
       await Promise.all(updates)
       toast({ title: 'Translations saved', variant: 'success' })
@@ -69,7 +69,7 @@ export default function Translations() {
           <h2 className="font-display text-2xl font-bold flex items-center gap-2">
             <Languages className="h-6 w-6" /> UI Translations
           </h2>
-          <p className="text-sm text-muted-foreground">Translate static UI text (buttons, labels, headings) into Tamil. English is shown for reference — edit the Tamil column.</p>
+          <p className="text-sm text-muted-foreground">Manage public English and Tamil text, form options, and SEO content.</p>
         </div>
         <Button onClick={handleSave} disabled={!hasEdits || saving} className="gap-2">
           <Save className="h-4 w-4" /> {saving ? 'Saving...' : `Save${hasEdits ? ` (${Object.keys(edits).length})` : ''}`}
@@ -100,17 +100,17 @@ export default function Translations() {
                 </div>
                 <div className="divide-y">
                   {items.map((t) => (
-                    <div key={t.key} className="grid grid-cols-1 gap-3 p-4 md:grid-cols-2">
+                    <div key={t.key} className="grid grid-cols-1 gap-3 p-4 md:grid-cols-3">
                       <div className="space-y-1">
                         <Label className="text-xs text-muted-foreground">{t.key}</Label>
-                        <p className="text-sm font-medium">{t.en}</p>
+                        <Input id={`en-${t.key}`} value={edits[t.key]?.en ?? t.en} onChange={(e) => setEdits((prev) => ({ ...prev, [t.key]: { ...prev[t.key], en: e.target.value } }))} placeholder="English text" />
                       </div>
                       <div className="space-y-1">
                         <Label className="text-xs text-muted-foreground" htmlFor={`ta-${t.key}`}>Tamil</Label>
                         <Input
                           id={`ta-${t.key}`}
-                          value={edits[t.key] ?? t.ta}
-                          onChange={(e) => setEdits((prev) => ({ ...prev, [t.key]: e.target.value }))}
+                          value={edits[t.key]?.ta ?? t.ta}
+                          onChange={(e) => setEdits((prev) => ({ ...prev, [t.key]: { ...prev[t.key], ta: e.target.value } }))}
                           placeholder="தமிழ் மொழிபெயர்ப்பு"
                           className="font-tamil"
                         />

@@ -60,6 +60,7 @@ export default function Contact() {
   const hasContactInfo = safeString(settings?.phone) || safeString(settings?.email) || safeString(settings?.address)
   const mapUrl = safeString(settings?.google_map_url)
   const mapEmbedUrl = getMapEmbedUrl(mapUrl, safeString(settings?.address))
+  const enquiryOptions = t('form.enquiryOptions', 'Class 8|Class 9|Class 10|Class 11|Class 12|NEET|Engineering|Foundation|Spoken English|CMA|Government Exams').split('|').map((item) => item.trim()).filter(Boolean)
 
   return (
     <>
@@ -146,7 +147,7 @@ export default function Contact() {
                       <MessageSquare className="h-6 w-6" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs uppercase tracking-wide text-muted-foreground">WhatsApp</p>
+                      <p className="text-xs uppercase tracking-wide text-muted-foreground">{t('contact.whatsappLabel', 'WhatsApp')}</p>
                       <a href={`https://wa.me/${safeString(settings.phone).replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="text-lg font-semibold transition-colors hover:text-primary">{t('contact.phoneLabel', 'Chat with Us')}</a>
                     </div>
                   </CardContent>
@@ -163,8 +164,8 @@ export default function Contact() {
                   ) : (
                     <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
                       <MapPin className="h-10 w-10 text-primary" />
-                      <p className="text-muted-foreground">Open our location in Google Maps.</p>
-                      <Button asChild><a href={mapUrl} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-4 w-4" />Open Google Maps</a></Button>
+                      <p className="text-muted-foreground">{t('contact.openMapText', 'Open our location in Google Maps.')}</p>
+                      <Button asChild><a href={mapUrl} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-4 w-4" />{t('contact.openMapButton', 'Open Google Maps')}</a></Button>
                     </CardContent>
                   )}
                 </Card>
@@ -185,15 +186,14 @@ export default function Contact() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone">{t('contact.phone', 'Phone Number')} *</Label>
-                      <Input id="phone" placeholder="10-digit mobile number" {...register("phone")} aria-invalid={!!errors.phone} className="h-12 rounded-xl" />
+                      <Input id="phone" placeholder={t('form.phonePlaceholder', '10-digit mobile number')} {...register("phone")} aria-invalid={!!errors.phone} className="h-12 rounded-xl" />
                       {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="classCourse">{t('contact.classCourse', 'Class / Course of Interest')} *</Label>
                       <select id="classCourse" {...register("classCourse")} aria-invalid={!!errors.classCourse} className="flex h-12 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                        <option value="">Select class or course</option>
-                        <option value="Class 8">Class 8</option><option value="Class 9">Class 9</option><option value="Class 10">Class 10</option><option value="Class 11">Class 11</option><option value="Class 12">Class 12</option>
-                        <option value="NEET">NEET</option><option value="Engineering">Engineering</option><option value="Foundation">Foundation</option><option value="Spoken English">Spoken English</option><option value="CMA">CMA</option><option value="Government Exams">Government Exams</option>
+                        <option value="">{t('form.selectClassCourse', 'Select class or course')}</option>
+                        {enquiryOptions.map((option) => <option key={option} value={option}>{option}</option>)}
                       </select>
                       {errors.classCourse && <p className="text-xs text-destructive">{errors.classCourse.message}</p>}
                     </div>

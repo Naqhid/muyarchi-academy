@@ -416,22 +416,15 @@ All admin pages (except login) are wrapped in `AdminLayout` and protected by `Pr
 
 ### Language Switcher
 **File**: `src/components/LanguageSwitcher.tsx`
-- Globe icon with current language code (EN/TA/UR)
+- Globe icon with current language code (EN/TA)
 - Dropdown menu to switch languages
-- Uses Google Translate for localization
-- Loading spinner when switching languages
-- Requires internet connection for Tamil/Urdu translations
+- Uses stored English and human-written Tamil translations
+- Tamil content is maintained through the admin translation and content fields
 
 ### Dark Mode Toggle
 - Available in PublicLayout header
 - Saves theme preference to localStorage
 - Persists across sessions
-
-### Google Translate Integration
-- Supports English (default), Tamil, and Urdu
-- Lazy loads Google Translate script
-- Sets language cookie
-- Reloads page to apply translations
 
 ### Toast Notifications
 - Used for form submissions, errors, and success messages
@@ -444,7 +437,7 @@ All admin pages (except login) are wrapped in `AdminLayout` and protected by `Pr
 src/
 ├── components/         # Reusable UI components (shared, ui, etc.)
 ├── layouts/            # PublicLayout, AdminLayout
-├── lib/                # API functions, utilities, Google Translate loader
+├── lib/                # API functions and utilities
 ├── pages/
 │   ├── admin/          # Admin dashboard pages
 │   └── public/         # Public website pages

@@ -31,16 +31,16 @@ export default function Blog() {
             <BookOpen className="mr-2 h-4 w-4" /> {t('nav.blog', 'Academy Blog')}
           </Badge>
           <h1 className="mx-auto max-w-4xl font-display text-5xl font-extrabold leading-tight tracking-tight text-white md:text-7xl">
-            Insights & <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-500 bg-clip-text text-transparent">{t('blog.title', 'Success Stories')}</span>
+            {t('blog.heroPrefix', 'Insights & ')}<span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-500 bg-clip-text text-transparent">{t('blog.heroHighlight', 'Success Stories')}</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-300 md:text-xl">
-            {t('blog.title', 'Stay updated with the latest educational insights, examination tips, academy news, and inspiring success stories.')}
+            {t('blog.heroSubtitle', 'Stay updated with the latest educational insights, examination tips, academy news, and inspiring success stories.')}
           </p>
         </motion.div>
       </section>
 
       <Section>
-        <SectionHeader title={t('blog.title', 'Latest Posts')} subtitle={t('blog.title', 'Read our latest articles and updates')} />
+        <SectionHeader title={t('blog.listTitle', 'Latest Posts')} subtitle={t('blog.listSubtitle', 'Read our latest articles and updates')} />
         {loading ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-80 rounded-lg" />)}</div>
         ) : blogs.length === 0 ? (

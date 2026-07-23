@@ -10,6 +10,7 @@ import { fetchBlogById } from '@/lib/api'
 import { formatDate } from '@/lib/utils'
 import { useLanguage, pickLang } from '@/hooks/use-language'
 import type { Blog } from '@/types'
+import { sanitizeHtml } from '@/lib/sanitize-html'
 
 export default function BlogDetail() {
   const { id } = useParams<{ id: string }>()
@@ -64,7 +65,7 @@ export default function BlogDetail() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
             <Card className="border-0 shadow-none"><CardContent className="p-0">
               {description && <p className="mb-6 text-xl font-medium leading-relaxed text-muted-foreground">{description}</p>}
-              <div className="prose prose-slate max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: content }} />
+              <div className="prose prose-slate max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }} />
             </CardContent></Card>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="mt-12 flex items-center justify-between border-t pt-8">

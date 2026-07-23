@@ -47,8 +47,8 @@ export default function CourseDetail() {
       <div className="container mx-auto px-4 py-12">
         <div className="mx-auto max-w-4xl text-center">
           <GraduationCap className="mx-auto mb-4 h-16 w-16 text-muted-foreground opacity-40" />
-          <h2 className="mb-2 text-2xl font-semibold">Course Not Found</h2>
-          <p className="mb-6 text-muted-foreground">{error || 'The course you are looking for does not exist.'}</p>
+          <h2 className="mb-2 text-2xl font-semibold">{t('courseDetail.notFoundTitle', 'Course Not Found')}</h2>
+          <p className="mb-6 text-muted-foreground">{error || t('courseDetail.notFoundText', 'The course you are looking for does not exist.')}</p>
           <Button asChild variant="outline"><Link to="/courses">{t('courseDetail.backToCourses', 'Back to Courses')}</Link></Button>
         </div>
       </div>
@@ -133,27 +133,27 @@ export default function CourseDetail() {
       </Section>
 
       <Section className="bg-muted/50">
-        <SectionHeader title="Course Highlights" subtitle="Key features of this program" centered={false} />
+        <SectionHeader title={t('courseDetail.highlightsTitle', 'Course Highlights')} subtitle={t('courseDetail.highlightsSubtitle', 'Key features of this program')} centered={false} />
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
             <Card className="rounded-2xl border-0 shadow-sm"><CardContent className="p-6">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary"><Users className="h-6 w-6" /></div>
-              <h3 className="font-semibold text-lg">Target Audience</h3>
-              <p className="mt-2 text-sm text-muted-foreground">Suitable for students aiming for {title} preparation</p>
+              <h3 className="font-semibold text-lg">{t('courseDetail.audienceTitle', 'Target Audience')}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{t('courseDetail.audienceText', `Suitable for students aiming for ${title} preparation`)}</p>
             </CardContent></Card>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
             <Card className="rounded-2xl border-0 shadow-sm"><CardContent className="p-6">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success"><GraduationCap className="h-6 w-6" /></div>
-              <h3 className="font-semibold text-lg">Learning Outcomes</h3>
-              <p className="mt-2 text-sm text-muted-foreground">Comprehensive preparation with expert guidance and practice tests</p>
+              <h3 className="font-semibold text-lg">{t('courseDetail.outcomesTitle', 'Learning Outcomes')}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{t('courseDetail.outcomesText', 'Comprehensive preparation with expert guidance and practice tests')}</p>
             </CardContent></Card>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
             <Card className="rounded-2xl border-0 shadow-sm"><CardContent className="p-6">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-warning/10 text-warning"><CheckCircle2 className="h-6 w-6" /></div>
-              <h3 className="font-semibold text-lg">Certification</h3>
-              <p className="mt-2 text-sm text-muted-foreground">Certificate provided upon successful completion</p>
+              <h3 className="font-semibold text-lg">{t('courseDetail.certificationTitle', 'Certification')}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{t('courseDetail.certificationText', 'Certificate provided upon successful completion')}</p>
             </CardContent></Card>
           </motion.div>
         </div>
@@ -161,8 +161,8 @@ export default function CourseDetail() {
 
       <Section>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mx-auto max-w-3xl text-center">
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-primary md:text-4xl">Ready to Enroll?</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Join this course and start your journey towards academic excellence.</p>
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-primary md:text-4xl">{t('courseDetail.ctaTitle', 'Ready to Enroll?')}</h2>
+          <p className="mt-4 text-lg text-muted-foreground">{t('courseDetail.ctaText', 'Join this course and start your journey towards academic excellence.')}</p>
           <div className="mt-8">
             <Button asChild size="lg" className="bg-gradient-to-r from-primary to-blue-600">
               <Link to="/contact">{t('courseDetail.enrollNow', 'Contact Us to Enroll')}</Link>
