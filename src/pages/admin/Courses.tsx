@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Plus, Pencil, Trash2, Loader2, BookOpen } from 'lucide-react'
+import { Plus, Pencil, Trash2, Loader2, BookOpen, Languages } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { fetchCourses, createCourse, updateCourse, deleteCourse } from '@/lib/api'
+import { TranslationSection } from '@/components/admin/TranslationSection'
 import type { Course, CourseInput } from '@/types'
 
 const schema = z.object({
@@ -42,6 +43,7 @@ export default function Courses() {
   const [deleting, setDeleting] = useState<Course | null>(null)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [deletingId, setDeletingId] = useState(false)
+  const [showTranslations, setShowTranslations] = useState(false)
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -145,7 +147,10 @@ export default function Courses() {
           <h2 className="font-display text-2xl font-bold">Courses</h2>
           <p className="text-sm text-muted-foreground">Manage your academy courses</p>
         </div>
-        <Button onClick={openCreate}><Plus className="h-4 w-4" />Add Course</Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setShowTranslations(!showTranslations)}><Languages className="h-4 w-4" />{showTranslations ? 'Hide' : 'Show'} Translations</Button>
+          <Button onClick={openCreate}><Plus className="h-4 w-4" />Add Course</Button>
+        </div>
       </div>
 
       {loading ? (
@@ -292,6 +297,21 @@ export default function Courses() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Course Translations */}
+      {showTranslations && (
+        <div className="mt-8 space-y-4">
+          <div>
+            <h3 className="font-display text-lg font-bold mb-2">Course Page Translations</h3>
+            <p className="text-sm text-muted-foreground mb-4">Edit text that appears on the course listing and detail pages</p>
+          </div>
+          <TranslationSection
+            prefix="course"
+            title="Course Page Text"
+            description="Manage course page labels, headings, and other UI text"
+          />
+        </div>
+      )}
     </div>
   )
 }

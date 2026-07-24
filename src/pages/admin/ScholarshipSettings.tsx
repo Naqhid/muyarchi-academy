@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Save, Loader2, GraduationCap } from 'lucide-react'
+import { Save, Loader2, GraduationCap, Languages } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -13,6 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { useSettings } from '@/hooks/use-settings'
 import { fetchScholarship, updateScholarship } from '@/lib/api'
+import { TranslationSection } from '@/components/admin/TranslationSection'
 import type { ScholarshipInput } from '@/types'
 
 const schema = z.object({
@@ -55,6 +56,7 @@ export default function ScholarshipSettings() {
   const { toast } = useToast()
   const { refresh } = useSettings()
   const [loading, setLoading] = useState(true)
+  const [showTranslations, setShowTranslations] = useState(false)
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -361,12 +363,28 @@ export default function ScholarshipSettings() {
           </Card>
         </motion.div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-2">
+          <Button type="button" variant="outline" onClick={() => setShowTranslations(!showTranslations)}><Languages className="h-4 w-4" />{showTranslations ? 'Hide' : 'Show'} Translations</Button>
           <Button type="submit" disabled={isSubmitting} size="lg">
             {isSubmitting ? <><Loader2 className="h-4 w-4 animate-spin" />Saving...</> : <><Save className="h-4 w-4" />Save Scholarship Settings</>}
           </Button>
         </div>
       </form>
+
+      {/* Scholarship Translations */}
+      {showTranslations && (
+        <div className="mt-8 space-y-4">
+          <div>
+            <h3 className="font-display text-lg font-bold mb-2">Scholarship Page Translations</h3>
+            <p className="text-sm text-muted-foreground mb-4">Edit text that appears on the scholarship page beyond the settings above</p>
+          </div>
+          <TranslationSection
+            prefix="scholarship"
+            title="Scholarship Page Text"
+            description="Manage scholarship page labels, headings, and other UI text"
+          />
+        </div>
+      )}
     </div>
   )
 }

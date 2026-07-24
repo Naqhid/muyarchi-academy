@@ -53,7 +53,14 @@ export default function Translations() {
     t.en.toLowerCase().includes(search.toLowerCase())
   )
 
-  const grouped = filtered.reduce((acc, t) => {
+  // Filter out page-specific translations (blog, course, event, testimonial, scholarship)
+  // Only show shared UI translations
+  const sharedTranslations = filtered.filter(t => {
+    const prefix = t.key.split('.')[0]
+    return !['blog', 'course', 'event', 'testimonial', 'scholarship'].includes(prefix)
+  })
+
+  const grouped = sharedTranslations.reduce((acc, t) => {
     const group = t.key.split('.')[0]
     if (!acc[group]) acc[group] = []
     acc[group].push(t)
@@ -69,7 +76,7 @@ export default function Translations() {
           <h2 className="font-display text-2xl font-bold flex items-center gap-2">
             <Languages className="h-6 w-6" /> UI Translations
           </h2>
-          <p className="text-sm text-muted-foreground">Manage public English and Tamil text, form options, and SEO content.</p>
+          <p className="text-sm text-muted-foreground">Manage shared button labels, common UI text, and global content. Page-specific translations are available in each page's admin panel.</p>
         </div>
         <Button onClick={handleSave} disabled={!hasEdits || saving} className="gap-2">
           <Save className="h-4 w-4" /> {saving ? 'Saving...' : `Save${hasEdits ? ` (${Object.keys(edits).length})` : ''}`}

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Plus, Pencil, Trash2, Loader2, FileText } from 'lucide-react'
+import { Plus, Pencil, Trash2, Loader2, FileText, Languages } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -16,6 +16,7 @@ import { Switch } from '@/components/ui/switch'
 import { useToast } from '@/hooks/use-toast'
 import { formatDate } from '@/lib/utils'
 import { fetchBlogs, createBlog, updateBlog, deleteBlog } from '@/lib/api'
+import { TranslationSection } from '@/components/admin/TranslationSection'
 import type { Blog, BlogInput } from '@/types'
 
 const schema = z.object({
@@ -41,6 +42,7 @@ export default function Blogs() {
   const [deleting, setDeleting] = useState<Blog | null>(null)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [deletingId, setDeletingId] = useState(false)
+  const [showTranslations, setShowTranslations] = useState(false)
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -140,7 +142,10 @@ export default function Blogs() {
           <h2 className="font-display text-2xl font-bold">Blogs</h2>
           <p className="text-sm text-muted-foreground">Manage your blog posts</p>
         </div>
-        <Button onClick={openCreate}><Plus className="h-4 w-4" />Add Blog</Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setShowTranslations(!showTranslations)}><Languages className="h-4 w-4" />{showTranslations ? 'Hide' : 'Show'} Translations</Button>
+          <Button onClick={openCreate}><Plus className="h-4 w-4" />Add Blog</Button>
+        </div>
       </div>
 
       {loading ? (
@@ -272,6 +277,21 @@ export default function Blogs() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Blog Translations */}
+      {showTranslations && (
+        <div className="mt-8 space-y-4">
+          <div>
+            <h3 className="font-display text-lg font-bold mb-2">Blog Page Translations</h3>
+            <p className="text-sm text-muted-foreground mb-4">Edit text that appears on the blog listing and detail pages</p>
+          </div>
+          <TranslationSection
+            prefix="blog"
+            title="Blog Page Text"
+            description="Manage blog page labels, headings, and other UI text"
+          />
+        </div>
+      )}
     </div>
   )
 }

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Plus, Pencil, Trash2, Loader2, Star } from 'lucide-react'
+import { Plus, Pencil, Trash2, Loader2, Star, Languages } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,6 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import { fetchTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from '@/lib/api'
+import { TranslationSection } from '@/components/admin/TranslationSection'
 import type { Testimonial, TestimonialInput } from '@/types'
 
 const schema = z.object({
@@ -37,6 +38,7 @@ export default function Testimonials() {
   const [deleting, setDeleting] = useState<Testimonial | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
+  const [showTranslations, setShowTranslations] = useState(false)
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset, watch, setValue } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -115,7 +117,10 @@ export default function Testimonials() {
           <h2 className="font-display text-2xl font-bold">Testimonials</h2>
           <p className="text-sm text-muted-foreground">Manage student and parent testimonials</p>
         </div>
-        <Button onClick={openAdd}><Plus className="h-4 w-4" />Add Testimonial</Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setShowTranslations(!showTranslations)}><Languages className="h-4 w-4" />{showTranslations ? 'Hide' : 'Show'} Translations</Button>
+          <Button onClick={openAdd}><Plus className="h-4 w-4" />Add Testimonial</Button>
+        </div>
       </div>
 
       {loading ? (
@@ -245,6 +250,21 @@ export default function Testimonials() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Testimonial Translations */}
+      {showTranslations && (
+        <div className="mt-8 space-y-4">
+          <div>
+            <h3 className="font-display text-lg font-bold mb-2">Testimonial Page Translations</h3>
+            <p className="text-sm text-muted-foreground mb-4">Edit text that appears on the testimonial section</p>
+          </div>
+          <TranslationSection
+            prefix="testimonial"
+            title="Testimonial Page Text"
+            description="Manage testimonial section labels, headings, and other UI text"
+          />
+        </div>
+      )}
     </div>
   )
 }
