@@ -1,7 +1,7 @@
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LayoutDashboard, BookOpen, FileText, Calendar, Star, Image, Settings, LogOut, Menu, X, GraduationCap, ExternalLink, Users, MessageSquare, PlayCircle, Languages } from 'lucide-react'
+import { LayoutDashboard, BookOpen, FileText, Calendar, Star, Image, Settings, LogOut, Menu, X, GraduationCap, ExternalLink, Users, MessageSquare, PlayCircle, Languages, Home, Mail, LayoutTemplate } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/use-auth'
 import { useSettings } from '@/hooks/use-settings'
@@ -9,12 +9,15 @@ import { cn } from '@/lib/utils'
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/admin/home', label: 'Home Page', icon: Home },
   { to: '/admin/courses', label: 'Courses', icon: BookOpen },
   { to: '/admin/blogs', label: 'Blogs', icon: FileText },
   { to: '/admin/events', label: 'Events', icon: Calendar },
   { to: '/admin/testimonials', label: 'Testimonials', icon: Star },
   { to: '/admin/media', label: 'Media Library', icon: Image },
   { to: '/admin/scholarship', label: 'Scholarship', icon: GraduationCap },
+  { to: '/admin/contact', label: 'Contact Page', icon: Mail },
+  { to: '/admin/site-content', label: 'Site Content', icon: LayoutTemplate },
   { to: '/admin/translations', label: 'UI Translations', icon: Languages },
   { to: '/admin/demo-registrations', label: 'Demo Registrations', icon: PlayCircle },
   { to: '/admin/enquiries', label: 'Enquiries', icon: MessageSquare },

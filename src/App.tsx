@@ -29,6 +29,9 @@ const AdminEnquiries = lazy(() => import('@/pages/admin/Enquiries'))
 const AdminDemoRegistrations = lazy(() => import('@/pages/admin/DemoRegistrations'))
 const AdminSettings = lazy(() => import('@/pages/admin/Settings'))
 const AdminTranslations = lazy(() => import('@/pages/admin/Translations'))
+const AdminHomeContent = lazy(() => import('@/pages/admin/HomeContent'))
+const AdminContactContent = lazy(() => import('@/pages/admin/ContactContent'))
+const AdminSiteContent = lazy(() => import('@/pages/admin/SiteContent'))
 
 function PageLoader() {
   return (
@@ -58,6 +61,7 @@ export default function App() {
           <Route path="/admin/login" element={<Login />} />
           <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
             <Route index element={<Dashboard />} />
+            <Route path="home" element={<AdminHomeContent />} />
             <Route path="courses" element={<AdminCourses />} />
             <Route path="blogs" element={<AdminBlogs />} />
             <Route path="events" element={<AdminEvents />} />
@@ -68,6 +72,8 @@ export default function App() {
             <Route path="enquiries" element={<AdminEnquiries />} />
             <Route path="settings" element={<AdminSettings />} />
             <Route path="translations" element={<AdminTranslations />} />
+            <Route path="contact" element={<AdminContactContent />} />
+            <Route path="site-content" element={<AdminSiteContent />} />
           </Route>
         </Routes>
       </Suspense>

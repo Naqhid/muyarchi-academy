@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Trash2, Users, Calendar, Phone, Clock } from 'lucide-react'
+import { Trash2, Users, Calendar, Phone, Clock, Languages } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast'
 import { fetchDemoRegistrations, deleteDemoRegistration } from '@/lib/api'
 import type { DemoRegistration } from '@/types'
 import { ExportRecords } from '@/components/admin/ExportRecords'
+import { TranslationSection } from '@/components/admin/TranslationSection'
 
 export default function DemoRegistrations() {
   const { toast } = useToast()
@@ -15,6 +16,7 @@ export default function DemoRegistrations() {
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState<DemoRegistration | null>(null)
   const [deleteOpen, setDeleteOpen] = useState(false)
+  const [showTranslations, setShowTranslations] = useState(false)
 
   const loadRegistrations = () => {
     setLoading(true)
@@ -58,6 +60,9 @@ export default function DemoRegistrations() {
           <p className="text-sm text-muted-foreground">View and manage free demo class bookings</p>
         </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Button variant="outline" size="sm" onClick={() => setShowTranslations(!showTranslations)}>
+            <Languages className="h-4 w-4" />{showTranslations ? 'Hide' : 'Show'} Translations
+          </Button>
           <ExportRecords title="Demo Class Registrations" rows={registrations} columns={[
             { label: 'Student', value: (item) => item.student_name }, { label: 'Class', value: (item) => item.class },
             { label: 'Phone', value: (item) => item.phone }, { label: 'Preferred time', value: (item) => item.preferred_time },
@@ -115,6 +120,20 @@ export default function DemoRegistrations() {
               </div>
             </motion.div>
           ))}
+        </div>
+      )}
+
+      {showTranslations && (
+        <div className="mt-8 space-y-4">
+          <div>
+            <h3 className="font-display text-lg font-bold mb-2">Free Demo Page Translations</h3>
+            <p className="text-sm text-muted-foreground mb-4">Edit the text and form labels that appear on the public free demo booking page</p>
+          </div>
+          <TranslationSection
+            prefix="freeDemo"
+            title="Free Demo Page Text"
+            description="Manage free demo page headings, labels, and form text"
+          />
         </div>
       )}
 

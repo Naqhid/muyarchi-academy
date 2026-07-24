@@ -53,12 +53,24 @@ export default function Translations() {
     t.en.toLowerCase().includes(search.toLowerCase())
   )
 
-  // Filter out page-specific translations (blog, course, event, testimonial, scholarship)
-  // Only show shared UI translations
-  const sharedTranslations = filtered.filter(t => {
-    const prefix = t.key.split('.')[0]
-    return !['blog', 'course', 'event', 'testimonial', 'scholarship'].includes(prefix)
-  })
+  // Page-specific translations are managed on their own admin pages, so hide them here.
+  // Matching is by key prefix (startsWith) so variants like `blogDetail`, `courseDetail`,
+  // `events`, and `eventDetail` are also excluded. Only truly shared UI text (e.g. `form`)
+  // remains on this page.
+  const movedPrefixes = [
+    'blog',        // Blogs page (blog, blogDetail)
+    'course',      // Courses page (course, courses, courseDetail)
+    'event',       // Events page (event, events, eventDetail)
+    'testimonial', // Testimonials page
+    'scholarship', // Scholarship page
+    'home',        // Home page
+    'contact',     // Contact page
+    'freeDemo',    // Demo Registrations page
+    'nav',         // Site Content page
+    'footer',      // Site Content page
+    'seo',         // Site Content page
+  ]
+  const sharedTranslations = filtered.filter(t => !movedPrefixes.some(p => t.key.startsWith(p)))
 
   const grouped = sharedTranslations.reduce((acc, t) => {
     const group = t.key.split('.')[0]
