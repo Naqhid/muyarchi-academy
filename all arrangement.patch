@@ -1,0 +1,781 @@
+diff --git a/src/components/admin/SettingsForm.tsx b/src/components/admin/SettingsForm.tsx
+new file mode 100644
+index 0000000..a8e29c4
+--- /dev/null
++++ b/src/components/admin/SettingsForm.tsx
+@@ -0,0 +1,155 @@
++import { useEffect, useState } from 'react'
++import { motion } from 'framer-motion'
++import { useForm } from 'react-hook-form'
++import { Save, Loader2 } from 'lucide-react'
++import { Button } from '@/components/ui/button'
++import { Input } from '@/components/ui/input'
++import { Textarea } from '@/components/ui/textarea'
++import { Label } from '@/components/ui/label'
++import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
++import { Skeleton } from '@/components/ui/skeleton'
++import { useToast } from '@/hooks/use-toast'
++import { useSettings } from '@/hooks/use-settings'
++import { fetchSettings, updateSettings } from '@/lib/api'
++import type { SiteSettings, SiteSettingsInput } from '@/types'
++
++export interface SettingsField {
++  /** English (primary) column name in site_settings */
++  name: keyof SiteSettings
++  label: string
++  type?: 'input' | 'textarea'
++  rows?: number
++  placeholder?: string
++  /** Optional Tamil column name — when set, a Tamil field is rendered too */
++  taName?: keyof SiteSettings
++  taLabel?: string
++  taPlaceholder?: string
++}
++
++export interface SettingsGroup {
++  title: string
++  description?: string
++  icon?: React.ElementType
++  /** Render fields in a horizontal grid (used for short stat inputs) */
++  columns?: boolean
++  fields: SettingsField[]
++}
++
++interface SettingsFormProps {
++  groups: SettingsGroup[]
++  submitLabel?: string
++}
++
++/**
++ * Renders and saves a subset of the site_settings row. Because updateSettings
++ * performs a partial update, several pages can each edit their own group of
++ * fields without overwriting each other.
++ */
++export function SettingsForm({ groups, submitLabel = 'Save Changes' }: SettingsFormProps) {
++  const { toast } = useToast()
++  const { refresh } = useSettings()
++  const [loading, setLoading] = useState(true)
++
++  const fieldNames: string[] = []
++  groups.forEach((g) =>
++    g.fields.forEach((f) => {
++      fieldNames.push(f.name as string)
++      if (f.taName) fieldNames.push(f.taName as string)
++    })
++  )
++
++  const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm<Record<string, string>>({
++    defaultValues: Object.fromEntries(fieldNames.map((n) => [n, ''])),
++  })
++
++  useEffect(() => {
++    fetchSettings()
++      .then((data) => {
++        if (data) {
++          const values: Record<string, string> = {}
++          fieldNames.forEach((n) => { values[n] = ((data as unknown as Record<string, unknown>)[n] as string) ?? '' })
++          reset(values)
++        }
++      })
++      .catch((err) => {
++        console.error('Failed to load settings:', err)
++        toast({ title: 'Error', description: 'Failed to load settings', variant: 'destructive' })
++      })
++      .finally(() => setLoading(false))
++    // eslint-disable-next-line react-hooks/exhaustive-deps
++  }, [])
++
++  const onSubmit = async (data: Record<string, string>) => {
++    const input: Partial<SiteSettingsInput> = {}
++    fieldNames.forEach((n) => { (input as Record<string, string>)[n] = data[n] ?? '' })
++    try {
++      await updateSettings(input)
++      toast({ title: 'Saved', description: 'Your changes have been saved successfully.', variant: 'success' })
++      refresh()
++    } catch (err) {
++      console.error('Save error:', err)
++      toast({ title: 'Error', description: 'Failed to save changes', variant: 'destructive' })
++    }
++  }
++
++  if (loading) {
++    return (
++      <div className="grid gap-6 md:grid-cols-2">
++        {Array.from({ length: 2 }).map((_, i) => <Skeleton key={i} className="h-64 rounded-lg" />)}
++      </div>
++    )
++  }
++
++  return (
++    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
++      {groups.map((group, gi) => (
++        <motion.div key={group.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: gi * 0.05 }}>
++          <Card>
++            <CardHeader>
++              <CardTitle className="flex items-center gap-2 text-xl">
++                {group.icon && <group.icon className="h-5 w-5" />}{group.title}
++              </CardTitle>
++              {group.description && <CardDescription>{group.description}</CardDescription>}
++            </CardHeader>
++            <CardContent className="space-y-4">
++              {group.columns ? (
++                <div className="grid gap-4 sm:grid-cols-3">
++                  {group.fields.map((field) => (
++                    <div key={field.name as string} className="space-y-2">
++                      <Label htmlFor={field.name as string}>{field.label}</Label>
++                      <Input id={field.name as string} placeholder={field.placeholder} {...register(field.name as string)} />
++                    </div>
++                  ))}
++                </div>
++              ) : (
++                group.fields.map((field) => (
++                  <div key={field.name as string} className="space-y-4">
++                    <div className="space-y-2">
++                      <Label htmlFor={field.name as string}>{field.label}</Label>
++                      {field.type === 'textarea'
++                        ? <Textarea id={field.name as string} rows={field.rows ?? 3} placeholder={field.placeholder} {...register(field.name as string)} />
++                        : <Input id={field.name as string} placeholder={field.placeholder} {...register(field.name as string)} />}
++                    </div>
++                    {field.taName && (
++                      <div className="space-y-2">
++                        <Label htmlFor={field.taName as string}>{field.taLabel ?? `${field.label} (Tamil)`}</Label>
++                        {field.type === 'textarea'
++                          ? <Textarea id={field.taName as string} rows={field.rows ?? 3} placeholder={field.taPlaceholder} className="font-tamil" {...register(field.taName as string)} />
++                          : <Input id={field.taName as string} placeholder={field.taPlaceholder} className="font-tamil" {...register(field.taName as string)} />}
++                      </div>
++                    )}
++                  </div>
++                ))
++              )}
++            </CardContent>
++          </Card>
++        </motion.div>
++      ))}
++      <div className="flex justify-end">
++        <Button type="submit" disabled={isSubmitting} size="lg">
++          {isSubmitting ? <><Loader2 className="h-4 w-4 animate-spin" />Saving...</> : <><Save className="h-4 w-4" />{submitLabel}</>}
++        </Button>
++      </div>
++    </form>
++  )
++}
+diff --git a/src/pages/admin/ContactContent.tsx b/src/pages/admin/ContactContent.tsx
+index ba9cafe..9058464 100644
+--- a/src/pages/admin/ContactContent.tsx
++++ b/src/pages/admin/ContactContent.tsx
+@@ -1,6 +1,28 @@
+-import { Mail } from 'lucide-react'
++import { Mail, Phone, MapPin } from 'lucide-react'
++import { SettingsForm, type SettingsGroup } from '@/components/admin/SettingsForm'
+ import { TranslationSection } from '@/components/admin/TranslationSection'
+ 
++const groups: SettingsGroup[] = [
++  {
++    title: 'Contact Info',
++    icon: Phone,
++    description: 'Phone, email and address shown on the Contact page and in the footer.',
++    fields: [
++      { name: 'phone', label: 'Phone', placeholder: '+91 98765 43210' },
++      { name: 'email', label: 'Email', placeholder: 'info@muyarchi.com' },
++      { name: 'address', label: 'Address', type: 'textarea', placeholder: "Your academy's address..." },
++    ],
++  },
++  {
++    title: 'Google Map',
++    icon: MapPin,
++    description: 'Use a Google Maps Embed URL (Share → Embed a map → copy only the URL inside src="..."). Share links such as maps.app.goo.gl will not display.',
++    fields: [
++      { name: 'google_map_url', label: 'Google Maps Embed URL', placeholder: 'https://www.google.com/maps/embed?pb=...' },
++    ],
++  },
++]
++
+ export default function ContactContent() {
+   return (
+     <div className="space-y-6">
+@@ -9,10 +31,12 @@ export default function ContactContent() {
+           <Mail className="h-6 w-6" /> Contact Page
+         </h2>
+         <p className="text-sm text-muted-foreground">
+-          Manage text shown on the Contact page. Phone, email, address and map are set in Settings &rarr; Contact Info.
++          Manage the Contact page — your phone, email, address and map, plus the page&apos;s headings and form labels.
+         </p>
+       </div>
+ 
++      <SettingsForm groups={groups} submitLabel="Save Contact Info" />
++
+       <TranslationSection
+         prefix="contact"
+         title="Contact Page Text"
+diff --git a/src/pages/admin/HomeContent.tsx b/src/pages/admin/HomeContent.tsx
+index bcfa40e..95c53e8 100644
+--- a/src/pages/admin/HomeContent.tsx
++++ b/src/pages/admin/HomeContent.tsx
+@@ -1,6 +1,44 @@
+-import { Home as HomeIcon } from 'lucide-react'
++import { Home as HomeIcon, Globe, Target, BarChart3 } from 'lucide-react'
++import { SettingsForm, type SettingsGroup } from '@/components/admin/SettingsForm'
+ import { TranslationSection } from '@/components/admin/TranslationSection'
+ 
++const groups: SettingsGroup[] = [
++  {
++    title: 'Hero Section',
++    icon: Globe,
++    description: 'The main banner text shown at the top of the homepage.',
++    fields: [
++      { name: 'hero_title', taName: 'hero_title_ta', label: 'Hero Title (English)', taLabel: 'Hero Title (Tamil)', placeholder: 'Welcome to Muyarchi Academy', taPlaceholder: 'தலைப்பு' },
++      { name: 'hero_subtitle', taName: 'hero_subtitle_ta', label: 'Hero Subtitle (English)', taLabel: 'Hero Subtitle (Tamil)', placeholder: 'Empowering students through quality education', taPlaceholder: 'துணைத் தலைப்பு' },
++    ],
++  },
++  {
++    title: 'About, Vision & Mission',
++    icon: Target,
++    description: 'The "Our Vision / About / Our Mission" section of the homepage. Fill in both English and Tamil — leave Tamil blank to reuse the English text.',
++    fields: [
++      { name: 'about', taName: 'about_ta', label: 'About (English)', taLabel: 'About (Tamil)', type: 'textarea', rows: 4, placeholder: 'About your academy...', taPlaceholder: 'அகாடமி பற்றி...' },
++      { name: 'vision', taName: 'vision_ta', label: 'Vision (English)', taLabel: 'Vision (Tamil)', type: 'textarea', placeholder: "Your academy's vision...", taPlaceholder: 'கல்வி நோக்கம்...' },
++      { name: 'mission', taName: 'mission_ta', label: 'Mission (English)', taLabel: 'Mission (Tamil)', type: 'textarea', placeholder: 'Our mission is to support talented students...', taPlaceholder: 'எங்கள் நோக்கம்...' },
++      { name: 'values_title', taName: 'values_title_ta', label: 'Values Title (English)', taLabel: 'Values Title (Tamil)', placeholder: 'Honesty. Discipline. Care.', taPlaceholder: 'நேர்மை. கட்டுப்பாடு. அக்கறை.' },
++      { name: 'values_text', taName: 'values_text_ta', label: 'Values Text (English)', taLabel: 'Values Text (Tamil)', type: 'textarea', placeholder: 'How we run every classroom...', taPlaceholder: 'ஒவ்வொரு வகுப்பறையிலும்...' },
++      { name: 'quality_title', taName: 'quality_title_ta', label: 'Quality Title (English)', taLabel: 'Quality Title (Tamil)', placeholder: 'Our Quality', taPlaceholder: 'எங்கள் தரம்' },
++      { name: 'quality_text', taName: 'quality_text_ta', label: 'Quality Text (English)', taLabel: 'Quality Text (Tamil)', type: 'textarea', placeholder: 'Monthly tests with ranked results...', taPlaceholder: 'மாதாந்திர தேர்வுகள்...' },
++    ],
++  },
++  {
++    title: 'Hero Stats',
++    icon: BarChart3,
++    columns: true,
++    description: 'Numbers shown in the hero section stats strip.',
++    fields: [
++      { name: 'stat_students', label: 'Students', placeholder: '500+' },
++      { name: 'stat_courses', label: 'Courses', placeholder: '20+' },
++      { name: 'stat_years', label: 'Years', placeholder: '10+' },
++    ],
++  },
++]
++
+ export default function HomeContent() {
+   return (
+     <div className="space-y-6">
+@@ -9,15 +47,18 @@ export default function HomeContent() {
+           <HomeIcon className="h-6 w-6" /> Home Page
+         </h2>
+         <p className="text-sm text-muted-foreground">
+-          Manage text shown across the homepage — hero, vision, mission, courses, events, blog and call-to-action
+-          sections. The vision, mission and about body text (with Tamil) are set in Settings &rarr; About Section.
++          Manage everything shown on the homepage — the hero banner, the Our Vision / About / Our Mission
++          section (with Tamil), and the stats strip. Section headings and button labels are managed under
++          &ldquo;Homepage Labels &amp; Buttons&rdquo; at the bottom.
+         </p>
+       </div>
+ 
++      <SettingsForm groups={groups} submitLabel="Save Homepage Content" />
++
+       <TranslationSection
+         prefix="home"
+-        title="Homepage Text"
+-        description="Headings, labels and buttons across the homepage, including the Our Mission heading"
++        title="Homepage Labels & Buttons"
++        description="Section headings and buttons (e.g. the 'Our Mission' heading and the 'View All Courses' button)"
+       />
+     </div>
+   )
+diff --git a/src/pages/admin/Settings.tsx b/src/pages/admin/Settings.tsx
+index 2d0abbb..e67d42e 100644
+--- a/src/pages/admin/Settings.tsx
++++ b/src/pages/admin/Settings.tsx
+@@ -1,455 +1,50 @@
+-import { useState, useEffect } from 'react'
+-import { motion } from 'framer-motion'
+-import { useForm } from 'react-hook-form'
+-import { zodResolver } from '@hookform/resolvers/zod'
+-import { z } from 'zod'
+-import { Save, Loader2, Settings as SettingsIcon, Globe, Phone, Mail, MapPin, Facebook, Twitter, Instagram, Youtube, Linkedin } from 'lucide-react'
+-import { Button } from '@/components/ui/button'
+-import { Input } from '@/components/ui/input'
+-import { Textarea } from '@/components/ui/textarea'
+-import { Label } from '@/components/ui/label'
+-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+-import { Skeleton } from '@/components/ui/skeleton'
+-import { useToast } from '@/hooks/use-toast'
+-import { useSettings } from '@/hooks/use-settings'
+-import { fetchSettings, updateSettings } from '@/lib/api'
+-import type { SiteSettingsInput } from '@/types'
+-
+-const schema = z.object({
+-  academy_name: z.string().optional().default(''),
+-  academy_name_ta: z.string().optional().default(''),
+-  logo_url: z.string().optional().default(''),
+-  hero_title: z.string().optional().default(''),
+-  hero_title_ta: z.string().optional().default(''),
+-  hero_subtitle: z.string().optional().default(''),
+-  hero_subtitle_ta: z.string().optional().default(''),
+-  about: z.string().optional().default(''),
+-  about_ta: z.string().optional().default(''),
+-  vision: z.string().optional().default(''),
+-  vision_ta: z.string().optional().default(''),
+-  mission: z.string().optional().default(''),
+-  mission_ta: z.string().optional().default(''),
+-  values_title: z.string().optional().default(''),
+-  values_title_ta: z.string().optional().default(''),
+-  values_text: z.string().optional().default(''),
+-  values_text_ta: z.string().optional().default(''),
+-  quality_title: z.string().optional().default(''),
+-  quality_title_ta: z.string().optional().default(''),
+-  quality_text: z.string().optional().default(''),
+-  quality_text_ta: z.string().optional().default(''),
+-  phone: z.string().optional().default(''),
+-  email: z.string().optional().default(''),
+-  address: z.string().optional().default(''),
+-  footer_text: z.string().optional().default(''),
+-  footer_text_ta: z.string().optional().default(''),
+-  google_map_url: z.string().optional().default(''),
+-  stat_students: z.string().optional().default(''),
+-  stat_courses: z.string().optional().default(''),
+-  stat_years: z.string().optional().default(''),
+-  facebook_url: z.string().optional().default(''),
+-  twitter_url: z.string().optional().default(''),
+-  instagram_url: z.string().optional().default(''),
+-  youtube_url: z.string().optional().default(''),
+-  linkedin_url: z.string().optional().default(''),
+-})
+-type FormData = z.infer<typeof schema>
++import { Settings as SettingsIcon, Globe } from 'lucide-react'
++import { SettingsForm, type SettingsGroup } from '@/components/admin/SettingsForm'
++
++const groups: SettingsGroup[] = [
++  {
++    title: 'General',
++    icon: SettingsIcon,
++    description: 'Academy name and logo used across the whole site.',
++    fields: [
++      { name: 'academy_name', taName: 'academy_name_ta', label: 'Academy Name (English)', taLabel: 'Academy Name (Tamil)', placeholder: 'Muyarchi Academy', taPlaceholder: 'முயற்சி அகாடமி' },
++      { name: 'logo_url', label: 'Logo URL', placeholder: 'https://...' },
++    ],
++  },
++  {
++    title: 'Footer',
++    icon: SettingsIcon,
++    description: 'Text displayed in the website footer.',
++    fields: [
++      { name: 'footer_text', taName: 'footer_text_ta', label: 'Footer Text (English)', taLabel: 'Footer Text (Tamil)', type: 'textarea', placeholder: '© 2024 Muyarchi Academy. All rights reserved.', taPlaceholder: 'அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.' },
++    ],
++  },
++  {
++    title: 'Social Links',
++    icon: Globe,
++    description: "Your academy's social media profiles.",
++    fields: [
++      { name: 'facebook_url', label: 'Facebook URL', placeholder: 'https://facebook.com/...' },
++      { name: 'twitter_url', label: 'Twitter URL', placeholder: 'https://twitter.com/...' },
++      { name: 'instagram_url', label: 'Instagram URL', placeholder: 'https://instagram.com/...' },
++      { name: 'youtube_url', label: 'YouTube URL', placeholder: 'https://youtube.com/...' },
++      { name: 'linkedin_url', label: 'LinkedIn URL', placeholder: 'https://linkedin.com/...' },
++    ],
++  },
++]
+ 
+ export default function Settings() {
+-  const { toast } = useToast()
+-  const { refresh } = useSettings()
+-  const [loading, setLoading] = useState(true)
+-
+-  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({
+-    resolver: zodResolver(schema),
+-    defaultValues: {
+-      academy_name: '', academy_name_ta: '', logo_url: '', hero_title: '', hero_title_ta: '', hero_subtitle: '', hero_subtitle_ta: '', about: '', about_ta: '', vision: '', vision_ta: '', mission: '', mission_ta: '', values_title: '', values_title_ta: '', values_text: '', values_text_ta: '', quality_title: '', quality_title_ta: '', quality_text: '', quality_text_ta: '',
+-      phone: '', email: '', address: '', footer_text: '', footer_text_ta: '', google_map_url: '',
+-      stat_students: '', stat_courses: '', stat_years: '',
+-      facebook_url: '', twitter_url: '', instagram_url: '', youtube_url: '', linkedin_url: '',
+-    },
+-  })
+-
+-  useEffect(() => {
+-    fetchSettings()
+-      .then((data) => {
+-        if (data) {
+-          reset({
+-            academy_name: data.academy_name || '',
+-            academy_name_ta: data.academy_name_ta || '',
+-            logo_url: data.logo_url || '',
+-            hero_title: data.hero_title || '',
+-            hero_title_ta: data.hero_title_ta || '',
+-            hero_subtitle: data.hero_subtitle || '',
+-            hero_subtitle_ta: data.hero_subtitle_ta || '',
+-            about: data.about || '',
+-            about_ta: data.about_ta || '',
+-            vision: data.vision || '',
+-            vision_ta: data.vision_ta || '',
+-            mission: data.mission || '',
+-            mission_ta: data.mission_ta || '',
+-            values_title: data.values_title || '',
+-            values_title_ta: data.values_title_ta || '',
+-            values_text: data.values_text || '',
+-            values_text_ta: data.values_text_ta || '',
+-            quality_title: data.quality_title || '',
+-            quality_title_ta: data.quality_title_ta || '',
+-            quality_text: data.quality_text || '',
+-            quality_text_ta: data.quality_text_ta || '',
+-            phone: data.phone || '',
+-            email: data.email || '',
+-            address: data.address || '',
+-            footer_text: data.footer_text || '',
+-            footer_text_ta: data.footer_text_ta || '',
+-            google_map_url: data.google_map_url || '',
+-            stat_students: data.stat_students || '',
+-            stat_courses: data.stat_courses || '',
+-            stat_years: data.stat_years || '',
+-            facebook_url: data.facebook_url || '',
+-            twitter_url: data.twitter_url || '',
+-            instagram_url: data.instagram_url || '',
+-            youtube_url: data.youtube_url || '',
+-            linkedin_url: data.linkedin_url || '',
+-          })
+-        }
+-      })
+-      .catch((err) => { console.error('Failed to load settings:', err); toast({ title: 'Error', description: 'Failed to load settings', variant: 'destructive' }) })
+-      .finally(() => setLoading(false))
+-  }, [reset, toast])
+-
+-  const onSubmit = async (data: FormData) => {
+-    const input: Partial<SiteSettingsInput> = {
+-      academy_name: data.academy_name || '',
+-      academy_name_ta: data.academy_name_ta || '',
+-      logo_url: data.logo_url || '',
+-      hero_title: data.hero_title || '',
+-      hero_title_ta: data.hero_title_ta || '',
+-      hero_subtitle: data.hero_subtitle || '',
+-      hero_subtitle_ta: data.hero_subtitle_ta || '',
+-      about: data.about || '',
+-      about_ta: data.about_ta || '',
+-      vision: data.vision || '',
+-      vision_ta: data.vision_ta || '',
+-      mission: data.mission || '',
+-      mission_ta: data.mission_ta || '',
+-      values_title: data.values_title || '',
+-      values_title_ta: data.values_title_ta || '',
+-      values_text: data.values_text || '',
+-      values_text_ta: data.values_text_ta || '',
+-      quality_title: data.quality_title || '',
+-      quality_title_ta: data.quality_title_ta || '',
+-      quality_text: data.quality_text || '',
+-      quality_text_ta: data.quality_text_ta || '',
+-      phone: data.phone || '',
+-      email: data.email || '',
+-      address: data.address || '',
+-      footer_text: data.footer_text || '',
+-      footer_text_ta: data.footer_text_ta || '',
+-      google_map_url: data.google_map_url || '',
+-      stat_students: data.stat_students || '',
+-      stat_courses: data.stat_courses || '',
+-      stat_years: data.stat_years || '',
+-      facebook_url: data.facebook_url || '',
+-      twitter_url: data.twitter_url || '',
+-      instagram_url: data.instagram_url || '',
+-      youtube_url: data.youtube_url || '',
+-      linkedin_url: data.linkedin_url || '',
+-    }
+-    try {
+-      await updateSettings(input)
+-      toast({ title: 'Settings saved', description: 'Website settings have been updated successfully.', variant: 'success' })
+-      refresh()
+-    } catch (err) {
+-      console.error('Save error:', err)
+-      toast({ title: 'Error', description: 'Failed to save settings', variant: 'destructive' })
+-    }
+-  }
+-
+-  if (loading) {
+-    return (
+-      <div className="space-y-6">
+-        <div>
+-          <h2 className="font-display text-2xl font-bold">Website Settings</h2>
+-          <p className="text-sm text-muted-foreground">Configure your academy website</p>
+-        </div>
+-        <div className="grid gap-6 md:grid-cols-2">
+-          {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-64 rounded-lg" />)}
+-        </div>
+-      </div>
+-    )
+-  }
+-
+   return (
+     <div className="space-y-6">
+       <div>
+         <h2 className="font-display text-2xl font-bold">Website Settings</h2>
+-        <p className="text-sm text-muted-foreground">Configure your academy website</p>
++        <p className="text-sm text-muted-foreground">
++          Global branding and links. Homepage text lives under <strong>Home Page</strong>, and contact
++          details under <strong>Contact Page</strong>.
++        </p>
+       </div>
+ 
+-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+-        {/* General */}
+-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+-          <Card>
+-            <CardHeader>
+-              <CardTitle className="flex items-center gap-2 text-xl"><SettingsIcon className="h-5 w-5" />General</CardTitle>
+-              <CardDescription>Basic information about your academy</CardDescription>
+-            </CardHeader>
+-            <CardContent className="space-y-4">
+-              <div className="space-y-2">
+-                <Label htmlFor="academy_name">Academy Name (English)</Label>
+-                <Input id="academy_name" placeholder="Muyarchi Academy" {...register('academy_name')} />
+-                {errors.academy_name && <p className="text-xs text-destructive" role="alert">{errors.academy_name.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="academy_name_ta">Academy Name (Tamil)</Label>
+-                <Input id="academy_name_ta" placeholder="முயற்சி அகாடமி" {...register('academy_name_ta')} />
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="logo_url">Logo URL</Label>
+-                <Input id="logo_url" placeholder="https://..." {...register('logo_url')} />
+-                {errors.logo_url && <p className="text-xs text-destructive" role="alert">{errors.logo_url.message}</p>}
+-              </div>
+-            </CardContent>
+-          </Card>
+-        </motion.div>
+-
+-        {/* Hero Section */}
+-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.05 }}>
+-          <Card>
+-            <CardHeader>
+-              <CardTitle className="flex items-center gap-2 text-xl"><Globe className="h-5 w-5" />Hero Section</CardTitle>
+-              <CardDescription>The main banner text on your homepage</CardDescription>
+-            </CardHeader>
+-            <CardContent className="space-y-4">
+-              <div className="space-y-2">
+-                <Label htmlFor="hero_title">Hero Title (English)</Label>
+-                <Input id="hero_title" placeholder="Welcome to Muyarchi Academy" {...register('hero_title')} />
+-                {errors.hero_title && <p className="text-xs text-destructive" role="alert">{errors.hero_title.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="hero_title_ta">Hero Title (Tamil)</Label>
+-                <Input id="hero_title_ta" placeholder="தலைப்பு" {...register('hero_title_ta')} />
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="hero_subtitle">Hero Subtitle (English)</Label>
+-                <Input id="hero_subtitle" placeholder="Empowering students through quality education" {...register('hero_subtitle')} />
+-                {errors.hero_subtitle && <p className="text-xs text-destructive" role="alert">{errors.hero_subtitle.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="hero_subtitle_ta">Hero Subtitle (Tamil)</Label>
+-                <Input id="hero_subtitle_ta" placeholder="துணைத் தலைப்பு" {...register('hero_subtitle_ta')} />
+-              </div>
+-            </CardContent>
+-          </Card>
+-        </motion.div>
+-
+-        {/* About Section */}
+-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.1 }}>
+-          <Card>
+-            <CardHeader>
+-              <CardTitle className="flex items-center gap-2 text-xl"><SettingsIcon className="h-5 w-5" />About Section</CardTitle>
+-              <CardDescription>Information about your academy's mission and vision</CardDescription>
+-            </CardHeader>
+-            <CardContent className="space-y-4">
+-              <div className="space-y-2">
+-                <Label htmlFor="about">About (English)</Label>
+-                <Textarea id="about" rows={4} placeholder="About your academy..." {...register('about')} />
+-                {errors.about && <p className="text-xs text-destructive" role="alert">{errors.about.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="about_ta">About (Tamil)</Label>
+-                <Textarea id="about_ta" rows={4} placeholder="அகாடமி பற்றி..." {...register('about_ta')} />
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="vision">Vision (English)</Label>
+-                <Textarea id="vision" rows={3} placeholder="Your academy's vision..." {...register('vision')} />
+-                {errors.vision && <p className="text-xs text-destructive" role="alert">{errors.vision.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="vision_ta">Vision (Tamil)</Label>
+-                <Textarea id="vision_ta" rows={3} placeholder="கல்வி நோக்கம்..." {...register('vision_ta')} />
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="mission">Mission (English)</Label>
+-                <Textarea id="mission" rows={3} placeholder="Your academy's mission..." {...register('mission')} />
+-                {errors.mission && <p className="text-xs text-destructive" role="alert">{errors.mission.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="mission_ta">Mission (Tamil)</Label>
+-                <Textarea id="mission_ta" rows={3} placeholder="கல்வி பணி..." {...register('mission_ta')} />
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="values_title">Values Title (English)</Label>
+-                <Input id="values_title" placeholder="Honesty. Discipline. Care." {...register('values_title')} />
+-                {errors.values_title && <p className="text-xs text-destructive" role="alert">{errors.values_title.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="values_title_ta">Values Title (Tamil)</Label>
+-                <Input id="values_title_ta" placeholder="நேர்மை. கட்டுப்பாடு. அக்கறை." {...register('values_title_ta')} />
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="values_text">Values Text (English)</Label>
+-                <Textarea id="values_text" rows={3} placeholder="How we run every classroom..." {...register('values_text')} />
+-                {errors.values_text && <p className="text-xs text-destructive" role="alert">{errors.values_text.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="values_text_ta">Values Text (Tamil)</Label>
+-                <Textarea id="values_text_ta" rows={3} placeholder="ஒவ்வொரு வகுப்பறையிலும்..." {...register('values_text_ta')} />
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="quality_title">Quality Title (English)</Label>
+-                <Input id="quality_title" placeholder="Our Quality" {...register('quality_title')} />
+-                {errors.quality_title && <p className="text-xs text-destructive" role="alert">{errors.quality_title.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="quality_title_ta">Quality Title (Tamil)</Label>
+-                <Input id="quality_title_ta" placeholder="எங்கள் தரம்" {...register('quality_title_ta')} />
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="quality_text">Quality Text (English)</Label>
+-                <Textarea id="quality_text" rows={3} placeholder="Monthly tests with ranked results..." {...register('quality_text')} />
+-                {errors.quality_text && <p className="text-xs text-destructive" role="alert">{errors.quality_text.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="quality_text_ta">Quality Text (Tamil)</Label>
+-                <Textarea id="quality_text_ta" rows={3} placeholder="மாதாந்திர தேர்வுகள்..." {...register('quality_text_ta')} />
+-              </div>
+-            </CardContent>
+-          </Card>
+-        </motion.div>
+-
+-        {/* Contact Info */}
+-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.15 }}>
+-          <Card>
+-            <CardHeader>
+-              <CardTitle className="flex items-center gap-2 text-xl"><Phone className="h-5 w-5" />Contact Info</CardTitle>
+-              <CardDescription>How people can reach your academy</CardDescription>
+-            </CardHeader>
+-            <CardContent className="space-y-4">
+-              <div className="space-y-2">
+-                <Label htmlFor="phone" className="flex items-center gap-1.5"><Phone className="h-3.5 w-3.5" />Phone</Label>
+-                <Input id="phone" placeholder="+91 98765 43210" {...register('phone')} />
+-                {errors.phone && <p className="text-xs text-destructive" role="alert">{errors.phone.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="email" className="flex items-center gap-1.5"><Mail className="h-3.5 w-3.5" />Email</Label>
+-                <Input id="email" type="email" placeholder="info@Muyarchi.com" {...register('email')} />
+-                {errors.email && <p className="text-xs text-destructive" role="alert">{errors.email.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="address" className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" />Address</Label>
+-                <Textarea id="address" rows={3} placeholder="Your academy's address..." {...register('address')} />
+-                {errors.address && <p className="text-xs text-destructive" role="alert">{errors.address.message}</p>}
+-              </div>
+-            </CardContent>
+-          </Card>
+-        </motion.div>
+-
+-        {/* Footer */}
+-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.2 }}>
+-          <Card>
+-            <CardHeader>
+-              <CardTitle className="flex items-center gap-2 text-xl"><SettingsIcon className="h-5 w-5" />Footer</CardTitle>
+-              <CardDescription>Text displayed in the website footer</CardDescription>
+-            </CardHeader>
+-            <CardContent className="space-y-4">
+-              <div className="space-y-2">
+-                <Label htmlFor="footer_text">Footer Text (English)</Label>
+-                <Textarea id="footer_text" rows={3} placeholder="© 2024 Muyarchi Academy. All rights reserved." {...register('footer_text')} />
+-                {errors.footer_text && <p className="text-xs text-destructive" role="alert">{errors.footer_text.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="footer_text_ta">Footer Text (Tamil)</Label>
+-                <Textarea id="footer_text_ta" rows={3} placeholder="அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." {...register('footer_text_ta')} />
+-              </div>
+-            </CardContent>
+-          </Card>
+-        </motion.div>
+-
+-        {/* Hero Stats */}
+-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.22 }}>
+-          <Card>
+-            <CardHeader>
+-              <CardTitle className="flex items-center gap-2 text-xl"><Globe className="h-5 w-5" />Hero Stats</CardTitle>
+-              <CardDescription>Numbers shown in the hero section stats strip</CardDescription>
+-            </CardHeader>
+-            <CardContent className="grid gap-4 sm:grid-cols-3">
+-              <div className="space-y-2">
+-                <Label htmlFor="stat_students">Students</Label>
+-                <Input id="stat_students" placeholder="500+" {...register('stat_students')} />
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="stat_courses">Courses</Label>
+-                <Input id="stat_courses" placeholder="20+" {...register('stat_courses')} />
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="stat_years">Years</Label>
+-                <Input id="stat_years" placeholder="10+" {...register('stat_years')} />
+-              </div>
+-            </CardContent>
+-          </Card>
+-        </motion.div>
+-
+-        {/* Google Map */}
+-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.25 }}>
+-          <Card>
+-            <CardHeader>
+-              <CardTitle className="flex items-center gap-2 text-xl"><MapPin className="h-5 w-5" />Google Map</CardTitle>
+-              <CardDescription>Use a Google Maps Embed URL. Google Maps share links (such as maps.app.goo.gl) cannot be displayed in the website.</CardDescription>
+-            </CardHeader>
+-            <CardContent className="space-y-4">
+-              <div className="space-y-2">
+-                <Label htmlFor="google_map_url">Google Maps Embed URL</Label>
+-                <Input id="google_map_url" placeholder="https://www.google.com/maps/embed?pb=..." {...register('google_map_url')} />
+-                <p className="text-xs text-muted-foreground">In Google Maps: Share → Embed a map → Copy HTML, then paste only the URL inside <code>src="..."</code>.</p>
+-                {errors.google_map_url && <p className="text-xs text-destructive" role="alert">{errors.google_map_url.message}</p>}
+-              </div>
+-            </CardContent>
+-          </Card>
+-        </motion.div>
+-
+-        {/* Social Links */}
+-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
+-          <Card>
+-            <CardHeader>
+-              <CardTitle className="flex items-center gap-2 text-xl"><Globe className="h-5 w-5" />Social Links</CardTitle>
+-              <CardDescription>Your academy's social media profiles</CardDescription>
+-            </CardHeader>
+-            <CardContent className="space-y-4">
+-              <div className="space-y-2">
+-                <Label htmlFor="facebook_url" className="flex items-center gap-1.5"><Facebook className="h-3.5 w-3.5" />Facebook URL</Label>
+-                <Input id="facebook_url" placeholder="https://facebook.com/..." {...register('facebook_url')} />
+-                {errors.facebook_url && <p className="text-xs text-destructive" role="alert">{errors.facebook_url.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="twitter_url" className="flex items-center gap-1.5"><Twitter className="h-3.5 w-3.5" />Twitter URL</Label>
+-                <Input id="twitter_url" placeholder="https://twitter.com/..." {...register('twitter_url')} />
+-                {errors.twitter_url && <p className="text-xs text-destructive" role="alert">{errors.twitter_url.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="instagram_url" className="flex items-center gap-1.5"><Instagram className="h-3.5 w-3.5" />Instagram URL</Label>
+-                <Input id="instagram_url" placeholder="https://instagram.com/..." {...register('instagram_url')} />
+-                {errors.instagram_url && <p className="text-xs text-destructive" role="alert">{errors.instagram_url.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="youtube_url" className="flex items-center gap-1.5"><Youtube className="h-3.5 w-3.5" />YouTube URL</Label>
+-                <Input id="youtube_url" placeholder="https://youtube.com/..." {...register('youtube_url')} />
+-                {errors.youtube_url && <p className="text-xs text-destructive" role="alert">{errors.youtube_url.message}</p>}
+-              </div>
+-              <div className="space-y-2">
+-                <Label htmlFor="linkedin_url" className="flex items-center gap-1.5"><Linkedin className="h-3.5 w-3.5" />LinkedIn URL</Label>
+-                <Input id="linkedin_url" placeholder="https://linkedin.com/..." {...register('linkedin_url')} />
+-                {errors.linkedin_url && <p className="text-xs text-destructive" role="alert">{errors.linkedin_url.message}</p>}
+-              </div>
+-            </CardContent>
+-          </Card>
+-        </motion.div>
+-
+-        <div className="flex justify-end">
+-          <Button type="submit" disabled={isSubmitting} size="lg">
+-            {isSubmitting ? <><Loader2 className="h-4 w-4 animate-spin" />Saving...</> : <><Save className="h-4 w-4" />Save Settings</>}
+-          </Button>
+-        </div>
+-      </form>
++      <SettingsForm groups={groups} submitLabel="Save Settings" />
+     </div>
+   )
+ }
