@@ -380,3 +380,16 @@ alter table public.site_settings add column if not exists quality_title    text 
 alter table public.site_settings add column if not exists quality_title_ta text not null default '';
 alter table public.site_settings add column if not exists quality_text     text not null default '';
 alter table public.site_settings add column if not exists quality_text_ta  text not null default '';
+
+-- ============================================================
+-- MIGRATION: add homepage Mission title bilingual columns
+-- Moves the "Our Mission" card heading into site_settings so it is
+-- edited (EN + Tamil) alongside Values & Quality titles.
+-- Safe to run even if columns already exist.
+-- ============================================================
+alter table public.site_settings add column if not exists mission_title    text not null default '';
+alter table public.site_settings add column if not exists mission_title_ta text not null default '';
+
+-- Remove the now-redundant UI label so admins don't see a duplicate
+-- "Mission Heading" entry under Homepage Labels & Buttons.
+delete from public.ui_translations where key = 'home.missionHeading';
