@@ -29,6 +29,14 @@ const schema = z.object({
   vision_ta: z.string().optional().default(''),
   mission: z.string().optional().default(''),
   mission_ta: z.string().optional().default(''),
+  values_title: z.string().optional().default(''),
+  values_title_ta: z.string().optional().default(''),
+  values_text: z.string().optional().default(''),
+  values_text_ta: z.string().optional().default(''),
+  quality_title: z.string().optional().default(''),
+  quality_title_ta: z.string().optional().default(''),
+  quality_text: z.string().optional().default(''),
+  quality_text_ta: z.string().optional().default(''),
   phone: z.string().optional().default(''),
   email: z.string().optional().default(''),
   address: z.string().optional().default(''),
@@ -54,7 +62,7 @@ export default function Settings() {
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      academy_name: '', academy_name_ta: '', logo_url: '', hero_title: '', hero_title_ta: '', hero_subtitle: '', hero_subtitle_ta: '', about: '', about_ta: '', vision: '', vision_ta: '', mission: '', mission_ta: '',
+      academy_name: '', academy_name_ta: '', logo_url: '', hero_title: '', hero_title_ta: '', hero_subtitle: '', hero_subtitle_ta: '', about: '', about_ta: '', vision: '', vision_ta: '', mission: '', mission_ta: '', values_title: '', values_title_ta: '', values_text: '', values_text_ta: '', quality_title: '', quality_title_ta: '', quality_text: '', quality_text_ta: '',
       phone: '', email: '', address: '', footer_text: '', footer_text_ta: '', google_map_url: '',
       stat_students: '', stat_courses: '', stat_years: '',
       facebook_url: '', twitter_url: '', instagram_url: '', youtube_url: '', linkedin_url: '',
@@ -79,6 +87,14 @@ export default function Settings() {
             vision_ta: data.vision_ta || '',
             mission: data.mission || '',
             mission_ta: data.mission_ta || '',
+            values_title: data.values_title || '',
+            values_title_ta: data.values_title_ta || '',
+            values_text: data.values_text || '',
+            values_text_ta: data.values_text_ta || '',
+            quality_title: data.quality_title || '',
+            quality_title_ta: data.quality_title_ta || '',
+            quality_text: data.quality_text || '',
+            quality_text_ta: data.quality_text_ta || '',
             phone: data.phone || '',
             email: data.email || '',
             address: data.address || '',
@@ -115,6 +131,14 @@ export default function Settings() {
       vision_ta: data.vision_ta || '',
       mission: data.mission || '',
       mission_ta: data.mission_ta || '',
+      values_title: data.values_title || '',
+      values_title_ta: data.values_title_ta || '',
+      values_text: data.values_text || '',
+      values_text_ta: data.values_text_ta || '',
+      quality_title: data.quality_title || '',
+      quality_title_ta: data.quality_title_ta || '',
+      quality_text: data.quality_text || '',
+      quality_text_ta: data.quality_text_ta || '',
       phone: data.phone || '',
       email: data.email || '',
       address: data.address || '',
@@ -252,6 +276,42 @@ export default function Settings() {
               <div className="space-y-2">
                 <Label htmlFor="mission_ta">Mission (Tamil)</Label>
                 <Textarea id="mission_ta" rows={3} placeholder="கல்வி பணி..." {...register('mission_ta')} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="values_title">Values Title (English)</Label>
+                <Input id="values_title" placeholder="Honesty. Discipline. Care." {...register('values_title')} />
+                {errors.values_title && <p className="text-xs text-destructive" role="alert">{errors.values_title.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="values_title_ta">Values Title (Tamil)</Label>
+                <Input id="values_title_ta" placeholder="நேர்மை. கட்டுப்பாடு. அக்கறை." {...register('values_title_ta')} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="values_text">Values Text (English)</Label>
+                <Textarea id="values_text" rows={3} placeholder="How we run every classroom..." {...register('values_text')} />
+                {errors.values_text && <p className="text-xs text-destructive" role="alert">{errors.values_text.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="values_text_ta">Values Text (Tamil)</Label>
+                <Textarea id="values_text_ta" rows={3} placeholder="ஒவ்வொரு வகுப்பறையிலும்..." {...register('values_text_ta')} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="quality_title">Quality Title (English)</Label>
+                <Input id="quality_title" placeholder="Our Quality" {...register('quality_title')} />
+                {errors.quality_title && <p className="text-xs text-destructive" role="alert">{errors.quality_title.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="quality_title_ta">Quality Title (Tamil)</Label>
+                <Input id="quality_title_ta" placeholder="எங்கள் தரம்" {...register('quality_title_ta')} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="quality_text">Quality Text (English)</Label>
+                <Textarea id="quality_text" rows={3} placeholder="Monthly tests with ranked results..." {...register('quality_text')} />
+                {errors.quality_text && <p className="text-xs text-destructive" role="alert">{errors.quality_text.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="quality_text_ta">Quality Text (Tamil)</Label>
+                <Textarea id="quality_text_ta" rows={3} placeholder="மாதாந்திர தேர்வுகள்..." {...register('quality_text_ta')} />
               </div>
             </CardContent>
           </Card>

@@ -367,3 +367,16 @@ create policy demo_registrations_admin_delete on public.demo_registrations
 alter table public.site_settings add column if not exists stat_students text not null default '';
 alter table public.site_settings add column if not exists stat_courses  text not null default '';
 alter table public.site_settings add column if not exists stat_years    text not null default '';
+
+-- ============================================================
+-- MIGRATION: add homepage Values & Quality bilingual columns
+-- Safe to run even if columns already exist.
+-- ============================================================
+alter table public.site_settings add column if not exists values_title    text not null default '';
+alter table public.site_settings add column if not exists values_title_ta text not null default '';
+alter table public.site_settings add column if not exists values_text     text not null default '';
+alter table public.site_settings add column if not exists values_text_ta  text not null default '';
+alter table public.site_settings add column if not exists quality_title    text not null default '';
+alter table public.site_settings add column if not exists quality_title_ta text not null default '';
+alter table public.site_settings add column if not exists quality_text     text not null default '';
+alter table public.site_settings add column if not exists quality_text_ta  text not null default '';

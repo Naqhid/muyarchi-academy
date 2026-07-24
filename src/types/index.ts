@@ -87,6 +87,14 @@ export interface SiteSettings {
   vision_ta: string
   mission: string
   mission_ta: string
+  values_title: string
+  values_title_ta: string
+  values_text: string
+  values_text_ta: string
+  quality_title: string
+  quality_title_ta: string
+  quality_text: string
+  quality_text_ta: string
   phone: string
   email: string
   address: string

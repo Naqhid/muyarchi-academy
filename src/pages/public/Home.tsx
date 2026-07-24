@@ -141,9 +141,9 @@ export default function Home() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { icon: Target, title: pickLang('Our Mission', safeString(settings?.mission_ta), language), text: pickLang(safeString(settings?.mission, "To bring city-standard coaching to our town at fees families can afford — without compromising on teaching quality or student outcomes."), safeString(settings?.mission_ta), language) },
-            { icon: TrendingUp, title: t('home.valuesTitle', 'Honesty. Discipline. Care.'), text: t('home.valuesText', 'How we run every classroom, every test, and every fee receipt.') },
-            { icon: Award, title: t('home.qualityTitle', 'Our Quality'), text: t('home.qualityText', 'Monthly tests with ranked results shared with parents, small batches of around 40, and teachers selected through live demonstration classes.') },
+            { icon: Target, title: t('home.missionHeading', 'Our Mission'), text: pickLang(safeString(settings?.mission, "To bring city-standard coaching to our town at fees families can afford — without compromising on teaching quality or student outcomes."), safeString(settings?.mission_ta), language) },
+            { icon: TrendingUp, title: pickLang(safeString(settings?.values_title, 'Honesty. Discipline. Care.'), safeString(settings?.values_title_ta), language), text: pickLang(safeString(settings?.values_text, 'How we run every classroom, every test, and every fee receipt.'), safeString(settings?.values_text_ta), language) },
+            { icon: Award, title: pickLang(safeString(settings?.quality_title, 'Our Quality'), safeString(settings?.quality_title_ta), language), text: pickLang(safeString(settings?.quality_text, 'Monthly tests with ranked results shared with parents, small batches of around 40, and teachers selected through live demonstration classes.'), safeString(settings?.quality_text_ta), language) },
           ].map(({ icon: Icon, title, text }, i) => (
             <FadeIn key={title} delay={i * 0.1}>
               <div className="rounded-lg border border-white/20 bg-white/5 p-6 transition-all hover:bg-white/10 hover:border-white/40">
